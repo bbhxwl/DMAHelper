@@ -153,6 +153,8 @@ namespace DMAHelper
                                             var UItemID = vmm.MemReadInt32(pid, vmm.MemReadInt64(pid, UItemAddress + Offset_ItemInformationComponent) + Offset_ItemID);
                                             if (UItemID > 0 && UItemID < 0xfff0ff)
                                             {
+                                                string UItemName = GetObjName(UItemID);
+
                                                 //auto pObjName = Tsl::GetGNamesByObjID(UItemID);
                                             }
                                         }
@@ -190,19 +192,13 @@ namespace DMAHelper
                 if (fName > 0)
                 {
                     var nameByte = vmm.MemRead(pid, fName + 0x10, 64);
-                    List<byte> newByte = new List<byte>();
-                    for (int ii = 0; ii < nameByte.Count(); ii++)
-                    {
-                        if (nameByte[ii] == 0)
-                            break;
-                        newByte.Add(nameByte[ii]);
-                    }
+                     
 
 
                     //获取类名
-                    string name = Encoding.ASCII.GetString(newByte.ToArray());
+                    string name = Encoding.ASCII.GetString(nameByte.ToArray());
 
-                    return name;
+                    return name.Substring(0,name.IndexOf('\0')>=0? name.IndexOf('\0'): name.Length);
                 }
 
 
