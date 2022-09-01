@@ -15,6 +15,7 @@ namespace DMAHelper
     {
         Vmm vmm;
         uint pid = 0;
+        #region 偏移
         ulong moduleBase;
         ulong GNamesAddress;
 
@@ -26,6 +27,12 @@ namespace DMAHelper
         ulong Offset_ObjID = 0x0010;
         ulong Offset_CurrentLevel = 0x00D0;
         ulong Offset_Actors = 0x00D0;
+        ulong Offset_ItemPackage = 0x0560;
+        ulong Offset_ItemInformationComponent = 0x00B0;
+        ulong Offset_ItemID = 0x0248;
+        ulong Offset_DroppedItem = 0x0420;
+        ulong Offset_DroppedItemGroup = 0x0280;
+        ulong Offset_DroppedItemGroup_UItem = 0x0728;
 
         public static uint Offset_XorKey1 = 0x6428D89B;
         public static long Offset_XorKey2 = 0xB3BC2464;
@@ -33,7 +40,9 @@ namespace DMAHelper
         public static bool Offset_IsingRor = true;
         ulong Offset_RootComponent = 0x0388;
         ulong Offset_ComponentLocation = 0x02C0;
+        #endregion 
         public delegate ulong DecryptData(ulong c);
+        public event Action<List<PlayerModel>> OnPlayerListUpdate;
         DecryptData decryptFunc;
         public pubg(Vmm m, uint pid)
         {
@@ -95,7 +104,7 @@ namespace DMAHelper
                     ulong actorBase = vmm.MemReadInt64(pid, ActorsArray);
                     ulong GNames = decryptFunc(vmm.MemReadInt64(pid, moduleBase + Offset_FNameEntry));
                     GNamesAddress = decryptFunc(vmm.MemReadInt64(pid, GNames));
-
+                    List<PlayerModel> ListPlayer = new List<PlayerModel>();
                     for (int i = 0; i < Actorscount; i++)
                     {
                         ulong pObjPointer = vmm.MemReadInt64(pid, actorBase + (ulong)i * 8);
@@ -107,33 +116,60 @@ namespace DMAHelper
                         if (objName == "PlayerMale_A_C" || objName == "PlayerFemale_A_C")
                         {
                             #region 读取血量和坐标
-                            PlayerModel model = new PlayerModel();
+                            PlayerModel player = new PlayerModel();
                             string name = vmm.MemReadString(pid, vmm.MemReadInt64(pid, pObjPointer + Offset_CharacterName), 64);
-                            model.Name = name;
+                            player.Name = name;
                             float hp = vmm.MemReadFloat(pid, pObjPointer + 0x0AE4);
-                            model.HP = hp;
+                            player.HP = hp;
                             //读取坐标
                             ulong RootComponent = decryptFunc(vmm.MemReadInt64(pid, pObjPointer + Offset_RootComponent));
                             byte[] temp = vmm.MemRead(pid, RootComponent + Offset_ComponentLocation, 12);
                             float x = BitConverter.ToSingle(temp, 0);
                             float y = BitConverter.ToSingle(temp, 4);
                             float z = BitConverter.ToSingle(temp, 8);
-                            model.x = x;
-                            model.y = y;
-                            model.z = z;
+                            player.x = x;
+                            player.y = y;
+                            player.z = z;
+                            ListPlayer.Add(player);
                             #endregion
-                            Console.WriteLine(JsonConvert.SerializeObject(model));
 
                         }
                         else if (objName == "DroppedItemGroup")
                         {
                             //这个地方就是物资的
+                            var ItemGroupPtr = vmm.MemReadInt64(pid, pObjPointer + Offset_DroppedItemGroup);
 
+                            var ItemCount = vmm.MemReadInt32(pid, pObjPointer + Offset_DroppedItemGroup + 0x8);
+                            if (ItemGroupPtr>0&& ItemCount>0)
+                            {
+                                for (int itemIndex = 0; itemIndex < ItemCount; itemIndex++)
+                                {
+                                    var ItemObject = vmm.MemReadInt64(pid, ItemGroupPtr + (ulong)(itemIndex * 0x10));
+                                    if (ItemObject > 0)
+                                    {
+                                        var UItemAddress = vmm.MemReadInt64(pid, ItemObject + Offset_DroppedItemGroup_UItem);
+                                        if (UItemAddress > 0)
+                                        {
+                                            var UItemID = vmm.MemReadInt32(pid, vmm.MemReadInt64(pid, UItemAddress + Offset_ItemInformationComponent) + Offset_ItemID);
+                                            if (UItemID > 0 && UItemID < 0xfff0ff)
+                                            {
+                                                //auto pObjName = Tsl::GetGNamesByObjID(UItemID);
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
                         }
 
                         // Console.WriteLine(objName);
 
 
+                    }
+
+                    if (OnPlayerListUpdate != null)
+                    {
+                        OnPlayerListUpdate(ListPlayer);
                     }
                     Thread.Sleep(10);
                 }
