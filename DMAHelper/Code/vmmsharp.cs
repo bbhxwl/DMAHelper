@@ -611,6 +611,28 @@ namespace vmmsharp
             return (uint)BitConverter.ToInt32(data, 0);
         }
 
+        public unsafe int MemReadInt(uint pid, ulong qwA, uint flags = 0)
+        {
+            uint cbRead;
+            byte[] data = new byte[4];
+            fixed (byte* pb = data)
+            {
+                if (!vmmi.VMMDLL_MemReadEx(hVMM, pid, qwA, pb, 4, out cbRead, flags))
+                {
+                    return 0;
+                }
+            }
+            if (cbRead != 4)
+            {
+                Array.Resize<byte>(ref data, (int)cbRead);
+            }
+            if (data.Length == 0)
+            {
+                return 0;
+            }
+            return BitConverter.ToInt32(data, 0);
+        }
+
         public unsafe float MemReadFloat(uint pid, ulong qwA, uint flags = 0)
         {
             uint cbRead;

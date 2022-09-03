@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using vmmsharp;
 using DMAHelper.Code.Models;
 using Newtonsoft.Json;
+using System.Windows;
 
 namespace DMAHelper
 {
@@ -33,6 +34,9 @@ namespace DMAHelper
         ulong Offset_DroppedItem = 0x0420;
         ulong Offset_DroppedItemGroup = 0x0280;
         ulong Offset_DroppedItemGroup_UItem = 0x0728;
+        
+        ulong Offset_WorldToMap = 0x0168;
+        ulong Offset_Mesh = 0x0540;
 
         public static uint Offset_XorKey1 = 0x6428D89B;
         public static long Offset_XorKey2 = 0xB3BC2464;
@@ -98,6 +102,7 @@ namespace DMAHelper
                 while (true)
                 {
                     ulong world = decryptFunc(vmm.MemReadInt64(pid, moduleBase + Offset_GWorld));
+                  
                     ulong PersistentLevel = decryptFunc(vmm.MemReadInt64(pid, world + Offset_CurrentLevel));
                     ulong ActorsArray = decryptFunc(vmm.MemReadInt64(pid, PersistentLevel + Offset_Actors));
                     uint Actorscount = vmm.MemReadInt32(pid, ActorsArray + 0x08);
@@ -107,63 +112,101 @@ namespace DMAHelper
                     List<PlayerModel> ListPlayer = new List<PlayerModel>();
                     for (int i = 0; i < Actorscount; i++)
                     {
-                        ulong pObjPointer = vmm.MemReadInt64(pid, actorBase + (ulong)i * 8);
-                        if (pObjPointer < 0x100000)
-                            continue;
-                        int actorId = (int)vmm.MemReadInt32(pid, pObjPointer + 0x10);
-                        uint objId = Common.dec_objid(actorId);
-                        string objName = GetObjName(objId);
-                        if (objName == "PlayerMale_A_C" || objName == "PlayerFemale_A_C")
+                        try
                         {
-                            #region 读取血量和坐标
-                            PlayerModel player = new PlayerModel();
-                            string name = vmm.MemReadString(pid, vmm.MemReadInt64(pid, pObjPointer + Offset_CharacterName), 64);
-                            player.Name = name;
-                            float hp = vmm.MemReadFloat(pid, pObjPointer + 0x0AE4);
-                            player.HP = hp;
-                            //读取坐标
-                            ulong RootComponent = decryptFunc(vmm.MemReadInt64(pid, pObjPointer + Offset_RootComponent));
-                            byte[] temp = vmm.MemRead(pid, RootComponent + Offset_ComponentLocation, 12);
-                            float x = BitConverter.ToSingle(temp, 0);
-                            float y = BitConverter.ToSingle(temp, 4);
-                            float z = BitConverter.ToSingle(temp, 8);
-                            player.x = x;
-                            player.y = y;
-                            player.z = z;
-                            ListPlayer.Add(player);
-                            #endregion
-
-                        }
-                        else if (objName == "DroppedItemGroup")
-                        {
-                            //这个地方就是物资的
-                            var ItemGroupPtr = vmm.MemReadInt64(pid, pObjPointer + Offset_DroppedItemGroup);
-
-                            var ItemCount = vmm.MemReadInt32(pid, pObjPointer + Offset_DroppedItemGroup + 0x8);
-                            if (ItemGroupPtr>0&& ItemCount>0)
+                            ulong pObjPointer = vmm.MemReadInt64(pid, actorBase + (ulong)i * 8);
+                            if (pObjPointer < 0x100000)
+                                continue;
+                            int actorId = (int)vmm.MemReadInt32(pid, pObjPointer + 0x10);
+                            uint objId = Common.dec_objid(actorId);
+                            string objName = GetObjName(objId);
+                            if (objName == "PlayerMale_A_C" || objName == "PlayerFemale_A_C")
                             {
-                                for (int itemIndex = 0; itemIndex < ItemCount; itemIndex++)
+                                #region 读取血量和坐标
+                                PlayerModel player = new PlayerModel();
+                                string name = vmm.MemReadString(pid, vmm.MemReadInt64(pid, pObjPointer + Offset_CharacterName), 64);
+                                player.Name = name;
+                                float hp = vmm.MemReadFloat(pid, pObjPointer + 0x0AE4);
+                                player.HP = hp;
+                                #region 读取骨骼
+                                ulong MeshAddr = vmm.MemReadInt64(pid, pObjPointer + Offset_Mesh);
+                                byte[] 敌人坐标 = vmm.MemRead(pid, MeshAddr + Offset_ComponentLocation, 12);
+                                float x = BitConverter.ToSingle(敌人坐标, 0);
+                                float y = BitConverter.ToSingle(敌人坐标, 4);
+                                float z = BitConverter.ToSingle(敌人坐标, 8);
+                                int w = vmm.MemReadInt(pid, world + Offset_WorldToMap);
+                                int h = vmm.MemReadInt(pid, world + Offset_WorldToMap + 0x4);
+                                
+                                player.x = x+w;
+                                player.y = y+h;
+                                player.z = z;
+                                if (player.x<0)
                                 {
-                                    var ItemObject = vmm.MemReadInt64(pid, ItemGroupPtr + (ulong)(itemIndex * 0x10));
-                                    if (ItemObject > 0)
-                                    {
-                                        var UItemAddress = vmm.MemReadInt64(pid, ItemObject + Offset_DroppedItemGroup_UItem);
-                                        if (UItemAddress > 0)
-                                        {
-                                            var UItemID = vmm.MemReadInt32(pid, vmm.MemReadInt64(pid, UItemAddress + Offset_ItemInformationComponent) + Offset_ItemID);
-                                            if (UItemID > 0 && UItemID < 0xfff0ff)
-                                            {
-                                                string UItemName = GetObjName(UItemID);
+                                    player.x = -player.x;
+                                }
+                                if (player.y < 0)
+                                {
+                                    player.y = -player.y;
+                                }
+                                if (player.z < 0)
+                                {
+                                    player.z = -player.z;
+                                }
+                                #endregion
+                                #region 读取世界坐标
 
-                                                //auto pObjName = Tsl::GetGNamesByObjID(UItemID);
+                                #endregion
+                                //读取坐标
+                                //ulong RootComponent = decryptFunc(vmm.MemReadInt64(pid, pObjPointer + Offset_RootComponent));
+                                //byte[] temp = vmm.MemRead(pid, RootComponent + Offset_ComponentLocation, 12);
+                                //float x = BitConverter.ToSingle(temp, 0);
+                                //float y = BitConverter.ToSingle(temp, 4);
+                                //float z = BitConverter.ToSingle(temp, 8);
+                                //player.x = x;
+                                //player.y = y;
+                                //player.z = z;
+                                ListPlayer.Add(player);
+                                #endregion
+
+                            }
+                            else if (objName == "DroppedItemGroup")
+                            {
+                                //这个地方就是物资的
+                                var ItemGroupPtr = vmm.MemReadInt64(pid, pObjPointer + Offset_DroppedItemGroup);
+
+                                var ItemCount = vmm.MemReadInt32(pid, pObjPointer + Offset_DroppedItemGroup + 0x8);
+                                if (ItemGroupPtr > 0 && ItemCount > 0)
+                                {
+                                    for (int itemIndex = 0; itemIndex < ItemCount; itemIndex++)
+                                    {
+                                        var ItemObject = vmm.MemReadInt64(pid, ItemGroupPtr + (ulong)(itemIndex * 0x10));
+                                        if (ItemObject > 0)
+                                        {
+                                            var UItemAddress = vmm.MemReadInt64(pid, ItemObject + Offset_DroppedItemGroup_UItem);
+                                            if (UItemAddress > 0)
+                                            {
+                                                var UItemID = vmm.MemReadInt32(pid, vmm.MemReadInt64(pid, UItemAddress + Offset_ItemInformationComponent) + Offset_ItemID);
+                                                if (UItemID > 0 && UItemID < 0xfff0ff)
+                                                {
+                                                    string UItemName = GetObjName(UItemID);
+
+                                                    //auto pObjName = Tsl::GetGNamesByObjID(UItemID);
+                                                }
                                             }
                                         }
-                                    }
 
+                                    }
                                 }
                             }
-                        }
 
+                        }
+                        catch (Exception ex)
+                        {
+
+                            Console.WriteLine("11111:"+ex.Message);
+                        }
+                            
+                       
                         // Console.WriteLine(objName);
 
 
