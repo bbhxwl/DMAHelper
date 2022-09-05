@@ -14,7 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
 using vmmsharp;
-
+using MQTTnet.Client;
+using MQTTnet;
 namespace DMAHelper
 {
     /// <summary>
@@ -24,9 +25,18 @@ namespace DMAHelper
     {
         Vmm vmm = new Vmm("", "-device", "fpga");
         pubg p = null;
+        IMqttClient mqtt = new MqttFactory().CreateMqttClient();
         public MainWindow()
         {
             InitializeComponent();
+           var op= new MqttClientOptionsBuilder().WithTcpServer("219.129.239.39").Build();
+            mqtt.ConnectAsync(op).ContinueWith(rs =>
+            {
+                if (rs.Result.ResultCode== MqttClientConnectResultCode.Success)
+                {
+                    
+                }
+            });
             var pidList = vmm.PidList();
             Console.WriteLine($"一共有{pidList.Length}个进程");
             foreach (var pid in pidList)
@@ -50,8 +60,24 @@ namespace DMAHelper
 
         private void P_OnPlayerListUpdate(List<Code.Models.PlayerModel> obj)
         {
+            dynamic o = new System.Dynamic.ExpandoObject();
+            List<dynamic> l = new List<dynamic>();
+            foreach (var item in obj)
+            {
+                string j = "["+item.x+","+item.y+",\r\n    45,\r\n    14,\r\n    "+item.HP+",\r\n    0,\r\n    0,\r\n    165.8167,\r\n    0,\r\n    0,\r\n    0,\r\n    0,\r\n    0,\r\n    0,\r\n    \""+item.Name+"\",\r\n    1\r\n]";
+                l.Add(j);
+            }
+            o.Player = l;
+            o.Goods =new List<int>();
+            o.Box = new List<int>();
+            o.Car = new List<int>();
+            o.Map = "Kiki_Main";
+            o.Goods = new List<int>();
+            o.Game = new List<int>();
+            mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithPayload(JsonConvert.SerializeObject(o)).Build());
             this.Dispatcher.Invoke(() =>
             {
+                
                 this.txt.Text = JsonConvert.SerializeObject(obj);
             });
         }

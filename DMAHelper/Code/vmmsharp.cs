@@ -2,6 +2,7 @@
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Windows.Media.Media3D;
 
 /*  
  *  C# API wrapper 'vmmsharp' for MemProcFS 'vmm.dll' and LeechCore 'leechcore.dll' APIs.
@@ -587,6 +588,27 @@ namespace vmmsharp
                 Array.Resize<byte>(ref data, (int)cbRead);
             }
             return data;
+        }
+        public unsafe Vector3D MemReadVector(uint pid, ulong qwA,  uint flags = 0)
+        {
+            uint cbRead;
+            byte[] data = new byte[12];
+            fixed (byte* pb = data)
+            {
+                if (!vmmi.VMMDLL_MemReadEx(hVMM, pid, qwA, pb, 12, out cbRead, flags))
+                {
+                    return new Vector3D(0,0,0);
+                }
+            }
+            if (cbRead != 12)
+            {
+                Array.Resize<byte>(ref data, (int)cbRead);
+            }
+            float x = BitConverter.ToSingle(data, 0);
+            float y = BitConverter.ToSingle(data, 4);
+            float z = BitConverter.ToSingle(data, 8);
+
+            return new Vector3D(x,y,z);
         }
 
         public unsafe uint MemReadInt32(uint pid, ulong qwA, uint flags = 0)
