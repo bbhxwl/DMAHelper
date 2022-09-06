@@ -8,7 +8,7 @@ namespace DMAHelper.Code.Models
 {
     public  class PubgModel
     {
-        public List<PlayerModel> Player { get; set; }
+        public List<PlayerModel> Player { get; set; } = new List<PlayerModel>();
         public string MapName { get; set; }
         
 

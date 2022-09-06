@@ -62,36 +62,41 @@ namespace DMAHelper
 
         private void P_OnPlayerListUpdate(PubgModel obj)
         {
-            PubgMqttModel model = new PubgMqttModel();
-            model.Map = obj.MapName;
-             List<dynamic> l = new List<dynamic>();
-            foreach (var item in obj.Player)
-            {
-                List<object> listobj = new List<object>();
-                listobj.Add(item.x);
-                listobj.Add(item.y);
-                listobj.Add(item.Distance);
-                listobj.Add(item.TeamId);
-                listobj.Add(item.HP);
-                listobj.Add(item.KillCount);
-                listobj.Add(item.SpectatedCount);
-                listobj.Add(item.Orientation);
-                //是不是队友，1=是队友，0不是队友
-                listobj.Add(0);
-                listobj.Add(item.isBot ?1:0);
-                listobj.Add(0);
-                listobj.Add(0);
-                listobj.Add(item.bIsAimed);
-                listobj.Add(0);
-                listobj.Add(item.Name);
-                listobj.Add(1);
-                model.Player.Add(listobj);
-            }
-             
-            mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithPayload(JsonConvert.SerializeObject(model)).Build());
+            //PubgMqttModel model = new PubgMqttModel();
+            //model.Map = obj.MapName;
+            // List<dynamic> l = new List<dynamic>();
+            //foreach (var item in obj.Player)
+            //{
+            //    List<object> listobj = new List<object>();
+            //    listobj.Add(item.x);
+            //    listobj.Add(item.y);
+            //    listobj.Add(item.Distance);
+            //    listobj.Add(item.TeamId);
+            //    listobj.Add(item.HP);
+            //    listobj.Add(item.KillCount);
+            //    listobj.Add(item.SpectatedCount);
+            //    listobj.Add(item.Orientation);
+            //    //是不是队友，1=是队友，0不是队友
+            //    listobj.Add(0);
+            //    listobj.Add(item.isBot ?1:0);
+            //    listobj.Add(0);
+            //    listobj.Add(0);
+            //    listobj.Add(item.bIsAimed);
+            //    listobj.Add(0);
+            //    listobj.Add(item.Name);
+            //    listobj.Add(1);
+            //    model.Player.Add(listobj);
+            //}
+            //Console.WriteLine(System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss-ffff"));
+
+            //Task.Run(() =>
+            //{
+            //    mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithQualityOfServiceLevel( MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build());
+
+            //});
             this.Dispatcher.Invoke(() =>
             {
-                
+
                 this.txt.Text = JsonConvert.SerializeObject(obj);
             });
         }

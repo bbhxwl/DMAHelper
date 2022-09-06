@@ -93,6 +93,8 @@
     </Compile>
     <Compile Include="Code\Common.cs" />
     <Compile Include="Code\Models\PlayerModel.cs" />
+    <Compile Include="Code\Models\PubgModel.cs" />
+    <Compile Include="Code\Models\PubgMqttModel.cs" />
     <Compile Include="Code\pubg.cs" />
     <Compile Include="Code\vmmsharp.cs" />
     <Compile Include="MainWindow.xaml.cs">
