@@ -119,6 +119,10 @@ namespace DMAHelper
                     ulong actorBase = vmm.MemReadInt64(pid, ActorsArray);
                     ulong GNames = decryptFunc(vmm.MemReadInt64(pid, moduleBase + Offset_FNameEntry));
                     GNamesAddress = decryptFunc(vmm.MemReadInt64(pid, GNames));
+                    
+                    uint  MapId = Common.dec_objid(vmm.MemReadInt(pid,world + Offset_ObjID));
+                    
+                    string  mapName = vmm.MemReadString(pid,world+MapId,64);
                     List<PlayerModel> ListPlayer = new List<PlayerModel>();
                     for (int i = 0; i < Actorscount; i++)
                     {
