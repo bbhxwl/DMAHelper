@@ -16,6 +16,8 @@ using Newtonsoft.Json;
 using vmmsharp;
 using MQTTnet.Client;
 using MQTTnet;
+using DMAHelper.Code.Models;
+
 namespace DMAHelper
 {
     /// <summary>
@@ -58,23 +60,35 @@ namespace DMAHelper
 
         }
 
-        private void P_OnPlayerListUpdate(List<Code.Models.PlayerModel> obj)
+        private void P_OnPlayerListUpdate(PubgModel obj)
         {
-            dynamic o = new System.Dynamic.ExpandoObject();
-            List<dynamic> l = new List<dynamic>();
-            foreach (var item in obj)
+            PubgMqttModel model = new PubgMqttModel();
+            model.Map = obj.MapName;
+             List<dynamic> l = new List<dynamic>();
+            foreach (var item in obj.Player)
             {
-                string j = "["+item.x+","+item.y+",\r\n    45,\r\n    14,\r\n    "+item.HP+",\r\n    0,\r\n    0,\r\n    165.8167,\r\n    0,\r\n    0,\r\n    0,\r\n    0,\r\n    0,\r\n    0,\r\n    \""+item.Name+"\",\r\n    1\r\n]";
-                l.Add(j);
+                List<object> listobj = new List<object>();
+                listobj.Add(item.x);
+                listobj.Add(item.y);
+                listobj.Add(item.Distance);
+                listobj.Add(item.TeamId);
+                listobj.Add(item.HP);
+                listobj.Add(item.KillCount);
+                listobj.Add(item.SpectatedCount);
+                listobj.Add(item.Orientation);
+                //是不是队友，1=是队友，0不是队友
+                listobj.Add(0);
+                listobj.Add(item.isBot ?1:0);
+                listobj.Add(0);
+                listobj.Add(0);
+                listobj.Add(item.bIsAimed);
+                listobj.Add(0);
+                listobj.Add(item.Name);
+                listobj.Add(1);
+                model.Player.Add(listobj);
             }
-            o.Player = l;
-            o.Goods =new List<int>();
-            o.Box = new List<int>();
-            o.Car = new List<int>();
-            o.Map = "Kiki_Main";
-            o.Goods = new List<int>();
-            o.Game = new List<int>();
-            mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithPayload(JsonConvert.SerializeObject(o)).Build());
+             
+            mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithPayload(JsonConvert.SerializeObject(model)).Build());
             this.Dispatcher.Invoke(() =>
             {
                 
