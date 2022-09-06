@@ -10,7 +10,7 @@ namespace DMAHelper.Code.Models
     {
         public List<PlayerModel> Player { get; set; }
         public string MapName { get; set; }
-
+        
 
     }
 }

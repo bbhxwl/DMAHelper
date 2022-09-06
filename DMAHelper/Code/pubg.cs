@@ -54,7 +54,7 @@ namespace DMAHelper
         ulong Offset_ComponentLocation = 0x02C0;
         #endregion 
         public delegate ulong DecryptData(ulong c);
-        public event Action<List<PlayerModel>> OnPlayerListUpdate;
+        public event Action<PubgModel> OnPlayerListUpdate;
         DecryptData decryptFunc;
         public pubg(Vmm m, uint pid)
         {
@@ -109,6 +109,8 @@ namespace DMAHelper
             {
                 while (true)
                 {
+                    PubgModel model = new PubgModel();
+ 
                     ulong world = decryptFunc(vmm.MemReadInt64(pid, moduleBase + Offset_GWorld));
                     ulong ULocalPlayer = vmm.MemReadInt64(pid,moduleBase + Offset_LocalPlayersPTR);
                    ulong PlayerController = decryptFunc(vmm.MemReadInt64(pid,ULocalPlayer + Offset_PlayerController));
@@ -123,6 +125,7 @@ namespace DMAHelper
                     uint  MapId = Common.dec_objid(vmm.MemReadInt(pid,world + Offset_ObjID));
                     
                     string  mapName =GetObjName(MapId);
+                    model.MapName = mapName;
                     List<PlayerModel> ListPlayer = new List<PlayerModel>();
                     for (int i = 0; i < Actorscount; i++)
                     {
@@ -287,10 +290,11 @@ namespace DMAHelper
 
 
                     }
-
+                  
+                    model.Player = ListPlayer;
                     if (OnPlayerListUpdate != null)
                     {
-                        OnPlayerListUpdate(ListPlayer);
+                        OnPlayerListUpdate(model);
                     }
                     Thread.Sleep(10);
                 }
