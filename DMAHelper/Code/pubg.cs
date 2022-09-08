@@ -108,8 +108,7 @@ namespace DMAHelper
         }
         public void Start()
         {
-            Task.Run(() =>
-            {
+            
                 while (true)
                 {
                      
@@ -313,7 +312,7 @@ namespace DMAHelper
                 }
 
 
-            });
+             
 
         }
 

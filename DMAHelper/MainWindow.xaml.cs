@@ -39,20 +39,18 @@ namespace DMAHelper
                     
                 }
             });
-            var pidList = vmm.PidList();
-            Console.WriteLine($"一共有{pidList.Length}个进程");
-            foreach (var pid in pidList)
+            vmm.PidGetFromName("tslgame.exe",out uint pid);
+            //var pidList = vmm.PidList();
+            //Console.WriteLine($"一共有{pidList.Length}个进程");
+            string path = vmm.ProcessGetInformationString(pid, Vmm.VMMDLL_PROCESS_INFORMATION_OPT_STRING_PATH_KERNEL);
+            //如果程序的路径 转小写后 包括 tslgame.exe，说明是pubg进程
+            if (path.ToLower().Contains("tslgame.exe"))
             {
-                string path = vmm.ProcessGetInformationString(pid, Vmm.VMMDLL_PROCESS_INFORMATION_OPT_STRING_PATH_KERNEL);
-                //如果程序的路径 转小写后 包括 tslgame.exe，说明是pubg进程
-                if (path.ToLower().Contains("tslgame.exe"))
+                p = new pubg(vmm, pid);
+                p.OnPlayerListUpdate += P_OnPlayerListUpdate;
+                if (p.Init())
                 {
-                    p = new pubg(vmm, pid);
-                    p.OnPlayerListUpdate += P_OnPlayerListUpdate;
-                    if (p.Init())
-                    {
-                        p.Start();
-                    }
+                    p.Start();
                 }
             }
 
