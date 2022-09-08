@@ -31,7 +31,7 @@ namespace DMAHelper
         public MainWindow()
         {
             InitializeComponent();
-           var op= new MqttClientOptionsBuilder().WithTcpServer("219.129.239.39").Build();
+           var op= new MqttClientOptionsBuilder().WithTcpServer("113.107.160.90").Build();
             mqtt.ConnectAsync(op).ContinueWith(rs =>
             {
                 if (rs.Result.ResultCode== MqttClientConnectResultCode.Success)
@@ -51,7 +51,6 @@ namespace DMAHelper
                     p.OnPlayerListUpdate += P_OnPlayerListUpdate;
                     if (p.Init())
                     {
-                        MessageBox.Show("初始化成功");
                         p.Start();
                     }
                 }
@@ -89,11 +88,8 @@ namespace DMAHelper
             }
             Console.WriteLine(System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss-ffff"));
 
-            Task.Run(() =>
-            {
-                mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithQualityOfServiceLevel( MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build());
+            mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build());
 
-            });
             this.Dispatcher.Invoke(() =>
             {
 

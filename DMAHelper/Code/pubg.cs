@@ -39,8 +39,9 @@ namespace DMAHelper
         ulong Offset_DroppedItemGroup = 0x01A8;
         ulong Offset_DroppedItemGroup_UItem = 0x0738;
         ulong Offset_SpectatedCount = 0x1438;
-        ulong Offset_WorldLocation = 0x0268;
+        ulong Offset_WorldLocation = 0x02DC;
         ulong Offset_Mesh = 0x0480;
+        ulong Offset_Health = 0x11E8;
         ulong Offset_PlayerState = 0x0410;
         ulong Offset_LastTeamNum = 0x1408;
         ulong Offset_PlayerController = 0x0030;
@@ -142,7 +143,7 @@ namespace DMAHelper
                                 ulong pObjPointer = vmm.MemReadInt64(pid, actorBase + (ulong)i * 8);
                                 if (pObjPointer < 0x100000)
                                     continue;
-                                int actorId = (int)vmm.MemReadInt32(pid, pObjPointer + 0x10);
+                                int actorId = (int)vmm.MemReadInt32(pid, pObjPointer + Offset_ObjID);
                                 uint objId = Common.dec_objid(actorId);
                                 string objName = GetObjName(objId);
 
@@ -152,7 +153,7 @@ namespace DMAHelper
                                     PlayerModel player = new PlayerModel();
                                     string name = vmm.MemReadString(pid, vmm.MemReadInt64(pid, pObjPointer + Offset_CharacterName), 64);
                                     player.Name = name;
-                                    float hp = vmm.MemReadFloat(pid, pObjPointer + 0x0AE4);
+                                    float hp = vmm.MemReadFloat(pid, pObjPointer + Offset_Health);
                                     player.HP = hp;
                                     #region 读取骨骼
                                     ulong MeshAddr = vmm.MemReadInt64(pid, pObjPointer + Offset_Mesh);
