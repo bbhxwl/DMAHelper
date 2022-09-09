@@ -108,13 +108,19 @@ namespace DMAHelper
         }
         public void Start()
         {
-            
+
+            Task.Run(() =>
+            {
+                
+           
                 while (true)
                 {
-                     
-                        PubgModel model = new PubgModel();
-                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                    sw.Start();
+
+
+                 System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                sw.Start();
+
+                PubgModel model = new PubgModel();
                         ulong world = decryptFunc(vmm.MemReadInt64(pid, moduleBase + Offset_GWorld));
                         ulong ULocalPlayer = vmm.MemReadInt64(pid, moduleBase + Offset_LocalPlayersPTR);
                         ulong PlayerController = decryptFunc(vmm.MemReadInt64(pid, ULocalPlayer + Offset_PlayerController));
@@ -125,8 +131,8 @@ namespace DMAHelper
                         ulong actorBase = vmm.MemReadInt64(pid, ActorsArray);
                         ulong GNames = decryptFunc(vmm.MemReadInt64(pid, moduleBase + Offset_FNameEntry));
                         GNamesAddress = decryptFunc(vmm.MemReadInt64(pid, GNames));
-
-                        uint MapId = Common.dec_objid(vmm.MemReadInt(pid, world + Offset_ObjID));
+                   // int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
+                    uint MapId = Common.dec_objid(vmm.MemReadInt(pid, world + Offset_ObjID));
 
                         string mapName = GetObjName(MapId);
                         if (mapName == "TslLobby_Persistent_Main")
@@ -162,11 +168,11 @@ namespace DMAHelper
                                     float z = BitConverter.ToSingle(敌人坐标, 8);
                                     Vector3D actorLocation = new Vector3D(x, y, z);
                                     player.ActorLocation = actorLocation;
-                                    int w = vmm.MemReadInt(pid, world + Offset_WorldLocation);
-                                    int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
-                                    player.x = x + w;
+                                int w = vmm.MemReadInt(pid, world + Offset_WorldLocation);
+                                int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
+                                player.x = x + w;
                                     player.y = y + h;
-                                    player.z = z;
+                                player.z = z;
                                     if (objName == "PlayerMale_A_C" || objName == "PlayerFemale_A_C")
                                     {
                                         player.isBot = false;
@@ -257,37 +263,48 @@ namespace DMAHelper
                                     #endregion
 
                                 }
-                                //else if (objName == "DroppedItemGroup")
-                                //{
-                                //    //这个地方就是物资的
-                                //    var ItemGroupPtr = vmm.MemReadInt64(pid, pObjPointer + Offset_DroppedItemGroup);
+                            else if (objName == "DroppedItemGroup")
+                            {
+                                //这个地方就是物资的
+                                var ItemGroupPtr = vmm.MemReadInt64(pid, pObjPointer + Offset_DroppedItemGroup);
 
-                                //    var ItemCount = vmm.MemReadInt32(pid, pObjPointer + Offset_DroppedItemGroup + 0x8);
-                                //    if (ItemGroupPtr > 0 && ItemCount > 0)
-                                //    {
-                                //        for (int itemIndex = 0; itemIndex < ItemCount; itemIndex++)
-                                //        {
-                                //            var ItemObject = vmm.MemReadInt64(pid, ItemGroupPtr + (ulong)(itemIndex * 0x10));
-                                //            if (ItemObject > 0)
-                                //            {
-                                //                var UItemAddress = vmm.MemReadInt64(pid, ItemObject + Offset_DroppedItemGroup_UItem);
-                                //                if (UItemAddress > 0)
-                                //                {
-                                //                    var UItemID = vmm.MemReadInt32(pid, vmm.MemReadInt64(pid, UItemAddress + Offset_ItemInformationComponent) + Offset_ItemID);
-                                //                    if (UItemID > 0 && UItemID < 0xfff0ff)
-                                //                    {
-                                //                        string UItemName = GetObjName(UItemID);
+                                var ItemCount = vmm.MemReadInt32(pid, pObjPointer + Offset_DroppedItemGroup + 0x8);
+                                if (ItemGroupPtr > 0 && ItemCount > 0)
+                                {
+                                    List<PubgGood> goods = new List<PubgGood>();
+                                    for (int itemIndex = 0; itemIndex < ItemCount; itemIndex++)
+                                    {
+                                        var ItemObject = vmm.MemReadInt64(pid, ItemGroupPtr + (ulong)(itemIndex * 0x10));
+                                        if (ItemObject > 0)
+                                        {
+                                            var UItemAddress = vmm.MemReadInt64(pid, ItemObject + Offset_DroppedItemGroup_UItem);
+                                            if (UItemAddress > 0)
+                                            {
+                                                var UItemID = vmm.MemReadInt32(pid, vmm.MemReadInt64(pid, UItemAddress + Offset_ItemInformationComponent) + Offset_ItemID);
+                                                if (UItemID > 0 && UItemID < 0xfff0ff)
+                                                {
+                                                    string UItemName = GetObjName(UItemID);
+                                                  var v3d=  vmm.MemReadVector(pid, ItemObject+Offset_ComponentLocation);
+                                                    PubgGood good = new PubgGood();
+                                                    good.ClassName = UItemName;
+                                                    
+                                                    int w = vmm.MemReadInt(pid, world + Offset_WorldLocation);
+                                                    int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
+                                                    var tempv3 =new Vector3D(w,h,0) + v3d;
+                                                    good.x = (int)tempv3.X;
+                                                    good.y = (int)tempv3.Y;
+                                                    goods.Add(good);
+                                                    //auto pObjName = Tsl::GetGNamesByObjID(UItemID);
+                                                }
+                                            }
+                                        }
 
-                                //                        //auto pObjName = Tsl::GetGNamesByObjID(UItemID);
-                                //                    }
-                                //                }
-                                //            }
-
-                                //        }
-                                //    }
-                                //}
-
+                                    }
+                                    model.PubgGoods = goods;
+                                }
                             }
+
+                        }
                             catch (Exception ex)
                             {
 
@@ -299,20 +316,22 @@ namespace DMAHelper
 
 
                         }
-                    sw.Stop();
-                    Console.WriteLine(sw.ElapsedMilliseconds);
+                        
                         model.Player = ListPlayer;
                         if (OnPlayerListUpdate != null)
                         {
                             OnPlayerListUpdate(model);
                         }
-                    
-                  
-                  
-                }
+                sw.Stop();
+                Console.WriteLine("dma:"+sw.ElapsedMilliseconds);
 
 
-             
+
+            }
+
+            });
+
+
 
         }
 

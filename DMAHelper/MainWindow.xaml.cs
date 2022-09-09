@@ -17,6 +17,8 @@ using vmmsharp;
 using MQTTnet.Client;
 using MQTTnet;
 using DMAHelper.Code.Models;
+using System.Diagnostics;
+using System.Net.Configuration;
 
 namespace DMAHelper
 {
@@ -56,10 +58,10 @@ namespace DMAHelper
 
 
         }
-
-        private void P_OnPlayerListUpdate(PubgModel obj)
+        private    void P_OnPlayerListUpdate(PubgModel obj)
         {
-            PubgMqttModel model = new PubgMqttModel();
+             
+             PubgMqttModel model = new PubgMqttModel();
             model.Map = obj.MapName;
              List<dynamic> l = new List<dynamic>();
             foreach (var item in obj.Player)
@@ -84,15 +86,49 @@ namespace DMAHelper
                 listobj.Add(1);
                 model.Player.Add(listobj);
             }
-            Console.WriteLine(System.DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss-ffff"));
+            if (obj.PubgGoods!=null&&obj.PubgGoods.Count>0)
+            {
+               
+                foreach (var item in obj.PubgGoods)
+                {
+                    List<object> listobj = new List<object>();
+                    listobj.Add(item.ClassName);
+                    listobj.Add(item.x);
+                    listobj.Add(item.y);
+                   // listobj.Add(0);
+                    //listobj.Add(item.ClassName);
+                    model.Goods.Add(listobj);
+                }
+               
+            }
+            try
+            {
+                 mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithPayload(JsonConvert.SerializeObject(model)).Build()).ContinueWith(rs =>
+                 {
+                     try
+                     {
+                         if (rs.Result.ReasonCode == MqttClientPublishReasonCode.Success)
+                         {
+                          }
+                     }
+                     catch (Exception ee)
+                     {
 
-            mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build());
-
-            this.Dispatcher.Invoke(() =>
+                      }
+                    
+                 });
+            
+            }
+            catch (Exception ex)
             {
 
-                this.txt.Text = JsonConvert.SerializeObject(obj);
-            });
+             }
+            
+            //this.Dispatcher.Invoke(() =>
+            //{
+
+            //    this.txt.Text = JsonConvert.SerializeObject(obj);
+            //});
         }
     }
 }
