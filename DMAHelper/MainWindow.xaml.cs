@@ -33,7 +33,7 @@ namespace DMAHelper
         public MainWindow()
         {
             InitializeComponent();
-           var op= new MqttClientOptionsBuilder().WithTcpServer("113.107.160.90").Build();
+           var op= new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel( MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
             mqtt.ConnectAsync(op).ContinueWith(rs =>
             {
                 if (rs.Result.ResultCode== MqttClientConnectResultCode.Success)
@@ -103,7 +103,7 @@ namespace DMAHelper
             }
             try
             {
-                 mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithPayload(JsonConvert.SerializeObject(model)).Build()).ContinueWith(rs =>
+                 mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic("470138890").WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build()).ContinueWith(rs =>
                  {
                      try
                      {
