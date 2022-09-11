@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace DMAHelper.Code.Models
 {
     public  class ZhiZhenModel
-    { 
+    {  
         public ulong pObjPointer { get; set; }
         public int actorId { get; set; }
         public uint objId { get; set; }

@@ -96,6 +96,7 @@
     <Compile Include="Code\Models\PubgGood.cs" />
     <Compile Include="Code\Models\PubgModel.cs" />
     <Compile Include="Code\Models\PubgMqttModel.cs" />
+    <Compile Include="Code\Models\ZhiZhenModel.cs" />
     <Compile Include="Code\pubg.cs" />
     <Compile Include="Code\vmmsharp.cs" />
     <Compile Include="MainWindow.xaml.cs">
