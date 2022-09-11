@@ -64,6 +64,7 @@ namespace DMAHelper
         public delegate ulong DecryptData(ulong c);
         public event Action<PubgModel> OnPlayerListUpdate;
         DecryptData decryptFunc;
+        List<GoodItem> goodItems = new List<GoodItem>();
         public pubg()
         {
 
@@ -101,6 +102,11 @@ namespace DMAHelper
                         string jsonStr = File.ReadAllText("itemfilter.json");
                         var jo=JsonConvert.DeserializeObject<JObject>(jsonStr);
                         var v=jo.Properties();
+                        foreach (var item in v)
+                        {
+                           JToken token= item.Value<JToken>();
+                           goodItems.Add(new GoodItem(){ className  = item.Name,shortName = token["shortName"].Value<string>(),showItem =token["showItem"].Value<bool>() , group =token["group"].Value<int>() });
+                        }
                         
                     }
                     
@@ -724,12 +730,23 @@ namespace DMAHelper
                             {
                                 string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
                                 item.ClassName = className;
-                                item.Name = className;
+                                var tempM=goodItems.Where(s => s.className == className).First();
+                                if (tempM!=null)
+                                {
+                                    item.Name = tempM.shortName;
+                                    item.isShow = tempM.showItem;
+                                    item.group = tempM.group;
+                                }
+                                else
+                                {
+                                    item.Name = className;
+                                }
+                               
                             }
                             #endregion
                             #endregion
                             model.Player = ListPlayer;
-                            model.PubgGoods = goods;
+                            model.PubgGoods = goods.Where(s=>s.isShow).ToList();
                             if (OnPlayerListUpdate != null)
                             {
                                 OnPlayerListUpdate(model);
@@ -760,9 +777,7 @@ namespace DMAHelper
                 if (fName > 0)
                 {
                     var nameByte = vmm.MemRead(pid, fName + 0x10, 64);
-
-
-
+                    
                     //获取类名
                     string name = Encoding.ASCII.GetString(nameByte.ToArray());
 

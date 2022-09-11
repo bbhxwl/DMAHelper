@@ -72,11 +72,35 @@ namespace DMAHelper
                 foreach (var item in obj.PubgGoods)
                 {
                     List<object> listobj = new List<object>();
-                    listobj.Add(item.ClassName);
+                    listobj.Add(item.Name);
                     listobj.Add(item.x);
                     listobj.Add(item.y);
-                    listobj.Add("red");
-                    //listobj.Add(item.ClassName);
+                    if (item.group==0)
+                    {
+                        listobj.Add("#FFFFFF");
+                    }
+                    else if (item.group==1)
+                    {
+                        listobj.Add("#157DEC");
+                    }
+                    else if (item.group==2)
+                    {
+                        listobj.Add("#FFFF00");
+                    }
+                    else if (item.group==3)
+                    {
+                        listobj.Add("#FF00FF");
+                    }
+                    else if (item.group==4)
+                    {
+                        listobj.Add("#00FF00");
+                    }
+                    else if (item.group==5)
+                    {
+                        listobj.Add("#00FFFF");
+                    }
+                    listobj.Add(item.ClassName);
+                    listobj.Add(item.group);
                     model.Goods.Add(listobj);
                 }
                
