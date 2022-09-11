@@ -88,7 +88,7 @@ namespace DMAHelper
                 // handle error
             }
         }
-        
+
         public bool Init()
         {
             try
@@ -100,24 +100,46 @@ namespace DMAHelper
                     {
 
                         string jsonStr = File.ReadAllText("itemfilter.json");
-                        var jo=JsonConvert.DeserializeObject<JObject>(jsonStr);
-                        var v=jo.Properties();
+                        var jo = JsonConvert.DeserializeObject<JObject>(jsonStr);
+                        var v = jo.Properties();
                         foreach (var item in v)
                         {
-                           JToken token= item.Value<JToken>();
-                           goodItems.Add(new GoodItem(){ className  = item.Name,shortName = token["shortName"].Value<string>(),showItem =token["showItem"].Value<bool>() , group =token["group"].Value<int>() });
+                            JToken token = item.Value<JToken>();
+                            goodItems.Add(new GoodItem() { className = item.Name, shortName = token["shortName"].Value<string>(), showItem = token["showItem"].Value<bool>(), group = token["group"].Value<int>() });
                         }
-                        
+
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
 
-                   
+
                 }
-              
-                vmm = new Vmm("", "-device", "fpga");
+
+                try
+                {
+                    vmm = new Vmm("", "-device", "fpga");
+                }
+                catch (Exception e)
+                {
+
+                }
+
+                try
+                {
+                    if (vmm == null)
+                    {
+                        vmm = new Vmm("", "-device", "fpga", "-memmap", "auto");
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                }
+
+
                 // GetMemMap();
                 vmm.PidGetFromName("tslgame.exe", out uint pid);
                 this.pid = pid;
@@ -159,7 +181,8 @@ namespace DMAHelper
 
             return false;
         }
-        
+
+
         public void Start()
         {
             Task.Run(() =>
@@ -730,7 +753,7 @@ namespace DMAHelper
                             {
                                 string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
                                 item.ClassName = className;
-                                var tempM=goodItems.Where(s => s.className == className).First();
+                                var tempM=goodItems.Where(s => s.className == className).FirstOrDefault();
                                 if (tempM!=null)
                                 {
                                     item.Name = tempM.shortName;
