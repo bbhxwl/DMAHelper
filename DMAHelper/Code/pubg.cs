@@ -546,7 +546,206 @@ namespace DMAHelper
                             }
 
                             #endregion
+                        #region 读取物资
+                            var listgoods = ListZhiZhenModel.Where(item =>
+                                    (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
+                                .ToList();
+                            //准备读取ItemGroupPtr
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in listgoods)
+                            {
+                                scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup, 8);
+                            }
+                            //读取ItemGroupPtr
+                            scatter.Execute();
+                            foreach (var item in listgoods)
+                            {
+                                item.ItemGroupPtr = scatter.ReadUInt64(item.pObjPointer + Offset_DroppedItemGroup);
+                            }
+                            //准备读取ItemCount 
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in listgoods)
+                            {
+                                if (item.ItemGroupPtr > 0)
+                                {
+                                    scatter.Prepare(item.ItemGroupPtr +Offset_DroppedItemGroup + 0x8, 4);
+                                }
+                            }
+                            //读取ItemCount
+                            scatter.Execute();
+                            List<PubgGood> goods = new List<PubgGood>();
+                            foreach (var item in listgoods)
+                            {
+                                if (item.ItemGroupPtr > 0)
+                                {
+                                  
+                                    item.ItemCount = scatter.ReadInt(item.ItemGroupPtr + Offset_DroppedItemGroup + 0x8);
+                                }
+                            }
+
+                            //准备ItemObject
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                          
+                            foreach (var item in listgoods)
+                            {
+                                if  (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                {
+                                    for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                    {
+                                        scatter.Prepare(item.ItemGroupPtr + (ulong)(itemIndex * 0x10),8);
+                                    }
+                                }
+                            }
+                            //读取ItemObject
+                            scatter.Execute();
+                            foreach (var item in listgoods)
+                            {
+                                if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                {
+                                    for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                    {
+                                        ulong ItemObject = scatter.ReadUInt64(item.ItemGroupPtr + (ulong)(itemIndex * 0x10));
+                                        goods.Add(new PubgGood()
+                                        {
+                                            ItemObject=ItemObject
+                                        } );
+                                        
+                                    }
+                                }
+                            }
+                            //准备UItemAddress 
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in goods)
+                            {
+                                if (item.ItemObject >0)
+                                {
+                                    scatter.Prepare( item.ItemObject + Offset_DroppedItemGroup_UItem,8);
+                                }
+                            }
+                            
+                            //读取UItemAddress
+                            scatter.Execute();
+                            foreach (var item in goods)
+                            {
+                                if (item.ItemObject > 0)
+                                {
+                                    item.UItemAddress =  scatter.ReadUInt64(item.ItemObject+ Offset_DroppedItemGroup_UItem);
+                                }
+                            }
+                            //准备读取UItemIDAddress
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in goods)
+                            {
+                                if (item.UItemAddress > 0)
+                                {
+                                    scatter.Prepare(item.UItemAddress + Offset_ItemInformationComponent, 8);
+                                }
+                            }
+                            //读取UItemIDAddress
+                            scatter.Execute();
+                            foreach (var item in goods)
+                            {
+                                if (item.UItemAddress > 0)
+                                {
+                                    item.UItemIDAddress = scatter.ReadUInt64(item.UItemAddress + Offset_ItemInformationComponent);
+                                }
+                            }
+                            //准备读取UItemID
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in goods)
+                            {
+                                if (item.UItemIDAddress > 0)
+                                {
+                                    scatter.Prepare(item.UItemIDAddress + Offset_ItemID, 4);
+                                }
+                            }
+                            //读取UItemID
+                            scatter.Execute();
+                            foreach (var item in goods)
+                            {
+                                if (item.UItemIDAddress > 0)
+                                {
+                                    item.UItemID = scatter.ReadUInt(item.UItemIDAddress + Offset_ItemID);
+                                }
+                            }
+                            //准备读取UItem坐标
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in goods)
+                            {
+                                if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                {
+                                    scatter.Prepare(item.ItemObject + Offset_ComponentLocation, 12);
+                                }
+                            }
+                            //读取UItem坐标
+                            scatter.Prepare(world + Offset_WorldLocation, 4);
+                            scatter.Prepare(world + Offset_WorldLocation + 0x04, 4);
+                            scatter.Execute();
+                            float ww = scatter.ReadInt(world + Offset_WorldLocation);
+                            float hh = scatter.ReadInt(world + Offset_WorldLocation + 0x4);
+                            foreach (var item in goods)
+                            {
+                                if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                {
+                                   var zuobiao= scatter.Read(item.ItemObject + Offset_ComponentLocation, 12);
+                                   Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao,0),BitConverter.ToSingle(zuobiao,4),BitConverter.ToSingle(zuobiao,8));
+                                   var tempv3 = new Vector3D(ww, hh, 0) + v3d;
+                                   item.x=(int)tempv3.X;
+                                   item.y=(int)tempv3.Y;
+                                }
+                            }
+                            #region 读取物资名字
+                            //准备fNamePtr
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in goods)
+                            {
+                                scatter.Prepare((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8), 8);
+                            }
+                            isExec = scatter.Execute();
+                            //读取fNamePtr 
+                            foreach (var item in goods)
+                            {
+                                ulong fNamePtr = scatter.ReadUInt64((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8));
+                                if (fNamePtr > 0)
+                                {
+                                    item.fNamePtr = fNamePtr;
+                                }
+                            }
+                            goods = goods.Where(x => x.fNamePtr > 0).ToList();
+                            //准备fName
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in goods)
+                            {
+                                scatter.Prepare(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8, 8);
+                            }
+                            isExec = scatter.Execute();
+                            //读取fName，
+                            foreach (var item in goods)
+                            {
+                                ulong fName = scatter.ReadUInt64(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8);
+                                if (fName > 0)
+                                {
+                                    item.fName = fName;
+                                }
+                            }
+                            //准备读取物资名字
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            goods = goods.Where(x => x.fName > 0).ToList();
+                            foreach (var item in goods)
+                            {
+                                scatter.Prepare(item.fName + 0x10, 64);
+                            }
+                            scatter.Execute();
+                            //读取物资名字
+                            foreach (var item in goods)
+                            {
+                                string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
+                                item.Name = className;
+                            }
+                            #endregion 
+                            #endregion             
                             model.Player = ListPlayer;
+                            model.PubgGoods = goods;
                             if (OnPlayerListUpdate != null)
                             {
                                 OnPlayerListUpdate(model);

@@ -36,6 +36,9 @@ namespace DMAHelper.Code.Models
         public float AmiMz { get; set; }
         public bool bIsAimed { get; set; }
         public float Distance { get; set; }
+        public ulong ItemGroupPtr { get; set; }
+        public int ItemCount { get; set; }
+        
     }
     
 }
