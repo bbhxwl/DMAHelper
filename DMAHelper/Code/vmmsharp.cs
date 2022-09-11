@@ -2193,6 +2193,24 @@ namespace vmmsharp
             }
             return data;
         }
+        public unsafe ulong ReadUInt64(ulong qwA)
+        {
+            uint cbRead;
+            byte[] data = new byte[8];
+            fixed (byte* pb = data)
+            {
+                if (!vmmi.VMMDLL_Scatter_Read(hS, qwA, 8, pb, out cbRead))
+                {
+                    return 0;
+                }
+            }
+            if (cbRead != 8)
+            {
+                Array.Resize<byte>(ref data, (int)cbRead);
+                return 0;
+            }
+            return  BitConverter.ToUInt64(data, 0);
+        }
 
         public bool Prepare(ulong qwA, uint cb)
         {

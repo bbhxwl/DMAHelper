@@ -137,9 +137,13 @@ namespace DMAHelper
             {
                 while (true)
                 {
+                    
                     System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                     sw.Start();
-
+                    VmmScatter scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                    if (scatter!=null)
+                    {
+ 
                     PubgModel model = new PubgModel();
                     ulong world = decryptFunc(vmm.MemReadInt64(pid, moduleBase + Offset_GWorld));
                     ulong ULocalPlayer = vmm.MemReadInt64(pid, moduleBase + Offset_LocalPlayersPTR);
@@ -163,10 +167,11 @@ namespace DMAHelper
                     List<PlayerModel> ListPlayer = new List<PlayerModel>();
                     for (int i = 0; i < Actorscount; i++)
                     {
-                        continue;
                         try
                         {
-                            ulong pObjPointer = vmm.MemReadInt64(pid, actorBase + (ulong)i * 8);
+                                scatter.Prepare(actorBase + (ulong)i * 8, 8);
+                                continue;
+                                ulong pObjPointer = vmm.MemReadInt64(pid, actorBase + (ulong)i * 8);
                             if (pObjPointer < 0x100000)
                                 continue;
                             int actorId = (int)vmm.MemReadInt32(pid, pObjPointer + Offset_ObjID);
@@ -331,17 +336,22 @@ namespace DMAHelper
 
                             Console.WriteLine("11111:" + ex.Message);
                         }
-
-
-                        // Console.WriteLine(objName);
-
-
                     }
-
-                    model.Player = ListPlayer;
+                       bool isExec= scatter.Execute();
+                        List<ulong> ListpObjPointer = new List<ulong>();
+                        for (int i = 0; i < Actorscount; i++)
+                        {
+                           ulong pObjPointer=scatter.ReadUInt64(actorBase + (ulong)i * 8);
+                            if (pObjPointer > 0x100000)
+                            {
+                                ListpObjPointer.Add(pObjPointer);
+                            }
+                        }
+                            model.Player = ListPlayer;
                     if (OnPlayerListUpdate != null)
                     {
                         OnPlayerListUpdate(model);
+                    }
                     }
                     sw.Stop();
                     Console.WriteLine("dma:" + sw.ElapsedMilliseconds);
