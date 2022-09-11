@@ -340,21 +340,23 @@ namespace DMAHelper
                             if (pObjPointer > 0x100000)
                             {
                                 ListZhiZhenModel.Add(new ZhiZhenModel() { pObjPointer = pObjPointer });
-                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                                scatter.Prepare(pObjPointer + Offset_ObjID, 4);
+                               
+                               
                             }
                         }
-                        
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            scatter.Prepare(item.pObjPointer + Offset_ObjID, 4);
+                        }
                           isExec = scatter.Execute();
-                         
-                        //读取actorId ，准备fNamePtr
+                          //读取actorId ，准备fNamePtr
                         foreach (var item in ListZhiZhenModel)
                         {
                             int actorId = scatter.ReadInt(item.pObjPointer + Offset_ObjID);
                             uint objId = Common.dec_objid(actorId);
                             item.actorId = actorId;
                             item.objId = objId;
-
                             scatter.Prepare((GNamesAddress + (ulong)(objId / Offset_ChunkSize) * 0x8), 8);
                              
                         }
