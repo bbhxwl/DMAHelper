@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
+using System.IO;
 
 namespace DMAHelper
 {
@@ -60,16 +61,38 @@ namespace DMAHelper
         public delegate ulong DecryptData(ulong c);
         public event Action<PubgModel> OnPlayerListUpdate;
         DecryptData decryptFunc;
-        public pubg(Vmm m, uint pid)
+        public pubg()
         {
-            this.vmm = m;
-            this.pid = pid;
-            moduleBase = vmm.ProcessGetModuleBase(pid, "TslGame.exe");
+             
+           
+        }
+        private   void GetMemMap()
+        {
+            try
+            {
+                var map = vmm.Map_GetPhysMem();
+                if (map.Length == 0) throw new Exception("Map_GetPhysMem() returned no entries!");
+                string mapOut = "";
+                for (int i = 0; i < map.Length; i++)
+                {
+                    mapOut += $"{map[i].pa.ToString("x")} {(map[i].pa + map[i].cb - 1).ToString("x")}\n";
+                }
+                File.WriteAllText("mmap.txt", mapOut);
+            }
+            catch (Exception ex)
+            {
+                // handle error
+            }
         }
         public bool Init()
         {
             try
             {
+                vmm = new Vmm("", "-device", "fpga");
+               // GetMemMap();
+                vmm.PidGetFromName("tslgame.exe",out uint pid);
+                this.pid = pid;
+                moduleBase = vmm.ProcessGetModuleBase(pid, "TslGame.exe");
                 var DecryptThis = vmm.MemReadInt64(pid, moduleBase + Offset_XenuineDecrypt);
                 if (DecryptThis > 0)
                 {
@@ -110,11 +133,9 @@ namespace DMAHelper
         DispatcherTimer timer;
         public void Start()
         {
-            for (int j = 0; j < 2; j++)
+            Task.Run(() =>
             {
-                timer =   new DispatcherTimer();
-                timer.Interval = TimeSpan.FromMilliseconds(10);
-                timer.Tick += (s, e) =>
+                while (true)
                 {
                     System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
                     sw.Start();
@@ -142,6 +163,7 @@ namespace DMAHelper
                     List<PlayerModel> ListPlayer = new List<PlayerModel>();
                     for (int i = 0; i < Actorscount; i++)
                     {
+                        continue;
                         try
                         {
                             ulong pObjPointer = vmm.MemReadInt64(pid, actorBase + (ulong)i * 8);
@@ -324,9 +346,8 @@ namespace DMAHelper
                     sw.Stop();
                     Console.WriteLine("dma:" + sw.ElapsedMilliseconds);
 
-                };
-                timer.Start();
-            }
+                }
+            });
            
 
 

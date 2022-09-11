@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DMAHelper"
         mc:Ignorable="d"
-        Title="MainWindow" Height="80" Width="250">
+        Title="斌斌 0.0.1版本" Height="100" Width="250">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -17,8 +17,8 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" x:Name="txtuid" Grid.Column="0">账号:</Label>
-        <TextBox Grid.Row="0" Grid.Column="1"></TextBox>
+        <Label Grid.Row="0"  Grid.Column="0">账号:</Label>
+        <TextBox Text="470138890" x:Name="txtuid" Grid.Row="0" Grid.Column="1"></TextBox>
         <Button x:Name="btnOk" Grid.ColumnSpan="2" Click="Button_Click" Grid.Row="1" Grid.Column="0" >确认</Button>
         <TextBox Grid.Column="3" x:Name="txtLog" Grid.RowSpan="2" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" ></TextBox>
     </Grid>
