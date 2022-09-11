@@ -343,7 +343,8 @@ namespace DMAHelper
                                 scatter.Prepare(pObjPointer + Offset_ObjID, 4);
                             }
                         }
-                        scatter.Execute();
+                          isExec = scatter.Execute();
+                         
                         //读取actorId ，准备fNamePtr
                         foreach (var item in ListZhiZhenModel)
                         {
@@ -355,7 +356,7 @@ namespace DMAHelper
                             scatter.Prepare((GNamesAddress + (ulong)(objId / Offset_ChunkSize) * 0x8), 8);
                              
                         }
-                        scatter.Execute();
+                          isExec = scatter.Execute();
                         //读取fNamePtr， 准备fName
                         foreach (var item in ListZhiZhenModel)
                         {
@@ -366,7 +367,7 @@ namespace DMAHelper
                                 scatter.Prepare(fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8, 8);
                             }
                         }
-                        scatter.Execute();
+                          isExec = scatter.Execute();
                         //读取fName，准备className
                         foreach (var item in ListZhiZhenModel)
                         {
