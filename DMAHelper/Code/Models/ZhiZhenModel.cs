@@ -15,5 +15,7 @@ namespace DMAHelper.Code.Models
         public ulong fNamePtr { get; set; }
         public ulong fName { get; set; }
         public string className { get; set; }
+        public ulong CharacterId { get; set; }
+        public string Name { get; set; }
     }
 }

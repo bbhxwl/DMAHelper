@@ -334,6 +334,7 @@ namespace DMAHelper
                         }
                         bool isExec = scatter.Execute();
                         List<ZhiZhenModel> ListZhiZhenModel = new List<ZhiZhenModel>();
+                        #region 读取所有类名
                         for (int i = 0; i < Actorscount; i++)
                         {
                             ulong pObjPointer = scatter.ReadUInt64(actorBase + (ulong)i * 8);
@@ -411,6 +412,43 @@ namespace DMAHelper
                             {
                                 string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
                                 item.className= className;
+                            }
+                        }
+                        #endregion
+                        //准备读取CharacterId
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            if (!string.IsNullOrEmpty(item.className)&&(item.className == "PlayerMale_A_C" || item.className  == "PlayerFemale_A_C" || item.className  == "AIPawn_Base_Female_C" || item.className  == "AIPawn_Base_Male_C" || item.className  == "UltAIPawn_Base_Female_C" || item.className  == "UltAIPawn_Base_Male_C"))
+                            { 
+                                scatter.Prepare(item.pObjPointer + Offset_CharacterName,8);
+                             }
+                        }
+                        scatter.Execute();
+                        //读取CharacterId
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            if (!string.IsNullOrEmpty(item.className)&&(item.className == "PlayerMale_A_C" || item.className  == "PlayerFemale_A_C" || item.className  == "AIPawn_Base_Female_C" || item.className  == "AIPawn_Base_Male_C" || item.className  == "UltAIPawn_Base_Female_C" || item.className  == "UltAIPawn_Base_Male_C"))
+                            { 
+                               item.CharacterId= scatter.ReadUInt64(item.pObjPointer + Offset_CharacterName);
+                            }
+                        }
+                        //准备读取CharacterName
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            if (item.CharacterId>0)
+                            {
+                                scatter.Prepare(item.CharacterId, 64);
+                            }
+                        }
+                        scatter.Execute();
+                        //读取CharacterName
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            if (item.CharacterId>0)
+                            {
+                                item.Name = scatter.ReadStringASCII(item.CharacterId, 64);
                             }
                         }
                         model.Player = ListPlayer;
