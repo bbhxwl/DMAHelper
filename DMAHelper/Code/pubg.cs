@@ -628,14 +628,14 @@ scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                         scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                         foreach (var item in listPlay)
                         {
-                          scatter.Prepare(item.pObjPointer + Offset_AimOffsets,4)
+                            scatter.Prepare(item.pObjPointer + Offset_AimOffsets, 4);
                             
                         }
                         //读取AmiMz
                         scatter.Execute();
                         foreach (var item in listPlay)
                         {
-                           item.AmiMz= scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets)
+                            item.AmiMz = scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets);
                            float AimX = (float)Math.Abs(item.aimFov.X - item.AmiMz);
                            item.bIsAimed= (AimX > -5 && AimX < 5);
                            float Distance = (float)(cameraLocation - item.actorLocation).Length / 100;
