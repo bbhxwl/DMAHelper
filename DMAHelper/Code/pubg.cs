@@ -340,9 +340,11 @@ namespace DMAHelper
                             if (pObjPointer > 0x100000)
                             {
                                 ListZhiZhenModel.Add(new ZhiZhenModel() { pObjPointer = pObjPointer });
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                                 scatter.Prepare(pObjPointer + Offset_ObjID, 4);
                             }
                         }
+                        
                           isExec = scatter.Execute();
                          
                         //读取actorId ，准备fNamePtr
