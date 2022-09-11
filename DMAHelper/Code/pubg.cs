@@ -448,7 +448,7 @@ namespace DMAHelper
                         {
                             if (item.CharacterId>0)
                             {
-                                item.Name = scatter.ReadStringASCII(item.CharacterId, 64);
+                                item.Name = scatter.ReadStringUnicode(item.CharacterId, 64);
                             }
                         }
                         model.Player = ListPlayer;
