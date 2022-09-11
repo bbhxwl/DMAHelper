@@ -150,6 +150,7 @@ namespace DMAHelper
                         ulong ULocalPlayer = vmm.MemReadInt64(pid, moduleBase + Offset_LocalPlayersPTR);
                         ulong PlayerController = decryptFunc(vmm.MemReadInt64(pid, ULocalPlayer + Offset_PlayerController));
                         ulong CameraManager = vmm.MemReadInt64(pid, PlayerController + Offset_PlayerCameraManager);
+                        Vector3D cameraLocation = vmm.MemReadVector(pid, CameraManager + Offset_CameraLocation);
                         ulong PersistentLevel = decryptFunc(vmm.MemReadInt64(pid, world + Offset_CurrentLevel));
                         ulong ActorsArray = decryptFunc(vmm.MemReadInt64(pid, PersistentLevel + Offset_Actors));
                         uint Actorscount = vmm.MemReadInt32(pid, ActorsArray + 0x08);
@@ -164,6 +165,8 @@ namespace DMAHelper
                         {
                             return;
                         }
+
+                        
                         model.MapName = mapName;
                         List<PlayerModel> ListPlayer = new List<PlayerModel>();
                         for (int i = 0; i < Actorscount; i++)
@@ -377,65 +380,66 @@ namespace DMAHelper
                                 scatter.Prepare(fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8, 8);
                             }
                         }
+                        ListZhiZhenModel=ListZhiZhenModel.Where(x => x.fNamePtr > 0).ToList();
                         //准备fName
                         scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                         foreach (var item in ListZhiZhenModel)
                         {
-                            if (item.fNamePtr > 0)
-                            {
-                                item.fNamePtr = item.fNamePtr;
-                                scatter.Prepare(item.fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8,8);
-                            }
+                            item.fNamePtr = item.fNamePtr;
+                            scatter.Prepare(item.fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8,8);
                         }
                           isExec = scatter.Execute();
                         //读取fName，
                         foreach (var item in ListZhiZhenModel)
                         {
                             ulong fName = scatter.ReadUInt64(item.fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8);
-                            item.fName = fName;
-                           
+                            if (item.fName > 0)
+                            {
+                                item.fName = fName;
+                            }
                         }
                         //准备className
                         scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        ListZhiZhenModel=ListZhiZhenModel.Where(x => x.fName > 0).ToList();
                         foreach (var item in ListZhiZhenModel)
                         {
-                            if (item.fName>0)
-                            {
-                                scatter.Prepare(item.fName + 0x10, 64);
-                            }
+                            scatter.Prepare(item.fName + 0x10, 64);
                         }
                         scatter.Execute();
                         //读取className
                         foreach (var item in ListZhiZhenModel)
                         {
-                            if (item.fName>0)
-                            {
-                                string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
+                            string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
                                 item.className= className;
-                            }
                         }
                         #endregion
+                        #region 读取玩家名字 
                         //准备读取CharacterId
                         scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                        foreach (var item in ListZhiZhenModel)
+                        var listPlay = ListZhiZhenModel.Where(item =>
+                                (!string.IsNullOrEmpty(item.className) && (item.className == "PlayerMale_A_C" ||
+                                                                           item.className == "PlayerFemale_A_C" ||
+                                                                           item.className == "AIPawn_Base_Female_C" ||
+                                                                           item.className == "AIPawn_Base_Male_C" ||
+                                                                           item.className ==
+                                                                           "UltAIPawn_Base_Female_C" ||
+                                                                           item.className == "UltAIPawn_Base_Male_C")))
+                            .ToList();
+                        foreach (var item in listPlay)
                         {
-                            if (!string.IsNullOrEmpty(item.className)&&(item.className == "PlayerMale_A_C" || item.className  == "PlayerFemale_A_C" || item.className  == "AIPawn_Base_Female_C" || item.className  == "AIPawn_Base_Male_C" || item.className  == "UltAIPawn_Base_Female_C" || item.className  == "UltAIPawn_Base_Male_C"))
-                            { 
+                             
                                 scatter.Prepare(item.pObjPointer + Offset_CharacterName,8);
-                             }
+                             
                         }
                         scatter.Execute();
                         //读取CharacterId
-                        foreach (var item in ListZhiZhenModel)
+                        foreach (var item in listPlay)
                         {
-                            if (!string.IsNullOrEmpty(item.className)&&(item.className == "PlayerMale_A_C" || item.className  == "PlayerFemale_A_C" || item.className  == "AIPawn_Base_Female_C" || item.className  == "AIPawn_Base_Male_C" || item.className  == "UltAIPawn_Base_Female_C" || item.className  == "UltAIPawn_Base_Male_C"))
-                            { 
-                               item.CharacterId= scatter.ReadUInt64(item.pObjPointer + Offset_CharacterName);
-                            }
+                            item.CharacterId= scatter.ReadUInt64(item.pObjPointer + Offset_CharacterName);
                         }
                         //准备读取CharacterName
                         scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                        foreach (var item in ListZhiZhenModel)
+                        foreach (var item in listPlay)
                         {
                             if (item.CharacterId>0)
                             {
@@ -444,13 +448,217 @@ namespace DMAHelper
                         }
                         scatter.Execute();
                         //读取CharacterName
-                        foreach (var item in ListZhiZhenModel)
+                        foreach (var item in listPlay)
                         {
                             if (item.CharacterId>0)
                             {
                                 item.Name = scatter.ReadStringUnicode(item.CharacterId, 64);
                             }
                         }
+                        #endregion
+                        
+                        #region 读取hp
+                        //准备读取hp
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in listPlay)
+                        {
+                            scatter.Prepare(item.pObjPointer + Offset_Health, 4);
+                        }
+                        //读取hp
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            item.Hp = scatter.ReadFloat(item.pObjPointer + Offset_Health);
+                        }
+                        #endregion
+                        #region 读取观战人数 
+                        //准备读取观战人数
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in listPlay)
+                        {
+                            scatter.Prepare(item.pObjPointer + Offset_SpectatedCount, 4);
+                        }
+                        //读取观战人数
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            item.SpectatedCount = scatter.ReadInt(item.pObjPointer + Offset_SpectatedCount);
+                        }
+                        #endregion
+                        #region 读取团队编号
+                        //准备读取团队编号
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in listPlay)
+                        {
+                            scatter.Prepare(item.pObjPointer + Offset_LastTeamNum, 4);
+                        }
+                        //读取团队编号
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            int teamNum= scatter.ReadInt(item.pObjPointer + Offset_LastTeamNum);
+                            if (teamNum == 100000 || teamNum > 100000)
+                            {
+                                item.teamNum= teamNum - 100000;
+                            }
+                        }
+                        #endregion
+                        #region 读取杀敌数量
+                        //准备读取PlayerState
+scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in listPlay)
+                        {
+                            scatter.Prepare(item.pObjPointer + Offset_PlayerState, 8);
+                        }
+                        //读取PlayerState
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            item.PlayerState = scatter.ReadUInt64(item.pObjPointer + Offset_PlayerState);
+                        }
+
+                        //准备读取KillCount
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in listPlay)
+                        {
+                            if (item.PlayerState > 0x1000)
+                            {
+                                scatter.Prepare(item.PlayerState + Offset_PlayerStatistics, 4);
+                            }
+                        }
+                        //读取KillCount
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            if (item.PlayerState > 0)
+                            {
+                                item.KillCount = scatter.ReadInt(item.PlayerState + Offset_PlayerStatistics);
+                            }
+                        }
+                        #endregion  
+                        #region 读取方向
+//准备读取方向
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        
+                        foreach (var item in listPlay)
+                        {
+                            scatter.Prepare(item.pObjPointer + Offset_AimOffsets + 0x4, 4);
+                        }
+                        //读取方向
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            item.Orientation = scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets + 0x4);
+                        }
+                        #endregion
+                         
+                        #region 读取坐标
+//准备读取MeshAddr
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);    
+                        foreach (var item in listPlay)
+                        {
+                            scatter.Prepare(item.pObjPointer + Offset_Mesh, 8);
+                        }
+                        //读取MeshAddr
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            item.MeshAddr = scatter.ReadUInt64(item.pObjPointer + Offset_Mesh);
+                        }
+                        //准备读取Offset_ComponentLocation
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in listPlay)
+                        {
+                            if (item.MeshAddr > 0)
+                            {
+                                scatter.Prepare(item.MeshAddr + Offset_ComponentLocation, 12);
+                            }
+                        }
+                        //读取Offset_ComponentLocation
+                        scatter.Prepare(world + Offset_WorldLocation, 12);
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                            if (item.MeshAddr > 0)
+                            {
+                                float X = scatter.ReadFloat(item.MeshAddr + Offset_ComponentLocation);
+                                float Y = scatter.ReadFloat(item.MeshAddr + Offset_ComponentLocation + 0x4);
+                                float Z = scatter.ReadFloat(item.MeshAddr + Offset_ComponentLocation + 0x8);
+                                float w= scatter.ReadInt(world + Offset_WorldLocation);
+                                float h = scatter.ReadInt(world + Offset_WorldLocation + 0x4);
+                                item.actorLocation = new Vector3D(X, Y, Z);
+                                Vector3D aimFov = (item.actorLocation - cameraLocation);
+                                var tempV = (item.actorLocation - cameraLocation);
+                                float Radpi = (float)(180 / 3.1415926535f);
+                                float Yaw = (float)Math.Atan2(tempV.Y, tempV.X) * Radpi;
+                                float Pitch = (float)Math.Atan2(item.z, Math.Sqrt((tempV.X * tempV.X) + (tempV.Y * tempV.Y))) * Radpi;
+                                float Roll = 0;
+                                aimFov = new Vector3D(Yaw, Pitch, Roll);
+                                item.aimFov = aimFov;
+                                
+                                item.x = X + w;
+                                item.y = Y + h;
+                                item.z = Z;
+                            }
+
+                            if (item.className=="PlayerMale_A_C"||item.className=="PlayerFemale_A_C")
+                            {
+                                item.isBot = false;
+                            } else if (item.className == "AIPawn_Base_Female_C" || item.className == "AIPawn_Base_Male_C" || item.className == "UltAIPawn_Base_Female_C" || item.className == "UltAIPawn_Base_Male_C")
+                            {
+                                item.isBot = true;
+                            }
+                            if (item.x < 0)
+                            {
+                                item.x = -item.x;
+                            }
+                            if (item.y < 0)
+                            {
+                                item.y = -item.y;
+                            }
+                            if (item.z < 0)
+                            {
+                                item.z = -item.z;
+                            }
+                        }
+                       
+                        #endregion 
+                         #region 读取AmiMz
+                        //准备读取AmiMz
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in listPlay)
+                        {
+                          scatter.Prepare(item.pObjPointer + Offset_AimOffsets,4)
+                            
+                        }
+                        //读取AmiMz
+                        scatter.Execute();
+                        foreach (var item in listPlay)
+                        {
+                           item.AmiMz= scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets)
+                           float AimX = (float)Math.Abs(item.aimFov.X - item.AmiMz);
+                           item.bIsAimed= (AimX > -5 && AimX < 5);
+                           float Distance = (float)(cameraLocation - item.actorLocation).Length / 100;
+                           item.Distance = Distance;
+                           ListPlayer.Add(new PlayerModel()
+                           {
+                                 Name = item.Name,
+                                 HP = item.Hp,
+                                 TeamId = item.teamNum,
+                                 isBot = item.isBot,
+                                 bIsAimed = item.bIsAimed,
+                                 Distance = item.Distance,
+                                 x = item.x,
+                                 y = item.y,
+                                 z = item.z,
+                                 KillCount = item.KillCount,
+                                 Orientation = item.Orientation,
+                                 SpectatedCount = item.SpectatedCount,
+                                 ActorLocation =item.actorLocation
+                           });
+                        }
+
+                         #endregion
                         model.Player = ListPlayer;
                         if (OnPlayerListUpdate != null)
                         {

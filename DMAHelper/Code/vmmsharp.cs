@@ -2250,6 +2250,25 @@ namespace vmmsharp
             return BitConverter.ToInt32(data, 0);
         }
 
+        public unsafe float ReadFloat(ulong qwA)
+        {
+            uint cbRead;
+            byte[] data = new byte[4];
+            fixed (byte* pb = data)
+            {
+                if (!vmmi.VMMDLL_Scatter_Read(hS, qwA, 4, pb, out cbRead))
+                {
+                    return 0;
+                }
+            }
+            if (cbRead != 4)
+            {
+                Array.Resize<byte>(ref data, (int)cbRead);
+                return 0;
+            }
+            return BitConverter.ToSingle(data, 0);
+        }
+
         public unsafe ulong ReadUInt64(ulong qwA)
         {
             uint cbRead;
