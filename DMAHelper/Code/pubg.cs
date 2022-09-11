@@ -13,6 +13,8 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using System.IO;
 using System.Security.Cryptography;
+using System.Timers;
+using Newtonsoft.Json.Linq;
 
 namespace DMAHelper
 {
@@ -85,10 +87,30 @@ namespace DMAHelper
                 // handle error
             }
         }
+        
         public bool Init()
         {
             try
             {
+
+                try
+                {
+                    if (File.Exists("itemfilter.json"))
+                    {
+
+                        string jsonStr = File.ReadAllText("itemfilter.json");
+                        var jo=JsonConvert.DeserializeObject<JObject>(jsonStr);
+                        var v=jo.Properties();
+                        
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+
+                   
+                }
+              
                 vmm = new Vmm("", "-device", "fpga");
                 // GetMemMap();
                 vmm.PidGetFromName("tslgame.exe", out uint pid);
@@ -131,7 +153,7 @@ namespace DMAHelper
 
             return false;
         }
-        DispatcherTimer timer;
+        
         public void Start()
         {
             Task.Run(() =>
@@ -158,60 +180,22 @@ namespace DMAHelper
                             GNamesAddress = decryptFunc(vmm.MemReadInt64(pid, GNames));
                             // int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
                             uint MapId = Common.dec_objid(vmm.MemReadInt(pid, world + Offset_ObjID));
-                           ulong myId= decryptFunc(vmm.MemReadInt64(pid, PlayerController+ Offset_AcknowledgedPawn));
-                           //var asd= vmm.MemReadStringASCII(pid,myId,64);
-                             string mapName = GetObjName(MapId);
+                            ulong myId = decryptFunc(vmm.MemReadInt64(pid, PlayerController + Offset_AcknowledgedPawn));
+                            //var asd= vmm.MemReadStringASCII(pid,myId,64);
+                            string mapName = GetObjName(MapId);
                             if (mapName == "TslLobby_Persistent_Main")
                             {
                                 return;
                             }
                             model.MapName = mapName;
+
+                            #region 读取所有类名
                             List<PlayerModel> ListPlayer = new List<PlayerModel>();
                             for (int i = 0; i < Actorscount; i++)
                             {
                                 try
                                 {
                                     scatter.Prepare(actorBase + (ulong)i * 8, 8);
-                                    //else if (objName == "DroppedItemGroup")
-                                    //{
-                                    //    //这个地方就是物资的
-                                    //    var ItemGroupPtr = vmm.MemReadInt64(pid, pObjPointer + Offset_DroppedItemGroup);
-
-                                    //    var ItemCount = vmm.MemReadInt32(pid, pObjPointer + Offset_DroppedItemGroup + 0x8);
-                                    //    if (ItemGroupPtr > 0 && ItemCount > 0)
-                                    //    {
-                                    //        List<PubgGood> goods = new List<PubgGood>();
-                                    //        for (int itemIndex = 0; itemIndex < ItemCount; itemIndex++)
-                                    //        {
-                                    //            var ItemObject = vmm.MemReadInt64(pid, ItemGroupPtr + (ulong)(itemIndex * 0x10));
-                                    //            if (ItemObject > 0)
-                                    //            {
-                                    //                var UItemAddress = vmm.MemReadInt64(pid, ItemObject + Offset_DroppedItemGroup_UItem);
-                                    //                if (UItemAddress > 0)
-                                    //                {
-                                    //                    var UItemID = vmm.MemReadInt32(pid, vmm.MemReadInt64(pid, UItemAddress + Offset_ItemInformationComponent) + Offset_ItemID);
-                                    //                    if (UItemID > 0 && UItemID < 0xfff0ff)
-                                    //                    {
-                                    //                        string UItemName = GetObjName(UItemID);
-                                    //                        var v3d = vmm.MemReadVector(pid, ItemObject + Offset_ComponentLocation);
-                                    //                        PubgGood good = new PubgGood();
-                                    //                        good.ClassName = UItemName;
-
-                                    //                        int w = vmm.MemReadInt(pid, world + Offset_WorldLocation);
-                                    //                        int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
-                                    //                        var tempv3 = new Vector3D(w, h, 0) + v3d;
-                                    //                        good.x = (int)tempv3.X;
-                                    //                        good.y = (int)tempv3.Y;
-                                    //                        goods.Add(good);
-                                    //                        //auto pObjName = Tsl::GetGNamesByObjID(UItemID);
-                                    //                    }
-                                    //                }
-                                    //            }
-
-                                    //        }
-                                    //        model.PubgGoods = goods;
-                                    //    }
-                                    //}
 
                                 }
                                 catch (Exception ex)
@@ -222,7 +206,6 @@ namespace DMAHelper
                             }
                             bool isExec = scatter.Execute();
                             List<ZhiZhenModel> ListZhiZhenModel = new List<ZhiZhenModel>();
-                            #region 读取所有类名
                             for (int i = 0; i < Actorscount; i++)
                             {
                                 ulong pObjPointer = scatter.ReadUInt64(actorBase + (ulong)i * 8);
@@ -546,7 +529,7 @@ namespace DMAHelper
                             }
 
                             #endregion
-                        #region 读取物资
+                            #region 读取物资
                             var listgoods = ListZhiZhenModel.Where(item =>
                                     (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
                                 .ToList();
@@ -568,7 +551,7 @@ namespace DMAHelper
                             {
                                 if (item.ItemGroupPtr > 0)
                                 {
-                                    scatter.Prepare(item.ItemGroupPtr +Offset_DroppedItemGroup + 0x8, 4);
+                                    scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup + 0x8, 4);
                                 }
                             }
                             //读取ItemCount
@@ -578,21 +561,21 @@ namespace DMAHelper
                             {
                                 if (item.ItemGroupPtr > 0)
                                 {
-                                  
-                                    item.ItemCount = scatter.ReadInt(item.ItemGroupPtr + Offset_DroppedItemGroup + 0x8);
+
+                                    item.ItemCount = scatter.ReadInt(item.pObjPointer + Offset_DroppedItemGroup + 0x8);
                                 }
                             }
 
                             //准备ItemObject
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                          
+
                             foreach (var item in listgoods)
                             {
-                                if  (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
                                 {
                                     for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
                                     {
-                                        scatter.Prepare(item.ItemGroupPtr + (ulong)(itemIndex * 0x10),8);
+                                        scatter.Prepare(item.ItemGroupPtr + (ulong)(itemIndex * 0x10), 8);
                                     }
                                 }
                             }
@@ -607,9 +590,9 @@ namespace DMAHelper
                                         ulong ItemObject = scatter.ReadUInt64(item.ItemGroupPtr + (ulong)(itemIndex * 0x10));
                                         goods.Add(new PubgGood()
                                         {
-                                            ItemObject=ItemObject
-                                        } );
-                                        
+                                            ItemObject = ItemObject
+                                        });
+
                                     }
                                 }
                             }
@@ -617,19 +600,19 @@ namespace DMAHelper
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             foreach (var item in goods)
                             {
-                                if (item.ItemObject >0)
+                                if (item.ItemObject > 0)
                                 {
-                                    scatter.Prepare( item.ItemObject + Offset_DroppedItemGroup_UItem,8);
+                                    scatter.Prepare(item.ItemObject + Offset_DroppedItemGroup_UItem, 8);
                                 }
                             }
-                            
+
                             //读取UItemAddress
                             scatter.Execute();
                             foreach (var item in goods)
                             {
                                 if (item.ItemObject > 0)
                                 {
-                                    item.UItemAddress =  scatter.ReadUInt64(item.ItemObject+ Offset_DroppedItemGroup_UItem);
+                                    item.UItemAddress = scatter.ReadUInt64(item.ItemObject + Offset_DroppedItemGroup_UItem);
                                 }
                             }
                             //准备读取UItemIDAddress
@@ -687,11 +670,11 @@ namespace DMAHelper
                             {
                                 if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
                                 {
-                                   var zuobiao= scatter.Read(item.ItemObject + Offset_ComponentLocation, 12);
-                                   Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao,0),BitConverter.ToSingle(zuobiao,4),BitConverter.ToSingle(zuobiao,8));
-                                   var tempv3 = new Vector3D(ww, hh, 0) + v3d;
-                                   item.x=(int)tempv3.X;
-                                   item.y=(int)tempv3.Y;
+                                    var zuobiao = scatter.Read(item.ItemObject + Offset_ComponentLocation, 12);
+                                    Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao, 0), BitConverter.ToSingle(zuobiao, 4), BitConverter.ToSingle(zuobiao, 8));
+                                    var tempv3 = new Vector3D(ww, hh, 0) + v3d;
+                                    item.x = (int)tempv3.X;
+                                    item.y = (int)tempv3.Y;
                                 }
                             }
                             #region 读取物资名字
@@ -740,10 +723,11 @@ namespace DMAHelper
                             foreach (var item in goods)
                             {
                                 string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
+                                item.ClassName = className;
                                 item.Name = className;
                             }
-                            #endregion 
-                            #endregion             
+                            #endregion
+                            #endregion
                             model.Player = ListPlayer;
                             model.PubgGoods = goods;
                             if (OnPlayerListUpdate != null)
@@ -753,15 +737,11 @@ namespace DMAHelper
                         }
 
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
 
-                        
+                        Console.WriteLine(ex.Message);
                     }
-                   
-                   
-                    
-
                 }
             });
 

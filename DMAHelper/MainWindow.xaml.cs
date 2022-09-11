@@ -75,7 +75,7 @@ namespace DMAHelper
                     listobj.Add(item.ClassName);
                     listobj.Add(item.x);
                     listobj.Add(item.y);
-                   // listobj.Add(0);
+                    listobj.Add("red");
                     //listobj.Add(item.ClassName);
                     model.Goods.Add(listobj);
                 }
