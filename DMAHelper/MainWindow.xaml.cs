@@ -113,6 +113,7 @@ namespace DMAHelper
         string zhuti =null;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            
             if (txtuid.Text == "")
             {
                 txtLog.AppendText( "账号不能为空\r\n");

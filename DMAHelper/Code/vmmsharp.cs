@@ -2193,6 +2193,45 @@ namespace vmmsharp
             }
             return data;
         }
+
+        public unsafe string ReadStringASCII(ulong qwA, uint cb)
+        {
+            uint cbRead;
+            byte[] data = new byte[cb];
+            fixed (byte* pb = data)
+            {
+                if (!vmmi.VMMDLL_Scatter_Read(hS, qwA, cb, pb, out cbRead))
+                {
+                    return null;
+                }
+            }
+            if (cbRead != cb)
+            {
+                Array.Resize<byte>(ref data, (int)cbRead);
+            }
+            string name = Encoding.ASCII.GetString(data);
+            return name.Substring(0, name.IndexOf('\0') >= 0 ? name.IndexOf('\0') : name.Length);
+        }
+
+        public unsafe int ReadInt(ulong qwA)
+        {
+            uint cbRead;
+            byte[] data = new byte[4];
+            fixed (byte* pb = data)
+            {
+                if (!vmmi.VMMDLL_Scatter_Read(hS, qwA, 4, pb, out cbRead))
+                {
+                    return 0;
+                }
+            }
+            if (cbRead != 4)
+            {
+                Array.Resize<byte>(ref data, (int)cbRead);
+                return 0;
+            }
+            return BitConverter.ToInt32(data, 0);
+        }
+
         public unsafe ulong ReadUInt64(ulong qwA)
         {
             uint cbRead;
