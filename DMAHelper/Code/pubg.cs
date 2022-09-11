@@ -344,13 +344,14 @@ namespace DMAHelper
                                
                             }
                         }
+                        //准备actorId
                         scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                         foreach (var item in ListZhiZhenModel)
                         {
                             scatter.Prepare(item.pObjPointer + Offset_ObjID, 4);
                         }
                           isExec = scatter.Execute();
-                          //读取actorId ，准备fNamePtr
+                          //读取actorId
                         foreach (var item in ListZhiZhenModel)
                         {
                             int actorId = scatter.ReadInt(item.pObjPointer + Offset_ObjID);
@@ -358,10 +359,15 @@ namespace DMAHelper
                             item.actorId = actorId;
                             item.objId = objId;
                             scatter.Prepare((GNamesAddress + (ulong)(objId / Offset_ChunkSize) * 0x8), 8);
-                             
+                        }
+                        //准备fNamePtr
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            scatter.Prepare((GNamesAddress + (ulong)(item.objId / Offset_ChunkSize) * 0x8), 8);
                         }
                           isExec = scatter.Execute();
-                        //读取fNamePtr， 准备fName
+                        //读取fNamePtr 
                         foreach (var item in ListZhiZhenModel)
                         {
                             ulong fNamePtr = scatter.ReadUInt64((GNamesAddress + (ulong)(item.objId / Offset_ChunkSize) * 0x8));
@@ -371,13 +377,29 @@ namespace DMAHelper
                                 scatter.Prepare(fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8, 8);
                             }
                         }
+                        //准备fName
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            if (item.fNamePtr > 0)
+                            {
+                                item.fNamePtr = item.fNamePtr;
+                                scatter.Prepare(item.fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8, 8);
+                            }
+                        }
                           isExec = scatter.Execute();
-                        //读取fName，准备className
+                        //读取fName，
                         foreach (var item in ListZhiZhenModel)
                         {
                             ulong fName = scatter.ReadUInt64(item.fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8);
                             item.fName = fName;
                             scatter.Prepare(fName + 0x10, 64);
+                        }
+                        //准备className
+                        scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                        foreach (var item in ListZhiZhenModel)
+                        {
+                            scatter.Prepare(item.fNamePtr + (ulong)(item.objId % Offset_ChunkSize) * 0x8,64);
                         }
                         scatter.Execute();
                         //读取className
