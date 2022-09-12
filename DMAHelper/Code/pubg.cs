@@ -313,6 +313,7 @@ namespace DMAHelper
                             #endregion
                             #region 读取玩家名字 
                             //准备读取CharacterId
+                             
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             var listPlay = ListZhiZhenModel.Where(item =>
                                     (!string.IsNullOrEmpty(item.className) && (item.className == "PlayerMale_A_C" ||
@@ -336,6 +337,8 @@ namespace DMAHelper
                                 item.CharacterId = scatter.ReadUInt64(item.pObjPointer + Offset_CharacterName);
                             }
                             //准备读取CharacterName
+                           // scatter.Close();
+                            //scatter.Clear(pid, Vmm.FLAG_NOCACHE);
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             foreach (var item in listPlay)
                             {

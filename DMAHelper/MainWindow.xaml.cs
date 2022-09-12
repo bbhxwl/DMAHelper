@@ -40,8 +40,12 @@ namespace DMAHelper
         }
         private    void P_OnPlayerListUpdate(PubgModel obj)
         {
-             
-             PubgMqttModel model = new PubgMqttModel();
+            if (mqtt.IsConnected)
+            {
+
+           
+            
+            PubgMqttModel model = new PubgMqttModel();
             model.Map = obj.MapName;
              List<dynamic> l = new List<dynamic>();
             foreach (var item in obj.Player)
@@ -127,7 +131,7 @@ namespace DMAHelper
             {
 
              }
-            
+            }
             //this.Dispatcher.Invoke(() =>
             //{
 
@@ -146,7 +150,9 @@ namespace DMAHelper
             zhuti = txtuid.Text;
          // var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
 
+            
             var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+            mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
             mqtt.ConnectAsync(op).ContinueWith(rs =>
             {
                 if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
@@ -185,6 +191,23 @@ namespace DMAHelper
                 txtLog.AppendText("初始化DMA异常" + ex.Message + "\r\n");
                 return;
             }
+        }
+
+        private Task Mqtt_DisconnectedAsync(MqttClientDisconnectedEventArgs arg)
+        {
+            var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+          return  mqtt.ConnectAsync(op).ContinueWith(rs =>
+            {
+                if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
+                {
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        txtLog.AppendText("网络重新连接成功\r\n");
+                    }));
+
+                }
+            });
+
         }
     }
 }
