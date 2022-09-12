@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DMAHelper"
         mc:Ignorable="d"
-        Title="斌斌 0.0.1版本" Height="100" Width="250">
+        Title="斌斌 0.0.1版本" Height="100" Width="280">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>

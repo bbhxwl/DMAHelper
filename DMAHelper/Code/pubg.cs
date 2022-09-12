@@ -210,7 +210,7 @@ namespace DMAHelper
                             // int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
                             uint MapId = Common.dec_objid(vmm.MemReadInt(pid, world + Offset_ObjID));
                             ulong myId = decryptFunc(vmm.MemReadInt64(pid, PlayerController + Offset_AcknowledgedPawn));
-                            //var asd= vmm.MemReadStringASCII(pid,myId,64);
+                            var asd= vmm.MemReadStringASCII(pid,myId+Offset_AcknowledgedPawn,64);
                             string mapName = GetObjName(MapId);
                             if (mapName == "TslLobby_Persistent_Main")
                             {
