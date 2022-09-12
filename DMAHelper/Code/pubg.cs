@@ -772,6 +772,16 @@ namespace DMAHelper
                             }
                             #endregion
                             #endregion
+
+                           var myModel= ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
+                           ListPlayer = ListPlayer.Where(s => s.HP > 0).ToList();
+                           foreach (var item in ListPlayer)
+                           {
+                               if (item.TeamId==myModel.TeamId)
+                               {
+                                   item.IsMyTeam = true;
+                               }
+                           }
                             model.Player = ListPlayer;
                             model.PubgGoods = goods.Where(s=>s.isShow).ToList();
                             if (OnPlayerListUpdate != null)

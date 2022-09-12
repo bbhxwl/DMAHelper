@@ -60,7 +60,7 @@ namespace DMAHelper
                 listobj.Add(item.SpectatedCount);
                 listobj.Add(item.Orientation);
                 //是不是队友，1=是队友，0不是队友
-                listobj.Add(0);
+                listobj.Add(item.IsMyTeam?1:0);
                 listobj.Add(item.isBot ?1:0);
                 listobj.Add(0);
                 listobj.Add(0);

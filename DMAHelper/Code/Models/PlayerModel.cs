@@ -11,7 +11,7 @@ namespace DMAHelper.Code.Models
     {
         internal bool bIsAimed;
         internal bool isBot;
-
+        public bool IsMyTeam { get; set; }
         public string Name { get; set; }
         public float x { get; set; }
         public float y { get; set; }
