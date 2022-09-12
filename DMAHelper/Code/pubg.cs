@@ -1311,17 +1311,59 @@ namespace DMAHelper
 
                             var listtempcar = ListZhiZhenModel.Where(item =>
                                 (!string.IsNullOrEmpty(item.className) && (listCar.Any(h=>h.CarClass==item.className)))).ToList();
-                           
+                            List<CarModel> listCarModel = new List<CarModel>();
                             if (listtempcar!=null&&listtempcar.Count()>0)
                             {
                                 //准备读取载具RootComponent
                                 scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                                 foreach (var item in listtempcar)
                                 {
-                                
-                                
+
+                                  var tempCarModel=  listCar.Where(s => s.CarClass == item.className).FirstOrDefault();
+                                  if (tempCarModel!=null)
+                                  {
+                                      listCarModel.Add(new CarModel()
+                                      {
+                                          CarClass = item.className,
+                                          CarName = tempCarModel.CarName,
+                                           pObjPointer =item.pObjPointer
+                                      });
+                                  }
+                                    
+                                    scatter.Prepare(item.pObjPointer + Offset_RootComponent, 12);
+                                }
+                                //读取载具RootComponent
+                                scatter.Execute();
+                                foreach (var item in listCarModel)
+                                {
+                                    var RootComponentAddress = scatter.ReadUInt64(item.pObjPointer + Offset_RootComponent);
+                                    if (RootComponentAddress > 0)
+                                    {
+                                        item.RootComponent = decryptFunc(RootComponentAddress);
+                                    }
+                                }
+                                //准备读取坐标
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in listCarModel)
+                                {
+                                    scatter.Prepare(item.RootComponent + Offset_ComponentLocation, 12);
+                                }
+                                //读取坐标
+                                scatter.Prepare(world + Offset_WorldLocation, 4);
+                                scatter.Prepare(world + Offset_WorldLocation + 0x04, 4);
+                                scatter.Execute();
+                                foreach (var item in listCarModel)
+                                {
+                                    var zuobiao = scatter.Read(item.RootComponent + Offset_ComponentLocation, 12);
+                                    Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao, 0), BitConverter.ToSingle(zuobiao, 4), BitConverter.ToSingle(zuobiao, 8));
+                                    float w = scatter.ReadInt(world + Offset_WorldLocation);
+                                    float h = scatter.ReadInt(world + Offset_WorldLocation + 0x4);
+                                    var tempv3 = new Vector3D(w, h, 0) + v3d;
+                                    item.x = (int)tempv3.X;
+                                    item.y = (int)tempv3.Y;
                                 }
                             }
+                            
                             
                             #endregion 
                             var tempMyModel= ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
@@ -1337,7 +1379,8 @@ namespace DMAHelper
                                     }
                                 }
                             }
-                          
+
+                            model.Cars = listCarModel;
                             model.Player = ListPlayer;
                             model.PubgGoods = goods.Where(s=>s.isShow).ToList();
                             if (OnPlayerListUpdate != null)
