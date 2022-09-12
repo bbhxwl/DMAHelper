@@ -92,6 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Code\Common.cs" />
+    <Compile Include="Code\Models\CarModel.cs" />
     <Compile Include="Code\Models\GoodItem.cs" />
     <Compile Include="Code\Models\PlayerModel.cs" />
     <Compile Include="Code\Models\PubgGood.cs" />
