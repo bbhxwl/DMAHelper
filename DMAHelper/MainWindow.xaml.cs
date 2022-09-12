@@ -70,6 +70,18 @@ namespace DMAHelper
                 listobj.Add(1);
                 model.Player.Add(listobj);
             }
+
+            if (obj.Cars!=null&&obj.Cars.Count>0)
+            {
+                foreach (var item in obj.Cars)
+                {
+                    List<object> listobj = new List<object>();
+                    listobj.Add(item.CarName);
+                    listobj.Add(item.x);
+                    listobj.Add(item.y);
+                    model.Car.Add(listobj);
+                }
+            }
             if (obj.PubgGoods!=null&&obj.PubgGoods.Count>0)
             {
                
