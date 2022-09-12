@@ -604,6 +604,10 @@ namespace vmmsharp
             {
                 Array.Resize<byte>(ref data, (int)cbRead);
             }
+            if (data.Length!=12)
+            {
+                return new Vector3D(0, 0, 0);
+            }
             float x = BitConverter.ToSingle(data, 0);
             float y = BitConverter.ToSingle(data, 4);
             float z = BitConverter.ToSingle(data, 8);

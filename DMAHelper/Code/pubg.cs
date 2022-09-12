@@ -587,25 +587,7 @@ namespace DMAHelper
             
             
         }
-        private void GetMemMap()
-        {
-            try
-            {
-                var map = vmm.Map_GetPhysMem();
-                if (map.Length == 0) throw new Exception("Map_GetPhysMem() returned no entries!");
-                string mapOut = "";
-                for (int i = 0; i < map.Length; i++)
-                {
-                    mapOut += $"{map[i].pa.ToString("x")} {(map[i].pa + map[i].cb - 1).ToString("x")}\n";
-                }
-                File.WriteAllText("mmap.txt", mapOut);
-            }
-            catch (Exception ex)
-            {
-                // handle error
-            }
-        }
-
+      
         public bool Init()
         {
             try
@@ -743,7 +725,7 @@ namespace DMAHelper
                             string mapName = GetObjName(MapId);
                             if (mapName == "TslLobby_Persistent_Main")
                             {
-                                return;
+                                continue;
                             }
                             model.MapName = mapName;
 
@@ -759,7 +741,7 @@ namespace DMAHelper
                                 catch (Exception ex)
                                 {
 
-                                    Console.WriteLine("11111:" + ex.Message);
+                                    Console.WriteLine("lei:" + ex.Message+ex.StackTrace);
                                 }
                             }
                             bool isExec = scatter.Execute();
@@ -885,7 +867,7 @@ namespace DMAHelper
                                 }
                             }
                             #endregion
-
+                            Console.WriteLine("读取hp");
                             #region 读取hp
                             //准备读取hp
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -900,6 +882,7 @@ namespace DMAHelper
                                 item.Hp = scatter.ReadFloat(item.pObjPointer + Offset_Health);
                             }
                             #endregion
+                            Console.WriteLine("读取观战人数");
                             #region 读取观战人数 
                             //准备读取观战人数
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -914,6 +897,7 @@ namespace DMAHelper
                                 item.SpectatedCount = scatter.ReadInt(item.pObjPointer + Offset_SpectatedCount);
                             }
                             #endregion
+                            Console.WriteLine("读取团队编号");
                             #region 读取团队编号
                             //准备读取团队编号
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -932,6 +916,7 @@ namespace DMAHelper
                                 }
                             }
                             #endregion
+                            Console.WriteLine("杀毒数量");
                             #region 读取杀敌数量
                             //准备读取PlayerState
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -965,6 +950,7 @@ namespace DMAHelper
                                 }
                             }
                             #endregion
+                            Console.WriteLine("fangxiang ");
                             #region 读取方向
                             //准备读取方向
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -980,7 +966,7 @@ namespace DMAHelper
                                 item.Orientation = scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets + 0x4);
                             }
                             #endregion
-
+                            Console.WriteLine("zuobiao");
                             #region 读取坐标
                             //准备读取MeshAddr
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -1054,6 +1040,7 @@ namespace DMAHelper
                             }
 
                             #endregion
+                            Console.WriteLine("amimz");
                             #region 读取AmiMz
                             //准备读取AmiMz
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -1090,6 +1077,7 @@ namespace DMAHelper
                             }
 
                             #endregion
+                            Console.WriteLine("wuzi");
                             #region 读取物资
                             List<PubgGood> goods = new List<PubgGood>();
                             var listgoods = ListZhiZhenModel.Where(item =>
@@ -1305,12 +1293,19 @@ namespace DMAHelper
                             }
                             }
                             #endregion
-                            
+
                             #endregion
+                            Console.WriteLine("zaiju");
                             #region 读取载具
 
                             var listtempcar = ListZhiZhenModel.Where(item =>
                                 (!string.IsNullOrEmpty(item.className) && (listCar.Any(h=>h.CarClass==item.className)))).ToList();
+                            Console.WriteLine("listtempcar " + listtempcar.Count());
+                            if (listtempcar.Count()==0)
+                            {
+
+                            }
+                                
                             List<CarModel> listCarModel = new List<CarModel>();
                             if (listtempcar!=null&&listtempcar.Count()>0)
                             {
@@ -1382,6 +1377,10 @@ namespace DMAHelper
 
                             model.Cars = listCarModel;
                             model.Player = ListPlayer;
+                            if (ListPlayer.Count==0)
+                            {
+                                continue;
+                            }
                             model.PubgGoods = goods.Where(s=>s.isShow).ToList();
                             if (OnPlayerListUpdate != null)
                             {
@@ -1393,7 +1392,7 @@ namespace DMAHelper
                     catch (Exception ex)
                     {
 
-                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("11:"+ex.Message+"\r\n"+ex.StackTrace);
                     }
                 }
             });
