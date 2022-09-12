@@ -15,6 +15,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Timers;
 using Newtonsoft.Json.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DMAHelper
 {
@@ -65,6 +66,7 @@ namespace DMAHelper
         public event Action<PubgModel> OnPlayerListUpdate;
         DecryptData decryptFunc;
         List<GoodItem> goodItems = new List<GoodItem>();
+        PlayerModel myModel = null;
         public pubg()
         {
 
@@ -104,8 +106,19 @@ namespace DMAHelper
                         var v = jo.Properties();
                         foreach (var item in v)
                         {
-                            JToken token = item.Value<JToken>();
-                            goodItems.Add(new GoodItem() { className = item.Name, shortName = token["shortName"].Value<string>(), showItem = token["showItem"].Value<bool>(), group = token["group"].Value<int>() });
+                            try
+                            {
+                                JToken token = item.Root[item.Name];
+
+
+                                goodItems.Add(new GoodItem() { className = item.Name, shortName = token["shortName"].ToString(), showItem = token["showItem"].Value<bool>(), group = token["group"].Value<int>() });
+                            }
+                            catch (Exception)
+                            {
+
+                                
+                            }
+                           
                         }
 
                     }
@@ -773,15 +786,20 @@ namespace DMAHelper
                             #endregion
                             #endregion
 
-                           var myModel= ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
+                           var tempMyModel= ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
                            ListPlayer = ListPlayer.Where(s => s.HP > 0).ToList();
-                           foreach (var item in ListPlayer)
-                           {
-                               if (item.TeamId==myModel.TeamId)
-                               {
-                                   item.IsMyTeam = true;
-                               }
-                           }
+                            if (tempMyModel != null)
+                            {
+                                myModel = tempMyModel;
+                                foreach (var item in ListPlayer)
+                                {
+                                    if (item.TeamId == myModel.TeamId)
+                                    {
+                                        item.IsMyTeam = true;
+                                    }
+                                }
+                            }
+                          
                             model.Player = ListPlayer;
                             model.PubgGoods = goods.Where(s=>s.isShow).ToList();
                             if (OnPlayerListUpdate != null)
