@@ -144,9 +144,9 @@ namespace DMAHelper
                 return;
             }
             zhuti = txtuid.Text;
-          var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
+         // var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
 
-           // var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+            var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
             mqtt.ConnectAsync(op).ContinueWith(rs =>
             {
                 if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
@@ -171,7 +171,7 @@ namespace DMAHelper
                 {
                     btnOk.IsEnabled = false;
                     p.Start();
-                   Process.Start("http://pubg.bbhxwl.com/?470138890&addr=219.129.239.39&id=游戏名字");
+                  // Process.Start("http://pubg.bbhxwl.com/?470138890&addr=219.129.239.39&id=游戏名字");
                 }
                 else
                 {
