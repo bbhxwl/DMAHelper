@@ -1310,7 +1310,7 @@ namespace DMAHelper
                             #region 读取载具
 
                             var listtempcar = ListZhiZhenModel.Where(item =>
-                                (!string.IsNullOrEmpty(item.className) && (listCar.Any(h=>h.CarClass==item.className))));
+                                (!string.IsNullOrEmpty(item.className) && (listCar.Any(h=>h.CarClass==item.className)))).ToList();
                            
                             if (listtempcar!=null&&listtempcar.Count()>0)
                             {
