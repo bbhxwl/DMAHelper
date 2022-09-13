@@ -47,6 +47,8 @@ namespace DMAHelper
 
                 PubgMqttModel model = new PubgMqttModel();
                 model.Map = obj.MapName;
+                model.MyTeam= obj.MyTeam;
+                model.MyName = obj.MyName;
                 List<dynamic> l = new List<dynamic>();
                 foreach (var item in obj.Player)
                 {
@@ -121,6 +123,7 @@ namespace DMAHelper
                     }
 
                 }
+                
                 try
                 {
                     mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic(zhuti).WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build()).ContinueWith(rs =>
