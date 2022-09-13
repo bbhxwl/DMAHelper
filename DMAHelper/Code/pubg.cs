@@ -728,7 +728,7 @@ namespace DMAHelper
                                 continue;
                             }
                             model.MapName = mapName;
-                            scatter.Prepare(actorBase + (ulong)i * 8, 8);
+                            //scatter.Prepare(actorBase + (ulong)i * 8, 8);
                             #region 读取所有类名
                             List<PlayerModel> ListPlayer = new List<PlayerModel>();
                             for (int i = 0; i < Actorscount; i++)
@@ -914,6 +914,10 @@ namespace DMAHelper
                                 {
                                     item.teamNum = teamNum - 100000;
                                 }
+                                else
+                                {
+                                    item.teamNum = teamNum;
+                                }
                             }
                             #endregion
                             Console.WriteLine("杀毒数量");
@@ -1072,7 +1076,8 @@ namespace DMAHelper
                                     KillCount = item.KillCount,
                                     Orientation = item.Orientation,
                                     SpectatedCount = item.SpectatedCount,
-                                    ActorLocation = item.actorLocation
+                                    ActorLocation = item.actorLocation,
+                                    
                                 });
                             }
 
@@ -1368,6 +1373,7 @@ namespace DMAHelper
                                 myModel = tempMyModel;
                                 foreach (var item in ListPlayer)
                                 {
+                                    
                                     if (item.TeamId == myModel.TeamId)
                                     {
                                         item.IsMyTeam = true;
