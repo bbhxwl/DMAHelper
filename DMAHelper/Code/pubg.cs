@@ -728,7 +728,7 @@ namespace DMAHelper
                                 continue;
                             }
                             model.MapName = mapName;
-
+                            scatter.Prepare(actorBase + (ulong)i * 8, 8);
                             #region 读取所有类名
                             List<PlayerModel> ListPlayer = new List<PlayerModel>();
                             for (int i = 0; i < Actorscount; i++)
@@ -1362,7 +1362,7 @@ namespace DMAHelper
                             
                             #endregion 
                             var tempMyModel= ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
-                           ListPlayer = ListPlayer.Where(s => s.HP > 0).ToList();
+                          // ListPlayer = ListPlayer.Where(s => s.HP > 0).ToList();
                             if (tempMyModel != null)
                             {
                                 myModel = tempMyModel;
@@ -1377,6 +1377,13 @@ namespace DMAHelper
 
                             model.Cars = listCarModel;
                             model.Player = ListPlayer;
+                            model.MyTeam = ListPlayer.Where(s => s.IsMyTeam == true).ToList();
+                            if (tempMyModel!=null)
+                            {
+                                model.MyName = tempMyModel.Name;
+                            }
+                                
+                            model.MyName = MyName;
                             if (ListPlayer.Count==0)
                             {
                                 continue;

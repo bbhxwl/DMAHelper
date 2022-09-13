@@ -13,5 +13,8 @@ namespace DMAHelper.Code.Models
         public List<CarModel> Cars { get; set; }
 
         public List<PubgGood> PubgGoods { get; set; }
+        public string MyName { get; set; }
+        public List<PlayerModel> MyTeam { get; set; } = new List<PlayerModel>();
+
     }
 }

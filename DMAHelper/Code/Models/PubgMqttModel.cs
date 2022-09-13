@@ -9,6 +9,9 @@ namespace DMAHelper.Code.Models
     public class PubgMqttModel
     {
         public string Map { get; set; }
+        public List<PlayerModel> MyTeam { get; set; } = new List<PlayerModel>();
+        public string MyName { get; set; }
+
         public List<List<int>> Game { get; set; } = new List<List<int>>();
         public List<List<object>> Car { get; set; } = new List<List<object>>();
         public List<string> Box { get; set; } = new List<string>();

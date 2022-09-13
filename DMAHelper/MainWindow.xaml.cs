@@ -29,120 +29,120 @@ namespace DMAHelper
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
         pubg p = null;
         IMqttClient mqtt = new MqttFactory().CreateMqttClient();
         public MainWindow()
         {
             InitializeComponent();
-          
+
 
         }
-        private    void P_OnPlayerListUpdate(PubgModel obj)
+        private void P_OnPlayerListUpdate(PubgModel obj)
         {
             if (mqtt.IsConnected)
             {
 
-           
-            
-            PubgMqttModel model = new PubgMqttModel();
-            model.Map = obj.MapName;
-             List<dynamic> l = new List<dynamic>();
-            foreach (var item in obj.Player)
-            {
-                List<object> listobj = new List<object>();
-                listobj.Add(item.x);
-                listobj.Add(item.y);
-                listobj.Add(item.Distance);
-                listobj.Add(item.TeamId);
-                listobj.Add(item.HP);
-                listobj.Add(item.KillCount);
-                listobj.Add(item.SpectatedCount);
-                listobj.Add(item.Orientation);
-                //是不是队友，1=是队友，0不是队友
-                listobj.Add(item.IsMyTeam?1:0);
-                listobj.Add(item.isBot ?1:0);
-                listobj.Add(0);
-                listobj.Add(0);
-                listobj.Add(item.bIsAimed);
-                listobj.Add(0);
-                listobj.Add(item.Name);
-                listobj.Add(1);
-                model.Player.Add(listobj);
-            }
 
-            if (obj.Cars!=null&&obj.Cars.Count>0)
-            {
-                foreach (var item in obj.Cars)
+
+                PubgMqttModel model = new PubgMqttModel();
+                model.Map = obj.MapName;
+                List<dynamic> l = new List<dynamic>();
+                foreach (var item in obj.Player)
                 {
                     List<object> listobj = new List<object>();
-                    listobj.Add(item.CarName);
                     listobj.Add(item.x);
                     listobj.Add(item.y);
-                    model.Car.Add(listobj);
-                }
-            }
-            if (obj.PubgGoods!=null&&obj.PubgGoods.Count>0)
-            {
-               
-                foreach (var item in obj.PubgGoods)
-                {
-                    List<object> listobj = new List<object>();
+                    listobj.Add(item.Distance);
+                    listobj.Add(item.TeamId);
+                    listobj.Add(item.HP);
+                    listobj.Add(item.KillCount);
+                    listobj.Add(item.SpectatedCount);
+                    listobj.Add(item.Orientation);
+                    //是不是队友，1=是队友，0不是队友
+                    listobj.Add(item.IsMyTeam ? 1 : 0);
+                    listobj.Add(item.isBot ? 1 : 0);
+                    listobj.Add(0);
+                    listobj.Add(0);
+                    listobj.Add(item.bIsAimed);
+                    listobj.Add(0);
                     listobj.Add(item.Name);
-                    listobj.Add(item.x);
-                    listobj.Add(item.y);
-                    if (item.group==0)
-                    {
-                        listobj.Add("#FFFFFF");
-                    }
-                    else if (item.group==1)
-                    {
-                        listobj.Add("#157DEC");
-                    }
-                    else if (item.group==2)
-                    {
-                        listobj.Add("#FFFF00");
-                    }
-                    else if (item.group==3)
-                    {
-                        listobj.Add("#FF00FF");
-                    }
-                    else if (item.group==4)
-                    {
-                        listobj.Add("#00FF00");
-                    }
-                    else if (item.group==5)
-                    {
-                        listobj.Add("#00FFFF");
-                    }
-                    listobj.Add(item.ClassName);
-                    listobj.Add(item.group);
-                    model.Goods.Add(listobj);
+                    listobj.Add(1);
+                    model.Player.Add(listobj);
                 }
-               
-            }
-            try
-            {
-                 mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic(zhuti).WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build()).ContinueWith(rs =>
-                 {
-                     try
-                     {
-                         if (rs.Result.ReasonCode == MqttClientPublishReasonCode.Success)
-                         {
-                          }
-                     }
-                     catch (Exception ee)
-                     {
 
-                      }
-                    
-                 });
-            
-            }
-            catch (Exception ex)
-            {
+                if (obj.Cars != null && obj.Cars.Count > 0)
+                {
+                    foreach (var item in obj.Cars)
+                    {
+                        List<object> listobj = new List<object>();
+                        listobj.Add(item.CarName);
+                        listobj.Add(item.x);
+                        listobj.Add(item.y);
+                        listobj.Add(item.CarClass);
+                        model.Car.Add(listobj);
+                    }
+                }
+                if (obj.PubgGoods != null && obj.PubgGoods.Count > 0)
+                {
+                    foreach (var item in obj.PubgGoods)
+                    {
+                        List<object> listobj = new List<object>();
+                        listobj.Add(item.Name);
+                        listobj.Add(item.x);
+                        listobj.Add(item.y);
+                        if (item.group == 0)
+                        {
+                            listobj.Add("#FFFFFF");
+                        }
+                        else if (item.group == 1)
+                        {
+                            listobj.Add("#157DEC");
+                        }
+                        else if (item.group == 2)
+                        {
+                            listobj.Add("#FFFF00");
+                        }
+                        else if (item.group == 3)
+                        {
+                            listobj.Add("#FF00FF");
+                        }
+                        else if (item.group == 4)
+                        {
+                            listobj.Add("#00FF00");
+                        }
+                        else if (item.group == 5)
+                        {
+                            listobj.Add("#00FFFF");
+                        }
+                        listobj.Add(item.ClassName);
+                        listobj.Add(item.group);
+                        model.Goods.Add(listobj);
+                    }
 
-             }
+                }
+                try
+                {
+                    mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic(zhuti).WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build()).ContinueWith(rs =>
+                    {
+                        try
+                        {
+                            if (rs.Result.ReasonCode == MqttClientPublishReasonCode.Success)
+                            {
+                            }
+                        }
+                        catch (Exception ee)
+                        {
+
+                        }
+
+                    });
+
+                }
+                catch (Exception ex)
+                {
+
+                }
             }
             //this.Dispatcher.Invoke(() =>
             //{
@@ -150,19 +150,19 @@ namespace DMAHelper
             //    this.txt.Text = JsonConvert.SerializeObject(obj);
             //});
         }
-        string zhuti =null;
+        string zhuti = null;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+
             if (txtuid.Text == "")
             {
-                txtLog.AppendText( "账号不能为空\r\n");
+                txtLog.AppendText("账号不能为空\r\n");
                 return;
             }
             zhuti = txtuid.Text;
-         // var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
+            // var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
 
-            
+
             var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
             mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
             mqtt.ConnectAsync(op).ContinueWith(rs =>
@@ -176,9 +176,9 @@ namespace DMAHelper
 
                 }
             });
-            
 
-             
+
+
 
 
             try
@@ -189,7 +189,7 @@ namespace DMAHelper
                 {
                     btnOk.IsEnabled = false;
                     p.Start();
-                  // Process.Start("http://pubg.bbhxwl.com/?470138890&addr=219.129.239.39&id=游戏名字");
+                    // Process.Start("http://pubg.bbhxwl.com/?470138890&addr=219.129.239.39&id=游戏名字");
                 }
                 else
                 {
@@ -199,7 +199,6 @@ namespace DMAHelper
             }
             catch (Exception ex)
             {
-
                 txtLog.AppendText("初始化DMA异常" + ex.Message + "\r\n");
                 return;
             }
@@ -208,17 +207,17 @@ namespace DMAHelper
         private Task Mqtt_DisconnectedAsync(MqttClientDisconnectedEventArgs arg)
         {
             var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
-          return  mqtt.ConnectAsync(op).ContinueWith(rs =>
-            {
-                if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
-                {
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        txtLog.AppendText("网络重新连接成功\r\n");
-                    }));
+            return mqtt.ConnectAsync(op).ContinueWith(rs =>
+              {
+                  if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
+                  {
+                      Dispatcher.BeginInvoke(new Action(() =>
+                      {
+                          txtLog.AppendText("网络重新连接成功\r\n");
+                      }));
 
-                }
-            });
+                  }
+              });
 
         }
     }
