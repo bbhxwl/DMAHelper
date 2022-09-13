@@ -45,9 +45,19 @@ namespace DMAHelper
         ulong Offset_DroppedItemGroup = 0x01A8;
         ulong Offset_DroppedItemGroup_UItem = 0x0738;
         ulong Offset_SpectatedCount = 0x1438;
+        ulong Offset_LerpSafetyZoneRadius = 0x04E8;
+        ulong Offset_LerpSafetyZonePosition = 0x0738;
+        ulong Offset_PoisonGasWarningPosition = 0x074C;
+        ulong Offset_PoisonGasWarningRadius = 0x050C;
+        ulong Offset_BlackZonePosition = 0x0AD0;
+        ulong Offset_BlackZoneRadius = 0x0ADC;
+        ulong Offset_RedZonePosition = 0x0548;
+        ulong  Offset_RedZoneRadius = 0x0744;
+        ulong Offset_GameState = 0x0678;
         ulong Offset_WorldLocation = 0x02DC;
         ulong Offset_Mesh = 0x0480;
         ulong Offset_Health = 0x11E8;
+        ulong Offset_GroggyHealth = 0x19A4;
         ulong Offset_PlayerState = 0x0410;
         ulong Offset_LastTeamNum = 0x1408;
         ulong Offset_PlayerController = 0x0030;
@@ -723,12 +733,18 @@ namespace DMAHelper
                             ulong CharacterId=vmm.MemReadInt64(pid, LocalPlayerPawn + Offset_CharacterName);
                             var MyName= vmm.MemReadString(pid,CharacterId,64);
                             string mapName = GetObjName(MapId);
-                            if (mapName == "TslLobby_Persistent_Main")
+                            ulong GameState = decryptFunc(vmm.MemReadInt64(pid, world + Offset_GameState));
+                             if (mapName == "TslLobby_Persistent_Main")
                             {
                                 continue;
                             }
                             model.MapName = mapName;
-                            //scatter.Prepare(actorBase + (ulong)i * 8, 8);
+                            scatter.Prepare(GameState+ Offset_LerpSafetyZoneRadius, 4);
+                            scatter.Prepare(GameState + Offset_LerpSafetyZonePosition, 8);
+                            scatter.Prepare(GameState + Offset_PoisonGasWarningPosition, 8);
+                            scatter.Prepare(GameState + Offset_PoisonGasWarningRadius, 4);
+                            scatter.Prepare(GameState + Offset_RedZonePosition, 8);
+                            scatter.Prepare(GameState + Offset_RedZoneRadius, 4);
                             #region 读取所有类名
                             List<PlayerModel> ListPlayer = new List<PlayerModel>();
                             for (int i = 0; i < Actorscount; i++)
@@ -745,6 +761,12 @@ namespace DMAHelper
                                 }
                             }
                             bool isExec = scatter.Execute();
+                            var lerpSafetyGasRadius= scatter.ReadFloat(GameState + Offset_LerpSafetyZoneRadius);
+                            var lerpSafetyPosition = scatter.ReadVector(GameState + Offset_LerpSafetyZonePosition);
+                            var poisonGasPosition = scatter.ReadVector(GameState + Offset_PoisonGasWarningPosition);
+                            var poisonGasRadius = scatter.ReadFloat(GameState + Offset_PoisonGasWarningRadius);
+                            var redPosition = scatter.ReadVector(GameState + Offset_RedZonePosition);
+                            var redRadius = scatter.ReadFloat(GameState + Offset_RedZoneRadius);
                             List<ZhiZhenModel> ListZhiZhenModel = new List<ZhiZhenModel>();
                             for (int i = 0; i < Actorscount; i++)
                             {
@@ -881,6 +903,24 @@ namespace DMAHelper
                             {
                                 item.Hp = scatter.ReadFloat(item.pObjPointer + Offset_Health);
                             }
+                            #endregion
+
+                            #region 读取倒地hp
+                            //准备读取hp
+                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                            foreach (var item in listPlay)
+                            {
+                                scatter.Prepare(item.pObjPointer + Offset_GroggyHealth, 4);
+                            }
+                            //读取倒地hp
+                            scatter.Execute();
+                            foreach (var item in listPlay)
+                            {
+
+                                item.groggyHp = scatter.ReadFloat(item.pObjPointer + Offset_GroggyHealth);
+                                 
+                            }
+                            listPlay = listPlay.Where(s => s.Hp > 0 || s.groggyHp > 0.1).ToList();
                             #endregion
                             Console.WriteLine("读取观战人数");
                             #region 读取观战人数 
@@ -1367,7 +1407,7 @@ namespace DMAHelper
                             
                             #endregion 
                             var tempMyModel= ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
-                          // ListPlayer = ListPlayer.Where(s => s.HP > 0).ToList();
+
                             if (tempMyModel != null)
                             {
                                 myModel = tempMyModel;
@@ -1380,10 +1420,14 @@ namespace DMAHelper
                                     }
                                 }
                             }
-
+                             
                             model.Cars = listCarModel;
                             model.Player = ListPlayer;
                             model.MyTeam = ListPlayer.Where(s => s.IsMyTeam == true).ToList();
+                            model.Game.Add(new List<object>() { lerpSafetyPosition.X, lerpSafetyPosition.Y, lerpSafetyGasRadius });
+
+                            model.Game.Add(new List<object>() { poisonGasPosition.X, poisonGasPosition.Y, poisonGasRadius });
+                            model.Game.Add(new List<object>() { redPosition.X, redPosition.Y, redRadius });
                             if (tempMyModel!=null)
                             {
                                 model.MyName = tempMyModel.Name;

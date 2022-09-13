@@ -49,6 +49,7 @@ namespace DMAHelper
                 model.Map = obj.MapName;
                 model.MyTeam= obj.MyTeam;
                 model.MyName = obj.MyName;
+                model.Game = obj.Game;
                 List<dynamic> l = new List<dynamic>();
                 foreach (var item in obj.Player)
                 {

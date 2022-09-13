@@ -14,6 +14,7 @@ namespace DMAHelper.Code.Models
 
         public List<PubgGood> PubgGoods { get; set; }
         public string MyName { get; set; }
+        public List<List<object>> Game = new List<List<object>>();
         public List<PlayerModel> MyTeam { get; set; } = new List<PlayerModel>();
 
     }

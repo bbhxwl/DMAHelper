@@ -12,6 +12,7 @@ namespace DMAHelper.Code.Models
         public ulong pObjPointer { get; set; }
         public int actorId { get; set; }
         public uint objId { get; set; }
+        public float groggyHp { get; set; }
 
         public ulong fNamePtr { get; set; }
         public ulong fName { get; set; }
