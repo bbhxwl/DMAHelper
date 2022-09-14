@@ -176,24 +176,25 @@ namespace DMAHelper
                 op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
 
             }
-            mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
-            mqtt.ConnectAsync(op).ContinueWith(rs =>
-            {
-                if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
-                {
-                    Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        txtLog.AppendText("网络连接成功\r\n");
-                    }));
-
-                }
-            });
+           
             try
             {
                 p = new pubg();
                 p.OnPlayerListUpdate += P_OnPlayerListUpdate;
                 if (p.Init(out string msg))
                 {
+                    mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
+                    mqtt.ConnectAsync(op).ContinueWith(rs =>
+                    {
+                        if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
+                        {
+                            Dispatcher.BeginInvoke(new Action(() =>
+                            {
+                                txtLog.AppendText("网络连接成功\r\n");
+                            }));
+
+                        }
+                    });
                     btnOk.IsEnabled = false;
                     p.Start();
                     if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)

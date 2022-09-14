@@ -621,7 +621,7 @@ namespace DMAHelper
                 }
                 catch (Exception e)
                 {
-                    msg =e.Message;
+                    msg ="1:"+e.Message;
                     return false;
 
                 }
@@ -663,7 +663,7 @@ namespace DMAHelper
             }
             catch (Exception ex)
             {
-                msg = ex.Message;
+                msg = "2:" + ex.Message;
                 return false;
 
             }
