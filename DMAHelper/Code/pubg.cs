@@ -80,516 +80,516 @@ namespace DMAHelper
         public pubg()
         {
             #region 载具列表
-            //listCar.Add(new CarModel()
-            //{
-            //     CarClass = "AirBoat_V2_C",
-            //     CarName="汽艇"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "AquaRail_A_01_C",
-            //    CarName="摩托艇"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "AquaRail_A_02_C",
-            //    CarName="摩托艇"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "AquaRail_A_03_C",
-            //    CarName="摩托艇"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "AquaRail_C",
-            //    CarName="摩托艇"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "AirBoat_V2_C",
+                CarName = "汽艇"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "AquaRail_A_01_C",
+                CarName = "摩托艇"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "AquaRail_A_02_C",
+                CarName = "摩托艇"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "AquaRail_A_03_C",
+                CarName = "摩托艇"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "AquaRail_C",
+                CarName = "摩托艇"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_ATV_C",
-            //    CarName="全地形车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_BRDM_C",
-            //    CarName="装甲车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Bicycle_C",
-            //    CarName="自行车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_CoupeRB_C",
-            //    CarName="跑车RB"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_DO_Circle_Train_Merged_C",
-            //    CarName="火车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_DO_Line_Train_Dino_Merged_C",
-            //    CarName="火车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_DO_Line_Train_Merged_C",
-            //    CarName="火车"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_ATV_C",
+                CarName = "全地形车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_BRDM_C",
+                CarName = "装甲车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Bicycle_C",
+                CarName = "自行车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_CoupeRB_C",
+                CarName = "跑车RB"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_DO_Circle_Train_Merged_C",
+                CarName = "火车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_DO_Line_Train_Dino_Merged_C",
+                CarName = "火车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_DO_Line_Train_Merged_C",
+                CarName = "火车"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Dirtbike_C",
-            //    CarName="越野摩托"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Food_Truck_C",
-            //    CarName="食品运输车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_EmergencyPickupVehicle_C",
-            //    CarName="紧急取件"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_KillTruck_C",
-            //    CarName="杀戮卡车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_LootTruck_C",
-            //    CarName="物资车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_M_Rony_A_01_C",
-            //    CarName="罗尼车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_M_Rony_A_02_C",
-            //    CarName="罗尼车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_M_Rony_A_03_C",
-            //    CarName="罗尼车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_McLarenGT_Lx_Yellow_C",
-            //    CarName="迈凯轮"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_McLarenGT_St_black_C",
-            //    CarName="迈凯轮"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_McLarenGT_St_white_C",
-            //    CarName="迈凯轮"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Mirado_A_02_C",
-            //    CarName="跑车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Mirado_A_03_Esports_C",
-            //    CarName="跑车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Mirado_Open_03_C",
-            //    CarName="跑车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Mirado_Open_04_C",
-            //    CarName="跑车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Mirado_Open_05_C",
-            //    CarName="跑车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Motorbike_04_C",
-            //    CarName="摩托车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Motorbike_04_Desert_C",
-            //    CarName="摩托车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Motorbike_Solitario_C",
-            //    CarName="摩托车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Motorbike_04_SideCar_C",
-            //    CarName="三轮摩托"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Motorbike_04_SideCar_C",
-            //    CarName="三轮摩托"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Motorglider_C",
-            //    CarName="滑翔机"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Motorglider_Green_C",
-            //    CarName="滑翔机"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Niva_01_C",
-            //    CarName="雪地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Niva_02_C",
-            //    CarName="雪地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Niva_03_C",
-            //    CarName="雪地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Niva_04_C",
-            //    CarName="雪地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Niva_05_C",
-            //    CarName="雪地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Niva_06_C",
-            //    CarName="雪地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Niva_07_C",
-            //    CarName="雪地车"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Dirtbike_C",
+                CarName = "越野摩托"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Food_Truck_C",
+                CarName = "食品运输车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_EmergencyPickupVehicle_C",
+                CarName = "紧急取件"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_KillTruck_C",
+                CarName = "杀戮卡车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_LootTruck_C",
+                CarName = "物资车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_M_Rony_A_01_C",
+                CarName = "罗尼车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_M_Rony_A_02_C",
+                CarName = "罗尼车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_M_Rony_A_03_C",
+                CarName = "罗尼车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_McLarenGT_Lx_Yellow_C",
+                CarName = "迈凯轮"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_McLarenGT_St_black_C",
+                CarName = "迈凯轮"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_McLarenGT_St_white_C",
+                CarName = "迈凯轮"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Mirado_A_02_C",
+                CarName = "跑车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Mirado_A_03_Esports_C",
+                CarName = "跑车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Mirado_Open_03_C",
+                CarName = "跑车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Mirado_Open_04_C",
+                CarName = "跑车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Mirado_Open_05_C",
+                CarName = "跑车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Motorbike_04_C",
+                CarName = "摩托车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Motorbike_04_Desert_C",
+                CarName = "摩托车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Motorbike_Solitario_C",
+                CarName = "摩托车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Motorbike_04_SideCar_C",
+                CarName = "三轮摩托"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Motorbike_04_SideCar_C",
+                CarName = "三轮摩托"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Motorglider_C",
+                CarName = "滑翔机"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Motorglider_Green_C",
+                CarName = "滑翔机"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Niva_01_C",
+                CarName = "雪地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Niva_02_C",
+                CarName = "雪地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Niva_03_C",
+                CarName = "雪地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Niva_04_C",
+                CarName = "雪地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Niva_05_C",
+                CarName = "雪地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Niva_06_C",
+                CarName = "雪地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Niva_07_C",
+                CarName = "雪地车"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_A_01_C",
-            //    CarName="皮卡车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_A_02_C",
-            //    CarName="皮卡车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_A_03_C",
-            //    CarName="皮卡车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_A_04_C",
-            //    CarName="皮卡车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_A_05_C",
-            //    CarName="皮卡车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_A_esports_C",
-            //    CarName="皮卡车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_B_01_C",
-            //    CarName="皮卡车(敞篷)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_B_02_C",
-            //    CarName="皮卡车(敞篷)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_B_03_C",
-            //    CarName="皮卡车(敞篷)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_B_04_C",
-            //    CarName="皮卡车(敞篷)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PickupTruck_B_05_C",
-            //    CarName="皮卡车(敞篷)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Pillar_Car_C",
-            //    CarName="●警车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_PonyCoupe_C",
-            //    CarName="新能源"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_A_01_C",
+                CarName = "皮卡车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_A_02_C",
+                CarName = "皮卡车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_A_03_C",
+                CarName = "皮卡车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_A_04_C",
+                CarName = "皮卡车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_A_05_C",
+                CarName = "皮卡车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_A_esports_C",
+                CarName = "皮卡车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_B_01_C",
+                CarName = "皮卡车(敞篷)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_B_02_C",
+                CarName = "皮卡车(敞篷)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_B_03_C",
+                CarName = "皮卡车(敞篷)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_B_04_C",
+                CarName = "皮卡车(敞篷)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PickupTruck_B_05_C",
+                CarName = "皮卡车(敞篷)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Pillar_Car_C",
+                CarName = "●警车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_PonyCoupe_C",
+                CarName = "新能源"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Porter_C",
-            //    CarName="货拉拉"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Scooter_01_A_C",
-            //    CarName="滑板车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Scooter_02_A_C",
-            //    CarName="滑板车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Scooter_03_A_C",
-            //    CarName="滑板车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Scooter_04_A_C",
-            //    CarName="滑板车"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Porter_C",
+                CarName = "货拉拉"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Scooter_01_A_C",
+                CarName = "滑板车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Scooter_02_A_C",
+                CarName = "滑板车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Scooter_03_A_C",
+                CarName = "滑板车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Scooter_04_A_C",
+                CarName = "滑板车"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Snowbike_01_C",
-            //    CarName="雪地自行车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Snowbike_02_C",
-            //    CarName="雪地自行车"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Snowbike_01_C",
+                CarName = "雪地自行车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Snowbike_02_C",
+                CarName = "雪地自行车"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Snowmobile_01_C",
-            //    CarName="雪地摩托"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Snowmobile_02_C",
-            //    CarName="雪地摩托"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Snowmobile_03_C",
-            //    CarName="雪地摩托"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Snowmobile_01_C",
+                CarName = "雪地摩托"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Snowmobile_02_C",
+                CarName = "雪地摩托"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Snowmobile_03_C",
+                CarName = "雪地摩托"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_TukTukTuk_A_01_C",
-            //    CarName="三轮车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_TukTukTuk_A_02_C",
-            //    CarName="三轮车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_TukTukTuk_A_03_C",
-            //    CarName="三轮车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Van_A_01_C",
-            //    CarName="面包车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Van_A_02_C",
-            //    CarName="面包车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "BP_Van_A_03_C",
-            //    CarName="面包车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Boat_PG117_C",
-            //    CarName="冲锋艇"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "PG117_A_01_C",
-            //    CarName="冲锋艇"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Buggy_A_01_C",
-            //    CarName="山地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Buggy_A_02_C",
-            //    CarName="山地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Buggy_A_03_C",
-            //    CarName="山地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Buggy_A_04_C",
-            //    CarName="山地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Buggy_A_05_C",
-            //    CarName="山地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Buggy_A_06_C",
-            //    CarName="山地车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Buggy_A_07_C",
-            //    CarName="山地车"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_TukTukTuk_A_01_C",
+                CarName = "三轮车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_TukTukTuk_A_02_C",
+                CarName = "三轮车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_TukTukTuk_A_03_C",
+                CarName = "三轮车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Van_A_01_C",
+                CarName = "面包车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Van_A_02_C",
+                CarName = "面包车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "BP_Van_A_03_C",
+                CarName = "面包车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Boat_PG117_C",
+                CarName = "冲锋艇"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "PG117_A_01_C",
+                CarName = "冲锋艇"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Buggy_A_01_C",
+                CarName = "山地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Buggy_A_02_C",
+                CarName = "山地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Buggy_A_03_C",
+                CarName = "山地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Buggy_A_04_C",
+                CarName = "山地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Buggy_A_05_C",
+                CarName = "山地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Buggy_A_06_C",
+                CarName = "山地车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Buggy_A_07_C",
+                CarName = "山地车"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Dacia_A_01_v2_C",
-            //    CarName="轿车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Dacia_A_01_v2_snow_C",
-            //    CarName="轿车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Dacia_A_02_v2_C",
-            //    CarName="轿车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Dacia_A_03_v2_C",
-            //    CarName="轿车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Dacia_A_03_v2_Esports_C",
-            //    CarName="轿车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Dacia_A_04_v2_C",
-            //    CarName="轿车"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "DummyTransportAircraft_C",
-            //    CarName="飞机"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "WarModeTransportAircraft_C",
-            //    CarName="空投飞机"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Dacia_A_01_v2_C",
+                CarName = "轿车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Dacia_A_01_v2_snow_C",
+                CarName = "轿车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Dacia_A_02_v2_C",
+                CarName = "轿车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Dacia_A_03_v2_C",
+                CarName = "轿车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Dacia_A_03_v2_Esports_C",
+                CarName = "轿车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Dacia_A_04_v2_C",
+                CarName = "轿车"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "DummyTransportAircraft_C",
+                CarName = "飞机"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "WarModeTransportAircraft_C",
+                CarName = "空投飞机"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "EmergencyAircraft_Tiger_C",
-            //    CarName="应急飞机"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "MortarPawn_C",
-            //    CarName="迫击炮"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "ParachutePlayer_C",
-            //    CarName="降落伞"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "ParachutePlayer_Warmode_C",
-            //    CarName="降落伞"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "RedeployAircraft_Tiger_C",
-            //    CarName="直升机"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "TransportAircraft_Chimera_C",
-            //    CarName="直升机"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "TransportAircraft_Tiger_C",
-            //    CarName="直升机"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "EmergencyAircraft_Tiger_C",
+                CarName = "应急飞机"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "MortarPawn_C",
+                CarName = "迫击炮"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "ParachutePlayer_C",
+                CarName = "降落伞"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "ParachutePlayer_Warmode_C",
+                CarName = "降落伞"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "RedeployAircraft_Tiger_C",
+                CarName = "直升机"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "TransportAircraft_Chimera_C",
+                CarName = "直升机"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "TransportAircraft_Tiger_C",
+                CarName = "直升机"
+            });
 
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Uaz_A_01_C",
-            //    CarName="吉普车(敞篷)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Uaz_Armored_C",
-            //    CarName="吉普车(armored)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Uaz_B_01_C",
-            //    CarName="吉普车(软)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Uaz_B_01_esports_C",
-            //    CarName="吉普车(软)"
-            //});
-            //listCar.Add(new CarModel()
-            //{
-            //    CarClass = "Uaz_C_01_C",
-            //    CarName="吉普车(硬)"
-            //});
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Uaz_A_01_C",
+                CarName = "吉普车(敞篷)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Uaz_Armored_C",
+                CarName = "吉普车(armored)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Uaz_B_01_C",
+                CarName = "吉普车(软)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Uaz_B_01_esports_C",
+                CarName = "吉普车(软)"
+            });
+            listCar.Add(new CarModel()
+            {
+                CarClass = "Uaz_C_01_C",
+                CarName = "吉普车(硬)"
+            });
 
             #endregion
 
