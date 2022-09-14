@@ -860,64 +860,24 @@ namespace DMAHelper
                             #endregion
                             Console.WriteLine("读取hp");
                             #region 读取hp
-                            //准备读取hp
+                            //准备hp+读取倒地hp+读取观战人数 
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             foreach (var item in listPlay)
                             {
                                 scatter.Prepare(item.pObjPointer + Offset_Health, 4);
+                                scatter.Prepare(item.pObjPointer + Offset_GroggyHealth, 4);
+                                scatter.Prepare(item.pObjPointer + Offset_SpectatedCount, 4);
+                                scatter.Prepare(item.pObjPointer + Offset_LastTeamNum, 4);
+                                scatter.Prepare(item.pObjPointer + Offset_AimOffsets + 0x4, 4);
+
                             }
-                            //读取hp
+                            //读取hp+读取倒地hp+读取观战人数 
                             scatter.Execute();
                             foreach (var item in listPlay)
                             {
                                 item.Hp = scatter.ReadFloat(item.pObjPointer + Offset_Health);
-                            }
-                            #endregion
-
-                            #region 读取倒地hp
-                            //准备读取hp
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in listPlay)
-                            {
-                                scatter.Prepare(item.pObjPointer + Offset_GroggyHealth, 4);
-                            }
-                            //读取倒地hp
-                            scatter.Execute();
-                            foreach (var item in listPlay)
-                            {
-
                                 item.groggyHp = scatter.ReadFloat(item.pObjPointer + Offset_GroggyHealth);
-
-                            }
-                            listPlay = listPlay.Where(s => s.Hp > 0 || s.groggyHp > 0.1).ToList();
-                            #endregion
-                            Console.WriteLine("读取观战人数");
-                            #region 读取观战人数 
-                            //准备读取观战人数
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in listPlay)
-                            {
-                                scatter.Prepare(item.pObjPointer + Offset_SpectatedCount, 4);
-                            }
-                            //读取观战人数
-                            scatter.Execute();
-                            foreach (var item in listPlay)
-                            {
                                 item.SpectatedCount = scatter.ReadInt(item.pObjPointer + Offset_SpectatedCount);
-                            }
-                            #endregion
-                            Console.WriteLine("读取团队编号");
-                            #region 读取团队编号
-                            //准备读取团队编号
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in listPlay)
-                            {
-                                scatter.Prepare(item.pObjPointer + Offset_LastTeamNum, 4);
-                            }
-                            //读取团队编号
-                            scatter.Execute();
-                            foreach (var item in listPlay)
-                            {
                                 int teamNum = scatter.ReadInt(item.pObjPointer + Offset_LastTeamNum);
                                 if (teamNum == 100000 || teamNum > 100000)
                                 {
@@ -927,9 +887,16 @@ namespace DMAHelper
                                 {
                                     item.teamNum = teamNum;
                                 }
+                                item.Orientation = scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets + 0x4);
+
                             }
+                            listPlay = listPlay.Where(s => s.Hp > 0 || s.groggyHp > 0.1).ToList();
+
                             #endregion
-                            Console.WriteLine("杀毒数量");
+
+ 
+                             
+
                             #region 读取杀敌数量
                             //准备读取PlayerState
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -963,22 +930,8 @@ namespace DMAHelper
                                 }
                             }
                             #endregion
-                            Console.WriteLine("fangxiang ");
-                            #region 读取方向
-                            //准备读取方向
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
 
-                            foreach (var item in listPlay)
-                            {
-                                scatter.Prepare(item.pObjPointer + Offset_AimOffsets + 0x4, 4);
-                            }
-                            //读取方向
-                            scatter.Execute();
-                            foreach (var item in listPlay)
-                            {
-                                item.Orientation = scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets + 0x4);
-                            }
-                            #endregion
+                            
                             Console.WriteLine("zuobiao");
                             #region 读取坐标
                             //准备读取MeshAddr
@@ -1091,6 +1044,101 @@ namespace DMAHelper
                             }
 
                             #endregion
+                            //如果列表没有自己的指针
+                            if (!listPlay.Where(s=>s.pObjPointer== LocalPlayerPawn).Any())
+                            {
+                               
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                ZhiZhenModel item = new ZhiZhenModel();
+                                item.pObjPointer = LocalPlayerPawn;
+                                scatter.Prepare(LocalPlayerPawn + Offset_Health, 4);
+                                scatter.Prepare(LocalPlayerPawn + Offset_GroggyHealth, 4);
+                                scatter.Prepare(LocalPlayerPawn + Offset_SpectatedCount, 4);
+                                scatter.Prepare(LocalPlayerPawn + Offset_LastTeamNum, 4);
+                                scatter.Prepare(LocalPlayerPawn + Offset_AimOffsets + 0x4, 4);
+                                scatter.Prepare(item.pObjPointer + Offset_AimOffsets, 4);
+                                scatter.Prepare(item.pObjPointer + Offset_PlayerState, 8);
+                                scatter.Prepare(item.pObjPointer + Offset_Mesh, 8);
+                                item.Hp = scatter.ReadFloat(item.pObjPointer + Offset_Health);
+                                item.groggyHp = scatter.ReadFloat(item.pObjPointer + Offset_GroggyHealth);
+                                item.SpectatedCount = scatter.ReadInt(item.pObjPointer + Offset_SpectatedCount);
+                                int teamNum = scatter.ReadInt(item.pObjPointer + Offset_LastTeamNum);
+                                if (teamNum == 100000 || teamNum > 100000)
+                                {
+                                    item.teamNum = teamNum - 100000;
+                                }
+                                else
+                                {
+                                    item.teamNum = teamNum;
+                                }
+                                item.MeshAddr = scatter.ReadUInt64(item.pObjPointer + Offset_Mesh);
+                                item.KillCount = vmm.MemReadInt(pid,item.PlayerState + Offset_PlayerStatistics, 4);
+                                item.Orientation = scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets + 0x4);
+                                item.PlayerState = scatter.ReadUInt64(item.pObjPointer + Offset_PlayerState);
+                                item.AmiMz = scatter.ReadFloat(item.pObjPointer + Offset_AimOffsets);
+                                float AimX = (float)Math.Abs(item.aimFov.X - item.AmiMz);
+                                item.bIsAimed = (AimX > -5 && AimX < 5);
+                                float Distance = (float)(cameraLocation - item.actorLocation).Length / 100;
+                                item.Distance = Distance;
+
+                                if (item.MeshAddr > 0)
+                                {
+                                    item.actorLocation = vmm.MemReadVector(pid,item.MeshAddr + Offset_ComponentLocation);
+                                    
+                                    float w = vmm.MemReadInt(pid,world + Offset_WorldLocation);
+                                    float h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
+                                    Vector3D aimFov = (item.actorLocation - cameraLocation);
+                                    var tempV = (item.actorLocation - cameraLocation);
+                                    float Radpi = (float)(180 / 3.1415926535f);
+                                    float Yaw = (float)Math.Atan2(tempV.Y, tempV.X) * Radpi;
+                                    float Pitch = (float)Math.Atan2(item.z, Math.Sqrt((tempV.X * tempV.X) + (tempV.Y * tempV.Y))) * Radpi;
+                                    float Roll = 0;
+                                    aimFov = new Vector3D(Yaw, Pitch, Roll);
+                                    item.aimFov = aimFov;
+                                    item.x = (float)item.actorLocation.X + w;
+                                    item.y = (float)item.actorLocation.Y + h;
+                                    item.z = (float)item.actorLocation.Z;
+                                }
+
+                                if (item.className == "PlayerMale_A_C" || item.className == "PlayerFemale_A_C")
+                                {
+                                    item.isBot = false;
+                                }
+                                else if (item.className == "AIPawn_Base_Female_C" || item.className == "AIPawn_Base_Male_C" || item.className == "UltAIPawn_Base_Female_C" || item.className == "UltAIPawn_Base_Male_C")
+                                {
+                                    item.isBot = true;
+                                }
+                                if (item.x < 0)
+                                {
+                                    item.x = -item.x;
+                                }
+                                if (item.y < 0)
+                                {
+                                    item.y = -item.y;
+                                }
+                                if (item.z < 0)
+                                {
+                                    item.z = -item.z;
+                                }
+
+                                ListPlayer.Insert(0,new PlayerModel()
+                                {
+                                    Name = item.Name,
+                                    HP = item.Hp,
+                                    TeamId = item.teamNum,
+                                    isBot = item.isBot,
+                                    bIsAimed = item.bIsAimed,
+                                    Distance = item.Distance,
+                                    x = item.x,
+                                    y = item.y,
+                                    z = item.z,
+                                    KillCount = item.KillCount,
+                                    Orientation = item.Orientation,
+                                    SpectatedCount = item.SpectatedCount,
+                                    ActorLocation = item.actorLocation,
+                                });
+
+                            }
                             Console.WriteLine("wuzi");
                             #region 读取物资
                             List<PubgGood> goods = new List<PubgGood>();
@@ -1371,17 +1419,6 @@ namespace DMAHelper
                             if (tempMyModel != null)
                             {
                                 myModel = tempMyModel;
-                                foreach (var item in ListPlayer)
-                                {
-
-                                    if (item.TeamId == myModel.TeamId)
-                                    {
-                                        item.IsMyTeam = true;
-                                    }
-                                }
-                            }
-                            else if (myModel!=null)
-                            {
                                 foreach (var item in ListPlayer)
                                 {
 
