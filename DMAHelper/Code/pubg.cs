@@ -27,615 +27,580 @@ namespace DMAHelper
         ulong moduleBase;
         ulong GNamesAddress;
         ulong Offset_AcknowledgedPawn = 0x0480;
-        ulong Offset_GWorld = 0x09031380;
-        ulong Offset_XenuineDecrypt = 0x07429928;
-        ulong Offset_FNameEntry = 0x09206410;
-        int Offset_ChunkSize = 0x3F6C;
-        ulong Offset_ObjID = 0x000C;
+        ulong Offset_GWorld = 0x08D06400;
+        ulong Offset_XenuineDecrypt = 0x070FE828;
+        ulong Offset_FNameEntry = 0x08EDB550;
+        int Offset_ChunkSize = 0x411C;
+        ulong Offset_ObjID = 0x0014;
+        public static uint Offset_XorKey1 = 0xF8C77B9A;
+        public static long Offset_XorKey2 = 0x5D830494;
+        public static int Offset_RorValue = 0x06;
+        public static bool Offset_IsingRor = true;
+        ulong Offset_CharacterName = 0x0F78;
 
-        ulong Offset_CharacterName = 0x1AE8;
-
-        ulong Offset_CurrentLevel = 0x01A8;
-        ulong Offset_Actors = 0x0048;
+        ulong Offset_CurrentLevel = 0x0168;
+        ulong Offset_Actors = 0x00E0;
         ulong Offset_ItemPackage = 0x0560;
-        ulong Offset_AimOffsets = 0x16B0;
+        ulong Offset_AimOffsets = 0x1500;
         ulong Offset_ItemInformationComponent = 0x00A8;
         ulong Offset_ItemID = 0x0248;
         ulong Offset_DroppedItem = 0x0420;
-        ulong Offset_DroppedItemGroup = 0x01A8;
+        ulong Offset_DroppedItemGroup = 0x0210;
         ulong Offset_DroppedItemGroup_UItem = 0x0738;
-        ulong Offset_SpectatedCount = 0x1438;
-        ulong Offset_LerpSafetyZoneRadius = 0x04E8;
-        ulong Offset_LerpSafetyZonePosition = 0x0738;
-        ulong Offset_PoisonGasWarningPosition = 0x074C;
-        ulong Offset_PoisonGasWarningRadius = 0x050C;
+        ulong Offset_SpectatedCount = 0x0E70;
+        ulong Offset_LerpSafetyZoneRadius = 0x04E4;
+        ulong Offset_LerpSafetyZonePosition = 0x0498;
+        ulong Offset_PoisonGasWarningPosition = 0x0550;
+        ulong Offset_PoisonGasWarningRadius = 0x056C;
         ulong Offset_BlackZonePosition = 0x0AD0;
         ulong Offset_BlackZoneRadius = 0x0ADC;
-        ulong Offset_RedZonePosition = 0x0548;
-        ulong  Offset_RedZoneRadius = 0x0744;
-        ulong Offset_GameState = 0x0678;
-        ulong Offset_WorldLocation = 0x02DC;
-        ulong Offset_Mesh = 0x0480;
-        ulong Offset_Health = 0x11E8;
-        ulong Offset_GroggyHealth = 0x19A4;
-        ulong Offset_PlayerState = 0x0410;
-        ulong Offset_LastTeamNum = 0x1408;
+        ulong Offset_RedZonePosition = 0x052C;
+        ulong Offset_RedZoneRadius = 0x0598;
+        ulong Offset_GameState = 0x09B0;
+        ulong Offset_WorldLocation = 0x030C;
+        ulong Offset_Mesh = 0x0488;
+        ulong Offset_Health = 0x1104;
+        ulong Offset_GroggyHealth = 0x12EC;
+        ulong Offset_PlayerState = 0x0408;
+        ulong Offset_LastTeamNum = 0x27B0;
         ulong Offset_PlayerController = 0x0030;
-        ulong Offset_LocalPlayersPTR = 0x091695F0;
+        ulong Offset_LocalPlayersPTR = 0x08E3E690;
         ulong Offset_PlayerCameraManager = 0x04A0;
-        ulong Offset_CameraLocation = 0x15C8;
-        public static uint Offset_XorKey1 = 0x520D75E6;
-        public static long Offset_XorKey2 = 0xEB27ADE8;
-        public static int Offset_RorValue = 0x0C;
-        public static bool Offset_IsingRor = true;
-        ulong Offset_PlayerStatistics = 0x0A54;
-        ulong Offset_RootComponent = 0x0270;
-        ulong Offset_ComponentLocation = 0x0310;
+        ulong Offset_CameraLocation = 0x0FA4;
+        ulong Offset_PlayerStatistics = 0x097C;
+        ulong Offset_RootComponent = 0x02D0;
+        ulong Offset_ComponentLocation = 0x0320;
         #endregion
 
         private List<CarModel> listCar = new List<CarModel>();
         public delegate ulong DecryptData(ulong c);
         public event Action<PubgModel> OnPlayerListUpdate;
         DecryptData decryptFunc;
-        List<GoodItem> goodItems = new List<GoodItem>();
         PlayerModel myModel = null;
         public pubg()
         {
             #region 载具列表
-            listCar.Add(new CarModel()
-            {
-                 CarClass = "AirBoat_V2_C",
-                 CarName="汽艇"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "AquaRail_A_01_C",
-                CarName="摩托艇"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "AquaRail_A_02_C",
-                CarName="摩托艇"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "AquaRail_A_03_C",
-                CarName="摩托艇"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "AquaRail_C",
-                CarName="摩托艇"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_ATV_C",
-                CarName="全地形车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_BRDM_C",
-                CarName="装甲车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Bicycle_C",
-                CarName="自行车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_CoupeRB_C",
-                CarName="跑车RB"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_DO_Circle_Train_Merged_C",
-                CarName="火车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_DO_Line_Train_Dino_Merged_C",
-                CarName="火车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_DO_Line_Train_Merged_C",
-                CarName="火车"
-            });
-             
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Dirtbike_C",
-                CarName="越野摩托"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Food_Truck_C",
-                CarName="食品运输车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_EmergencyPickupVehicle_C",
-                CarName="紧急取件"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_KillTruck_C",
-                CarName="杀戮卡车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_LootTruck_C",
-                CarName="物资车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_M_Rony_A_01_C",
-                CarName="罗尼车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_M_Rony_A_02_C",
-                CarName="罗尼车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_M_Rony_A_03_C",
-                CarName="罗尼车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_McLarenGT_Lx_Yellow_C",
-                CarName="迈凯轮"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_McLarenGT_St_black_C",
-                CarName="迈凯轮"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_McLarenGT_St_white_C",
-                CarName="迈凯轮"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Mirado_A_02_C",
-                CarName="跑车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Mirado_A_03_Esports_C",
-                CarName="跑车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Mirado_Open_03_C",
-                CarName="跑车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Mirado_Open_04_C",
-                CarName="跑车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Mirado_Open_05_C",
-                CarName="跑车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Motorbike_04_C",
-                CarName="摩托车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Motorbike_04_Desert_C",
-                CarName="摩托车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Motorbike_Solitario_C",
-                CarName="摩托车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Motorbike_04_SideCar_C",
-                CarName="三轮摩托"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Motorbike_04_SideCar_C",
-                CarName="三轮摩托"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Motorglider_C",
-                CarName="滑翔机"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Motorglider_Green_C",
-                CarName="滑翔机"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Niva_01_C",
-                CarName="雪地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Niva_02_C",
-                CarName="雪地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Niva_03_C",
-                CarName="雪地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Niva_04_C",
-                CarName="雪地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Niva_05_C",
-                CarName="雪地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Niva_06_C",
-                CarName="雪地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Niva_07_C",
-                CarName="雪地车"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_A_01_C",
-                CarName="皮卡车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_A_02_C",
-                CarName="皮卡车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_A_03_C",
-                CarName="皮卡车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_A_04_C",
-                CarName="皮卡车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_A_05_C",
-                CarName="皮卡车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_A_esports_C",
-                CarName="皮卡车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_B_01_C",
-                CarName="皮卡车(敞篷)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_B_02_C",
-                CarName="皮卡车(敞篷)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_B_03_C",
-                CarName="皮卡车(敞篷)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_B_04_C",
-                CarName="皮卡车(敞篷)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PickupTruck_B_05_C",
-                CarName="皮卡车(敞篷)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Pillar_Car_C",
-                CarName="●警车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_PonyCoupe_C",
-                CarName="新能源"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Porter_C",
-                CarName="货拉拉"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Scooter_01_A_C",
-                CarName="滑板车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Scooter_02_A_C",
-                CarName="滑板车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Scooter_03_A_C",
-                CarName="滑板车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Scooter_04_A_C",
-                CarName="滑板车"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Snowbike_01_C",
-                CarName="雪地自行车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Snowbike_02_C",
-                CarName="雪地自行车"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Snowmobile_01_C",
-                CarName="雪地摩托"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Snowmobile_02_C",
-                CarName="雪地摩托"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Snowmobile_03_C",
-                CarName="雪地摩托"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_TukTukTuk_A_01_C",
-                CarName="三轮车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_TukTukTuk_A_02_C",
-                CarName="三轮车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_TukTukTuk_A_03_C",
-                CarName="三轮车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Van_A_01_C",
-                CarName="面包车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Van_A_02_C",
-                CarName="面包车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "BP_Van_A_03_C",
-                CarName="面包车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Boat_PG117_C",
-                CarName="冲锋艇"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "PG117_A_01_C",
-                CarName="冲锋艇"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Buggy_A_01_C",
-                CarName="山地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Buggy_A_02_C",
-                CarName="山地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Buggy_A_03_C",
-                CarName="山地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Buggy_A_04_C",
-                CarName="山地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Buggy_A_05_C",
-                CarName="山地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Buggy_A_06_C",
-                CarName="山地车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Buggy_A_07_C",
-                CarName="山地车"
-            });
+            //listCar.Add(new CarModel()
+            //{
+            //     CarClass = "AirBoat_V2_C",
+            //     CarName="汽艇"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "AquaRail_A_01_C",
+            //    CarName="摩托艇"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "AquaRail_A_02_C",
+            //    CarName="摩托艇"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "AquaRail_A_03_C",
+            //    CarName="摩托艇"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "AquaRail_C",
+            //    CarName="摩托艇"
+            //});
 
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Dacia_A_01_v2_C",
-                CarName="轿车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Dacia_A_01_v2_snow_C",
-                CarName="轿车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Dacia_A_02_v2_C",
-                CarName="轿车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Dacia_A_03_v2_C",
-                CarName="轿车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Dacia_A_03_v2_Esports_C",
-                CarName="轿车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Dacia_A_04_v2_C",
-                CarName="轿车"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "DummyTransportAircraft_C",
-                CarName="飞机"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "WarModeTransportAircraft_C",
-                CarName="空投飞机"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "EmergencyAircraft_Tiger_C",
-                CarName="应急飞机"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "MortarPawn_C",
-                CarName="迫击炮"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "ParachutePlayer_C",
-                CarName="降落伞"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "ParachutePlayer_Warmode_C",
-                CarName="降落伞"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "RedeployAircraft_Tiger_C",
-                CarName="直升机"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "TransportAircraft_Chimera_C",
-                CarName="直升机"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "TransportAircraft_Tiger_C",
-                CarName="直升机"
-            });
-            
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Uaz_A_01_C",
-                CarName="吉普车(敞篷)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Uaz_Armored_C",
-                CarName="吉普车(armored)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Uaz_B_01_C",
-                CarName="吉普车(软)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Uaz_B_01_esports_C",
-                CarName="吉普车(软)"
-            });
-            listCar.Add(new CarModel()
-            {
-                CarClass = "Uaz_C_01_C",
-                CarName="吉普车(硬)"
-            });
-           
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_ATV_C",
+            //    CarName="全地形车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_BRDM_C",
+            //    CarName="装甲车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Bicycle_C",
+            //    CarName="自行车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_CoupeRB_C",
+            //    CarName="跑车RB"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_DO_Circle_Train_Merged_C",
+            //    CarName="火车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_DO_Line_Train_Dino_Merged_C",
+            //    CarName="火车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_DO_Line_Train_Merged_C",
+            //    CarName="火车"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Dirtbike_C",
+            //    CarName="越野摩托"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Food_Truck_C",
+            //    CarName="食品运输车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_EmergencyPickupVehicle_C",
+            //    CarName="紧急取件"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_KillTruck_C",
+            //    CarName="杀戮卡车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_LootTruck_C",
+            //    CarName="物资车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_M_Rony_A_01_C",
+            //    CarName="罗尼车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_M_Rony_A_02_C",
+            //    CarName="罗尼车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_M_Rony_A_03_C",
+            //    CarName="罗尼车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_McLarenGT_Lx_Yellow_C",
+            //    CarName="迈凯轮"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_McLarenGT_St_black_C",
+            //    CarName="迈凯轮"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_McLarenGT_St_white_C",
+            //    CarName="迈凯轮"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Mirado_A_02_C",
+            //    CarName="跑车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Mirado_A_03_Esports_C",
+            //    CarName="跑车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Mirado_Open_03_C",
+            //    CarName="跑车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Mirado_Open_04_C",
+            //    CarName="跑车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Mirado_Open_05_C",
+            //    CarName="跑车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Motorbike_04_C",
+            //    CarName="摩托车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Motorbike_04_Desert_C",
+            //    CarName="摩托车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Motorbike_Solitario_C",
+            //    CarName="摩托车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Motorbike_04_SideCar_C",
+            //    CarName="三轮摩托"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Motorbike_04_SideCar_C",
+            //    CarName="三轮摩托"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Motorglider_C",
+            //    CarName="滑翔机"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Motorglider_Green_C",
+            //    CarName="滑翔机"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Niva_01_C",
+            //    CarName="雪地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Niva_02_C",
+            //    CarName="雪地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Niva_03_C",
+            //    CarName="雪地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Niva_04_C",
+            //    CarName="雪地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Niva_05_C",
+            //    CarName="雪地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Niva_06_C",
+            //    CarName="雪地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Niva_07_C",
+            //    CarName="雪地车"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_A_01_C",
+            //    CarName="皮卡车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_A_02_C",
+            //    CarName="皮卡车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_A_03_C",
+            //    CarName="皮卡车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_A_04_C",
+            //    CarName="皮卡车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_A_05_C",
+            //    CarName="皮卡车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_A_esports_C",
+            //    CarName="皮卡车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_B_01_C",
+            //    CarName="皮卡车(敞篷)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_B_02_C",
+            //    CarName="皮卡车(敞篷)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_B_03_C",
+            //    CarName="皮卡车(敞篷)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_B_04_C",
+            //    CarName="皮卡车(敞篷)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PickupTruck_B_05_C",
+            //    CarName="皮卡车(敞篷)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Pillar_Car_C",
+            //    CarName="●警车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_PonyCoupe_C",
+            //    CarName="新能源"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Porter_C",
+            //    CarName="货拉拉"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Scooter_01_A_C",
+            //    CarName="滑板车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Scooter_02_A_C",
+            //    CarName="滑板车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Scooter_03_A_C",
+            //    CarName="滑板车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Scooter_04_A_C",
+            //    CarName="滑板车"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Snowbike_01_C",
+            //    CarName="雪地自行车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Snowbike_02_C",
+            //    CarName="雪地自行车"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Snowmobile_01_C",
+            //    CarName="雪地摩托"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Snowmobile_02_C",
+            //    CarName="雪地摩托"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Snowmobile_03_C",
+            //    CarName="雪地摩托"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_TukTukTuk_A_01_C",
+            //    CarName="三轮车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_TukTukTuk_A_02_C",
+            //    CarName="三轮车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_TukTukTuk_A_03_C",
+            //    CarName="三轮车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Van_A_01_C",
+            //    CarName="面包车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Van_A_02_C",
+            //    CarName="面包车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "BP_Van_A_03_C",
+            //    CarName="面包车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Boat_PG117_C",
+            //    CarName="冲锋艇"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "PG117_A_01_C",
+            //    CarName="冲锋艇"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Buggy_A_01_C",
+            //    CarName="山地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Buggy_A_02_C",
+            //    CarName="山地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Buggy_A_03_C",
+            //    CarName="山地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Buggy_A_04_C",
+            //    CarName="山地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Buggy_A_05_C",
+            //    CarName="山地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Buggy_A_06_C",
+            //    CarName="山地车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Buggy_A_07_C",
+            //    CarName="山地车"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Dacia_A_01_v2_C",
+            //    CarName="轿车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Dacia_A_01_v2_snow_C",
+            //    CarName="轿车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Dacia_A_02_v2_C",
+            //    CarName="轿车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Dacia_A_03_v2_C",
+            //    CarName="轿车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Dacia_A_03_v2_Esports_C",
+            //    CarName="轿车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Dacia_A_04_v2_C",
+            //    CarName="轿车"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "DummyTransportAircraft_C",
+            //    CarName="飞机"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "WarModeTransportAircraft_C",
+            //    CarName="空投飞机"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "EmergencyAircraft_Tiger_C",
+            //    CarName="应急飞机"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "MortarPawn_C",
+            //    CarName="迫击炮"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "ParachutePlayer_C",
+            //    CarName="降落伞"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "ParachutePlayer_Warmode_C",
+            //    CarName="降落伞"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "RedeployAircraft_Tiger_C",
+            //    CarName="直升机"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "TransportAircraft_Chimera_C",
+            //    CarName="直升机"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "TransportAircraft_Tiger_C",
+            //    CarName="直升机"
+            //});
+
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Uaz_A_01_C",
+            //    CarName="吉普车(敞篷)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Uaz_Armored_C",
+            //    CarName="吉普车(armored)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Uaz_B_01_C",
+            //    CarName="吉普车(软)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Uaz_B_01_esports_C",
+            //    CarName="吉普车(软)"
+            //});
+            //listCar.Add(new CarModel()
+            //{
+            //    CarClass = "Uaz_C_01_C",
+            //    CarName="吉普车(硬)"
+            //});
+
             #endregion
-            
-            
+
+
         }
-      
+
         public bool Init()
         {
             try
             {
 
-                try
-                {
-                    if (File.Exists("itemfilter.json"))
-                    {
-
-                        string jsonStr = File.ReadAllText("itemfilter.json");
-                        var jo = JsonConvert.DeserializeObject<JObject>(jsonStr);
-                        var v = jo.Properties();
-                        foreach (var item in v)
-                        {
-                            try
-                            {
-                                JToken token = item.Root[item.Name];
-
-
-                                goodItems.Add(new GoodItem() { className = item.Name, shortName = token["shortName"].ToString(), showItem = token["showItem"].Value<bool>(), group = token["group"].Value<int>() });
-                            }
-                            catch (Exception)
-                            {
-
-                                
-                            }
-                           
-                        }
-
-                    }
-
-                }
-                catch (Exception ex)
-                {
-
-
-                }
 
                 try
                 {
@@ -730,16 +695,16 @@ namespace DMAHelper
                             // int h = vmm.MemReadInt(pid, world + Offset_WorldLocation + 0x4);
                             uint MapId = Common.dec_objid(vmm.MemReadInt(pid, world + Offset_ObjID));
                             ulong LocalPlayerPawn = decryptFunc(vmm.MemReadInt64(pid, PlayerController + Offset_AcknowledgedPawn));
-                            ulong CharacterId=vmm.MemReadInt64(pid, LocalPlayerPawn + Offset_CharacterName);
-                            var MyName= vmm.MemReadString(pid,CharacterId,64);
+                            ulong CharacterId = vmm.MemReadInt64(pid, LocalPlayerPawn + Offset_CharacterName);
+                            var MyName = vmm.MemReadString(pid, CharacterId, 64);
                             string mapName = GetObjName(MapId);
                             ulong GameState = decryptFunc(vmm.MemReadInt64(pid, world + Offset_GameState));
-                             if (mapName == "TslLobby_Persistent_Main")
+                            if (mapName == "TslLobby_Persistent_Main")
                             {
                                 continue;
                             }
                             model.MapName = mapName;
-                            scatter.Prepare(GameState+ Offset_LerpSafetyZoneRadius, 4);
+                            scatter.Prepare(GameState + Offset_LerpSafetyZoneRadius, 4);
                             scatter.Prepare(GameState + Offset_LerpSafetyZonePosition, 8);
                             scatter.Prepare(GameState + Offset_PoisonGasWarningPosition, 8);
                             scatter.Prepare(GameState + Offset_PoisonGasWarningRadius, 4);
@@ -757,11 +722,11 @@ namespace DMAHelper
                                 catch (Exception ex)
                                 {
 
-                                    Console.WriteLine("lei:" + ex.Message+ex.StackTrace);
+                                    Console.WriteLine("lei:" + ex.Message + ex.StackTrace);
                                 }
                             }
                             bool isExec = scatter.Execute();
-                            var lerpSafetyGasRadius= scatter.ReadFloat(GameState + Offset_LerpSafetyZoneRadius);
+                            var lerpSafetyGasRadius = scatter.ReadFloat(GameState + Offset_LerpSafetyZoneRadius);
                             var lerpSafetyPosition = scatter.ReadVector(GameState + Offset_LerpSafetyZonePosition);
                             var poisonGasPosition = scatter.ReadVector(GameState + Offset_PoisonGasWarningPosition);
                             var poisonGasRadius = scatter.ReadFloat(GameState + Offset_PoisonGasWarningRadius);
@@ -845,7 +810,7 @@ namespace DMAHelper
                             #endregion
                             #region 读取玩家名字 
                             //准备读取CharacterId
-                             
+
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             var listPlay = ListZhiZhenModel.Where(item =>
                                     (!string.IsNullOrEmpty(item.className) && (item.className == "PlayerMale_A_C" ||
@@ -869,7 +834,7 @@ namespace DMAHelper
                                 item.CharacterId = scatter.ReadUInt64(item.pObjPointer + Offset_CharacterName);
                             }
                             //准备读取CharacterName
-                           // scatter.Close();
+                            // scatter.Close();
                             //scatter.Clear(pid, Vmm.FLAG_NOCACHE);
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             foreach (var item in listPlay)
@@ -918,7 +883,7 @@ namespace DMAHelper
                             {
 
                                 item.groggyHp = scatter.ReadFloat(item.pObjPointer + Offset_GroggyHealth);
-                                 
+
                             }
                             listPlay = listPlay.Where(s => s.Hp > 0 || s.groggyHp > 0.1).ToList();
                             #endregion
@@ -1117,7 +1082,7 @@ namespace DMAHelper
                                     Orientation = item.Orientation,
                                     SpectatedCount = item.SpectatedCount,
                                     ActorLocation = item.actorLocation,
-                                    
+
                                 });
                             }
 
@@ -1128,214 +1093,204 @@ namespace DMAHelper
                             var listgoods = ListZhiZhenModel.Where(item =>
                                     (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
                                 .ToList();
-                            if (listgoods!=null&&listgoods.Count()>0)
+                            if (listgoods != null && listgoods.Count() > 0)
                             {
-                                
-                            
-                            //准备读取ItemGroupPtr
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in listgoods)
-                            {
-                                scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup, 8);
-                            }
-                            //读取ItemGroupPtr
-                            scatter.Execute();
-                            foreach (var item in listgoods)
-                            {
-                                item.ItemGroupPtr = scatter.ReadUInt64(item.pObjPointer + Offset_DroppedItemGroup);
-                            }
-                            //准备读取ItemCount 
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in listgoods)
-                            {
-                                if (item.ItemGroupPtr > 0)
+
+
+                                //准备读取ItemGroupPtr
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in listgoods)
                                 {
-                                    scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup + 0x8, 4);
+                                    scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup, 8);
                                 }
-                            }
-                            //读取ItemCount
-                            scatter.Execute();
-                         
-                            foreach (var item in listgoods)
-                            {
-                                if (item.ItemGroupPtr > 0)
+                                //读取ItemGroupPtr
+                                scatter.Execute();
+                                foreach (var item in listgoods)
                                 {
-
-                                    item.ItemCount = scatter.ReadInt(item.pObjPointer + Offset_DroppedItemGroup + 0x8);
+                                    item.ItemGroupPtr = scatter.ReadUInt64(item.pObjPointer + Offset_DroppedItemGroup);
                                 }
-                            }
-
-                            //准备ItemObject
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-
-                            foreach (var item in listgoods)
-                            {
-                                if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                //准备读取ItemCount 
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in listgoods)
                                 {
-                                    for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                    if (item.ItemGroupPtr > 0)
                                     {
-                                        scatter.Prepare(item.ItemGroupPtr + (ulong)(itemIndex * 0x10), 8);
+                                        scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup + 0x8, 4);
                                     }
                                 }
-                            }
-                            //读取ItemObject
-                            scatter.Execute();
-                            foreach (var item in listgoods)
-                            {
-                                if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                //读取ItemCount
+                                scatter.Execute();
+
+                                foreach (var item in listgoods)
                                 {
-                                    for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                    if (item.ItemGroupPtr > 0)
                                     {
-                                        ulong ItemObject = scatter.ReadUInt64(item.ItemGroupPtr + (ulong)(itemIndex * 0x10));
-                                        goods.Add(new PubgGood()
+
+                                        item.ItemCount = scatter.ReadInt(item.pObjPointer + Offset_DroppedItemGroup + 0x8);
+                                    }
+                                }
+
+                                //准备ItemObject
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+
+                                foreach (var item in listgoods)
+                                {
+                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                    {
+                                        for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
                                         {
-                                            ItemObject = ItemObject
-                                        });
-
+                                            scatter.Prepare(item.ItemGroupPtr + (ulong)(itemIndex * 0x10), 8);
+                                        }
                                     }
                                 }
-                            }
-                            //准备UItemAddress 
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in goods)
-                            {
-                                if (item.ItemObject > 0)
+                                //读取ItemObject
+                                scatter.Execute();
+                                foreach (var item in listgoods)
                                 {
-                                    scatter.Prepare(item.ItemObject + Offset_DroppedItemGroup_UItem, 8);
-                                }
-                            }
+                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                    {
+                                        for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                        {
+                                            ulong ItemObject = scatter.ReadUInt64(item.ItemGroupPtr + (ulong)(itemIndex * 0x10));
+                                            goods.Add(new PubgGood()
+                                            {
+                                                ItemObject = ItemObject
+                                            });
 
-                            //读取UItemAddress
-                            scatter.Execute();
-                            foreach (var item in goods)
-                            {
-                                if (item.ItemObject > 0)
-                                {
-                                    item.UItemAddress = scatter.ReadUInt64(item.ItemObject + Offset_DroppedItemGroup_UItem);
+                                        }
+                                    }
                                 }
-                            }
-                            //准备读取UItemIDAddress
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in goods)
-                            {
-                                if (item.UItemAddress > 0)
+                                //准备UItemAddress 
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in goods)
                                 {
-                                    scatter.Prepare(item.UItemAddress + Offset_ItemInformationComponent, 8);
+                                    if (item.ItemObject > 0)
+                                    {
+                                        scatter.Prepare(item.ItemObject + Offset_DroppedItemGroup_UItem, 8);
+                                    }
                                 }
-                            }
-                            //读取UItemIDAddress
-                            scatter.Execute();
-                            foreach (var item in goods)
-                            {
-                                if (item.UItemAddress > 0)
+
+                                //读取UItemAddress
+                                scatter.Execute();
+                                foreach (var item in goods)
                                 {
-                                    item.UItemIDAddress = scatter.ReadUInt64(item.UItemAddress + Offset_ItemInformationComponent);
+                                    if (item.ItemObject > 0)
+                                    {
+                                        item.UItemAddress = scatter.ReadUInt64(item.ItemObject + Offset_DroppedItemGroup_UItem);
+                                    }
                                 }
-                            }
-                            //准备读取UItemID
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in goods)
-                            {
-                                if (item.UItemIDAddress > 0)
+                                //准备读取UItemIDAddress
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in goods)
                                 {
-                                    scatter.Prepare(item.UItemIDAddress + Offset_ItemID, 4);
+                                    if (item.UItemAddress > 0)
+                                    {
+                                        scatter.Prepare(item.UItemAddress + Offset_ItemInformationComponent, 8);
+                                    }
                                 }
-                            }
-                            //读取UItemID
-                            scatter.Execute();
-                            foreach (var item in goods)
-                            {
-                                if (item.UItemIDAddress > 0)
+                                //读取UItemIDAddress
+                                scatter.Execute();
+                                foreach (var item in goods)
                                 {
-                                    item.UItemID = scatter.ReadUInt(item.UItemIDAddress + Offset_ItemID);
+                                    if (item.UItemAddress > 0)
+                                    {
+                                        item.UItemIDAddress = scatter.ReadUInt64(item.UItemAddress + Offset_ItemInformationComponent);
+                                    }
                                 }
-                            }
-                            //准备读取UItem坐标
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in goods)
-                            {
-                                if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                //准备读取UItemID
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in goods)
                                 {
-                                    scatter.Prepare(item.ItemObject + Offset_ComponentLocation, 12);
+                                    if (item.UItemIDAddress > 0)
+                                    {
+                                        scatter.Prepare(item.UItemIDAddress + Offset_ItemID, 4);
+                                    }
                                 }
-                            }
-                            //读取UItem坐标
-                            scatter.Prepare(world + Offset_WorldLocation, 4);
-                            scatter.Prepare(world + Offset_WorldLocation + 0x04, 4);
-                            scatter.Execute();
-                            float ww = scatter.ReadInt(world + Offset_WorldLocation);
-                            float hh = scatter.ReadInt(world + Offset_WorldLocation + 0x4);
-                            foreach (var item in goods)
-                            {
-                                if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                //读取UItemID
+                                scatter.Execute();
+                                foreach (var item in goods)
                                 {
-                                    var zuobiao = scatter.Read(item.ItemObject + Offset_ComponentLocation, 12);
-                                    Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao, 0), BitConverter.ToSingle(zuobiao, 4), BitConverter.ToSingle(zuobiao, 8));
-                                    var tempv3 = new Vector3D(ww, hh, 0) + v3d;
-                                    item.x = (int)tempv3.X;
-                                    item.y = (int)tempv3.Y;
+                                    if (item.UItemIDAddress > 0)
+                                    {
+                                        item.UItemID = scatter.ReadUInt(item.UItemIDAddress + Offset_ItemID);
+                                    }
                                 }
-                            }
-                            #region 读取物资名字
-                            //准备fNamePtr
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in goods)
-                            {
-                                scatter.Prepare((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8), 8);
-                            }
-                            isExec = scatter.Execute();
-                            //读取fNamePtr 
-                            foreach (var item in goods)
-                            {
-                                ulong fNamePtr = scatter.ReadUInt64((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8));
-                                if (fNamePtr > 0)
+                                //准备读取UItem坐标
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in goods)
                                 {
-                                    item.fNamePtr = fNamePtr;
+                                    if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                    {
+                                        scatter.Prepare(item.ItemObject + Offset_ComponentLocation, 12);
+                                    }
                                 }
-                            }
-                            goods = goods.Where(x => x.fNamePtr > 0).ToList();
-                            //准备fName
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            foreach (var item in goods)
-                            {
-                                scatter.Prepare(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8, 8);
-                            }
-                            isExec = scatter.Execute();
-                            //读取fName，
-                            foreach (var item in goods)
-                            {
-                                ulong fName = scatter.ReadUInt64(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8);
-                                if (fName > 0)
+                                //读取UItem坐标
+                                scatter.Prepare(world + Offset_WorldLocation, 4);
+                                scatter.Prepare(world + Offset_WorldLocation + 0x04, 4);
+                                scatter.Execute();
+                                float ww = scatter.ReadInt(world + Offset_WorldLocation);
+                                float hh = scatter.ReadInt(world + Offset_WorldLocation + 0x4);
+                                foreach (var item in goods)
                                 {
-                                    item.fName = fName;
+                                    if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                    {
+                                        var zuobiao = scatter.Read(item.ItemObject + Offset_ComponentLocation, 12);
+                                        Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao, 0), BitConverter.ToSingle(zuobiao, 4), BitConverter.ToSingle(zuobiao, 8));
+                                        var tempv3 = new Vector3D(ww, hh, 0) + v3d;
+                                        item.x = (int)tempv3.X;
+                                        item.y = (int)tempv3.Y;
+                                    }
                                 }
-                            }
-                            //准备读取物资名字
-                            scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-                            goods = goods.Where(x => x.fName > 0).ToList();
-                            foreach (var item in goods)
-                            {
-                                scatter.Prepare(item.fName + 0x10, 64);
-                            }
-                            scatter.Execute();
-                            //读取物资名字
-                            foreach (var item in goods)
-                            {
-                                string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
-                                item.ClassName = className;
-                                var tempM=goodItems.Where(s => s.className == className).FirstOrDefault();
-                                if (tempM!=null)
+                                #region 读取物资名字
+                                //准备fNamePtr
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in goods)
                                 {
-                                    item.Name = tempM.shortName;
-                                    item.isShow = tempM.showItem;
-                                    item.group = tempM.group;
+                                    scatter.Prepare((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8), 8);
                                 }
-                                else
+                                isExec = scatter.Execute();
+                                //读取fNamePtr 
+                                foreach (var item in goods)
                                 {
+                                    ulong fNamePtr = scatter.ReadUInt64((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8));
+                                    if (fNamePtr > 0)
+                                    {
+                                        item.fNamePtr = fNamePtr;
+                                    }
+                                }
+                                goods = goods.Where(x => x.fNamePtr > 0).ToList();
+                                //准备fName
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                foreach (var item in goods)
+                                {
+                                    scatter.Prepare(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8, 8);
+                                }
+                                isExec = scatter.Execute();
+                                //读取fName，
+                                foreach (var item in goods)
+                                {
+                                    ulong fName = scatter.ReadUInt64(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8);
+                                    if (fName > 0)
+                                    {
+                                        item.fName = fName;
+                                    }
+                                }
+                                //准备读取物资名字
+                                scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                                goods = goods.Where(x => x.fName > 0).ToList();
+                                foreach (var item in goods)
+                                {
+                                    scatter.Prepare(item.fName + 0x10, 64);
+                                }
+                                scatter.Execute();
+                                //读取物资名字
+                                foreach (var item in goods)
+                                {
+                                    string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
+                                    item.ClassName = className;
+                                    item.isShow = true;
                                     item.Name = className;
                                 }
-                               
-                            }
                             }
                             #endregion
 
@@ -1344,32 +1299,32 @@ namespace DMAHelper
                             #region 读取载具
 
                             var listtempcar = ListZhiZhenModel.Where(item =>
-                                (!string.IsNullOrEmpty(item.className) && (listCar.Any(h=>h.CarClass==item.className)))).ToList();
+                                (!string.IsNullOrEmpty(item.className) && (listCar.Any(h => h.CarClass == item.className)))).ToList();
                             Console.WriteLine("listtempcar " + listtempcar.Count());
-                            if (listtempcar.Count()==0)
+                            if (listtempcar.Count() == 0)
                             {
 
                             }
-                                
+
                             List<CarModel> listCarModel = new List<CarModel>();
-                            if (listtempcar!=null&&listtempcar.Count()>0)
+                            if (listtempcar != null && listtempcar.Count() > 0)
                             {
                                 //准备读取载具RootComponent
                                 scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                                 foreach (var item in listtempcar)
                                 {
 
-                                  var tempCarModel=  listCar.Where(s => s.CarClass == item.className).FirstOrDefault();
-                                  if (tempCarModel!=null)
-                                  {
-                                      listCarModel.Add(new CarModel()
-                                      {
-                                          CarClass = item.className,
-                                          CarName = tempCarModel.CarName,
-                                           pObjPointer =item.pObjPointer
-                                      });
-                                  }
-                                    
+                                    var tempCarModel = listCar.Where(s => s.CarClass == item.className).FirstOrDefault();
+                                    if (tempCarModel != null)
+                                    {
+                                        listCarModel.Add(new CarModel()
+                                        {
+                                            CarClass = item.className,
+                                            CarName = tempCarModel.CarName,
+                                            pObjPointer = item.pObjPointer
+                                        });
+                                    }
+
                                     scatter.Prepare(item.pObjPointer + Offset_RootComponent, 12);
                                 }
                                 //读取载具RootComponent
@@ -1403,24 +1358,24 @@ namespace DMAHelper
                                     item.y = (int)tempv3.Y;
                                 }
                             }
-                            
-                            
-                            #endregion 
-                            var tempMyModel= ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
+
+
+                            #endregion
+                            var tempMyModel = ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
 
                             if (tempMyModel != null)
                             {
                                 myModel = tempMyModel;
                                 foreach (var item in ListPlayer)
                                 {
-                                    
+
                                     if (item.TeamId == myModel.TeamId)
                                     {
                                         item.IsMyTeam = true;
                                     }
                                 }
                             }
-                             
+
                             model.Cars = listCarModel;
                             model.Player = ListPlayer;
                             model.MyTeam = ListPlayer.Where(s => s.IsMyTeam == true).ToList();
@@ -1428,28 +1383,27 @@ namespace DMAHelper
 
                             model.Game.Add(new List<object>() { poisonGasPosition.X, poisonGasPosition.Y, poisonGasRadius });
                             model.Game.Add(new List<object>() { redPosition.X, redPosition.Y, redRadius });
-                            if (tempMyModel!=null)
+                            if (tempMyModel != null)
                             {
                                 model.MyName = tempMyModel.Name;
                             }
-                                
+
                             model.MyName = MyName;
-                            if (ListPlayer.Count==0)
+                            if (ListPlayer.Count == 0)
                             {
                                 continue;
                             }
-                            model.PubgGoods = goods.Where(s=>s.isShow).ToList();
+                            model.PubgGoods = goods.Where(s => s.isShow).ToList();
                             if (OnPlayerListUpdate != null)
                             {
                                 OnPlayerListUpdate(model);
                             }
                         }
-
                     }
                     catch (Exception ex)
                     {
 
-                        Console.WriteLine("11:"+ex.Message+"\r\n"+ex.StackTrace);
+                        Console.WriteLine("11:" + ex.Message + "\r\n" + ex.StackTrace);
                     }
                 }
             });
@@ -1469,7 +1423,7 @@ namespace DMAHelper
                 if (fName > 0)
                 {
                     var nameByte = vmm.MemRead(pid, fName + 0x10, 64);
-                    
+
                     //获取类名
                     string name = Encoding.ASCII.GetString(nameByte.ToArray());
 

@@ -47,7 +47,7 @@ namespace DMAHelper
 
                 PubgMqttModel model = new PubgMqttModel();
                 model.Map = obj.MapName;
-                model.MyTeam= obj.MyTeam;
+                model.MyTeam = obj.MyTeam;
                 model.MyName = obj.MyName;
                 model.Game = obj.Game;
                 List<dynamic> l = new List<dynamic>();
@@ -124,7 +124,7 @@ namespace DMAHelper
                     }
 
                 }
-                
+
                 try
                 {
                     mqtt.PublishAsync(new MqttApplicationMessageBuilder().WithTopic(zhuti).WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtMostOnce).WithPayload(JsonConvert.SerializeObject(model)).Build()).ContinueWith(rs =>
@@ -164,10 +164,18 @@ namespace DMAHelper
                 return;
             }
             zhuti = txtuid.Text;
-            // var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
 
+            MqttClientOptions op = null;
+            if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
+            {
+                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
 
-            var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+            }
+            else
+            {
+                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
+
+            }
             mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
             mqtt.ConnectAsync(op).ContinueWith(rs =>
             {
@@ -180,11 +188,6 @@ namespace DMAHelper
 
                 }
             });
-
-
-
-
-
             try
             {
                 p = new pubg();
@@ -193,7 +196,13 @@ namespace DMAHelper
                 {
                     btnOk.IsEnabled = false;
                     p.Start();
-                    // Process.Start("http://pubg.bbhxwl.com/?470138890&addr=219.129.239.39&id=游戏名字");
+                    if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
+                    {
+                    }
+                    else
+                    {
+                        Process.Start("http://pubg.bbhxwl.com/?" + txtuid.Text.Trim() + "&addr=219.129.239.39");
+                    }
                 }
                 else
                 {
