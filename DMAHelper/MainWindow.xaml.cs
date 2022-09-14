@@ -192,7 +192,7 @@ namespace DMAHelper
             {
                 p = new pubg();
                 p.OnPlayerListUpdate += P_OnPlayerListUpdate;
-                if (p.Init())
+                if (p.Init(out string msg))
                 {
                     btnOk.IsEnabled = false;
                     p.Start();
@@ -201,12 +201,12 @@ namespace DMAHelper
                     }
                     else
                     {
-                        Process.Start("http://pubg.bbhxwl.com/?" + txtuid.Text.Trim() + "&addr=219.129.239.39");
+                        Process.Start("http://pubg.xzbapi.com/?" + txtuid.Text.Trim() + "&addr=219.129.239.39");
                     }
                 }
                 else
                 {
-                    txtLog.AppendText("初始化DMA失败\r\n");
+                    txtLog.AppendText("初始化DMA失败\r\n"+msg);
                     return;
                 }
             }

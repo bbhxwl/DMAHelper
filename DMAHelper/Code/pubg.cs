@@ -596,7 +596,7 @@ namespace DMAHelper
 
         }
 
-        public bool Init()
+        public bool Init(out string msg)
         {
             try
             {
@@ -621,10 +621,12 @@ namespace DMAHelper
                 }
                 catch (Exception e)
                 {
+                    msg =e.Message;
+                    return false;
 
                 }
 
-
+                   
                 // GetMemMap();
                 vmm.PidGetFromName("tslgame.exe", out uint pid);
                 this.pid = pid;
@@ -655,15 +657,17 @@ namespace DMAHelper
                     //指针转换成方法
                     decryptFunc = (DecryptData)Marshal.GetDelegateForFunctionPointer(addr, typeof(DecryptData));
                     #endregion 
+                    msg = "";
                     return true;
                 }
             }
             catch (Exception ex)
             {
-
+                msg = ex.Message;
+                return false;
 
             }
-
+            msg = "未知错误";
             return false;
         }
 
