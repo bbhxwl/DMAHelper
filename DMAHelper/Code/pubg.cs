@@ -1365,6 +1365,7 @@ namespace DMAHelper
 
 
                             #endregion
+                            
                             var tempMyModel = ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
 
                             if (tempMyModel != null)
@@ -1379,6 +1380,18 @@ namespace DMAHelper
                                     }
                                 }
                             }
+                            else if (myModel!=null)
+                            {
+                                foreach (var item in ListPlayer)
+                                {
+
+                                    if (item.TeamId == myModel.TeamId)
+                                    {
+                                        item.IsMyTeam = true;
+                                    }
+                                }
+                            }
+                            
 
                             model.Cars = listCarModel;
                             model.Player = ListPlayer;
