@@ -843,22 +843,16 @@ namespace DMAHelper
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             foreach (var item in listPlay)
                             {
-                                if (item.CharacterId > 0)
-                                {
-                                    scatter.Prepare(item.CharacterId, 64);
-                                }
+                                scatter.Prepare(item.CharacterId, 64);
                             }
                             scatter.Execute();
                             //读取CharacterName
                             foreach (var item in listPlay)
                             {
-                                if (item.CharacterId > 0)
-                                {
-                                    item.Name = scatter.ReadStringUnicode(item.CharacterId, 64);
-                                }
+                                item.Name = scatter.ReadStringUnicode(item.CharacterId, 64);
                             }
                             #endregion
-                            Console.WriteLine("读取hp");
+                          
                             #region 读取hp
                             //准备hp+读取倒地hp+读取观战人数 
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
@@ -915,23 +909,18 @@ namespace DMAHelper
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             foreach (var item in listPlay)
                             {
-                                if (item.PlayerState > 0x1000)
-                                {
-                                    scatter.Prepare(item.PlayerState + Offset_PlayerStatistics, 4);
-                                }
+                                scatter.Prepare(item.PlayerState + Offset_PlayerStatistics, 4);
+
                             }
                             //读取KillCount
                             scatter.Execute();
                             foreach (var item in listPlay)
                             {
-                                if (item.PlayerState > 0)
-                                {
-                                    item.KillCount = scatter.ReadInt(item.PlayerState + Offset_PlayerStatistics);
-                                }
+                                item.KillCount = scatter.ReadInt(item.PlayerState + Offset_PlayerStatistics);
                             }
                             #endregion
 
-                            
+
                             Console.WriteLine("zuobiao");
                             #region 读取坐标
                             //准备读取MeshAddr
@@ -950,10 +939,8 @@ namespace DMAHelper
                             scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
                             foreach (var item in listPlay)
                             {
-                                if (item.MeshAddr > 0)
-                                {
-                                    scatter.Prepare(item.MeshAddr + Offset_ComponentLocation, 12);
-                                }
+                                scatter.Prepare(item.MeshAddr + Offset_ComponentLocation, 12);
+
                             }
                             //读取Offset_ComponentLocation
                             scatter.Prepare(world + Offset_WorldLocation, 4);
@@ -961,8 +948,7 @@ namespace DMAHelper
                             scatter.Execute();
                             foreach (var item in listPlay)
                             {
-                                if (item.MeshAddr > 0)
-                                {
+                                
                                     float X = scatter.ReadFloat(item.MeshAddr + Offset_ComponentLocation);
                                     float Y = scatter.ReadFloat(item.MeshAddr + Offset_ComponentLocation + 0x4);
                                     float Z = scatter.ReadFloat(item.MeshAddr + Offset_ComponentLocation + 0x8);
@@ -981,7 +967,7 @@ namespace DMAHelper
                                     item.x = X + w;
                                     item.y = Y + h;
                                     item.z = Z;
-                                }
+                                
 
                                 if (item.className == "PlayerMale_A_C" || item.className == "PlayerFemale_A_C")
                                 {
