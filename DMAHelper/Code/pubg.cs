@@ -679,7 +679,7 @@ namespace DMAHelper
         public void Start()
         {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(30); ;
+            timer.Interval = TimeSpan.FromMilliseconds(20); ;
             timer.Tick += (obj, e) =>
             {
                 try
@@ -1426,8 +1426,8 @@ namespace DMAHelper
                 }
                 GC.Collect();
             };
-            
 
+            timer.Start();
 
 
         }
