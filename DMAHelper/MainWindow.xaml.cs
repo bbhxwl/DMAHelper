@@ -180,6 +180,13 @@ namespace DMAHelper
             try
             {
                 p = new pubg();
+                p.OnExecTime += (s) =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        this.Title = s.ToString();
+                    });
+                };
                 p.OnPlayerListUpdate += P_OnPlayerListUpdate;
                 if (p.Init(out string msg))
                 {
