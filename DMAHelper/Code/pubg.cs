@@ -678,14 +678,17 @@ namespace DMAHelper
 
         public void Start()
         {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(20); 
-            VmmScatter scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
-
-            timer.Tick += (obj, e) =>
+            Task.Run(() =>
             {
-                try
-                {
+
+          
+           
+            while (true)
+            {
+                    VmmScatter scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+
+                    try
+                    {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
                     if (scatter != null)
@@ -826,7 +829,7 @@ namespace DMAHelper
                         #region 读取玩家名字 
                         //准备读取CharacterId
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                        
+
                         var listPlay = ListZhiZhenModel.Where(item =>
                                 (!string.IsNullOrEmpty(item.className) && (item.className == "PlayerMale_A_C" ||
                                                                            item.className == "PlayerFemale_A_C" ||
@@ -849,9 +852,9 @@ namespace DMAHelper
                             item.CharacterId = scatter.ReadUInt64(item.pObjPointer + Offset_CharacterName);
                         }
                         //准备读取CharacterName
-                        
+
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                        
+
                         foreach (var item in listPlay)
                         {
                             scatter.Prepare(item.CharacterId, 64);
@@ -867,7 +870,7 @@ namespace DMAHelper
                         #region 读取hp
                         //准备hp+读取倒地hp+读取观战人数 
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                        
+
                         foreach (var item in listPlay)
                         {
                             scatter.Prepare(item.pObjPointer + Offset_Health, 4);
@@ -906,7 +909,7 @@ namespace DMAHelper
                         #region 读取杀敌数量
                         //准备读取PlayerState
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
- 
+
                         foreach (var item in listPlay)
                         {
                             scatter.Prepare(item.pObjPointer + Offset_PlayerState, 8);
@@ -920,7 +923,7 @@ namespace DMAHelper
 
                         //准备读取KillCount
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                        
+
                         foreach (var item in listPlay)
                         {
                             scatter.Prepare(item.PlayerState + Offset_PlayerStatistics, 4);
@@ -939,7 +942,7 @@ namespace DMAHelper
                         #region 读取坐标
                         //准备读取MeshAddr
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                         
+
                         foreach (var item in listPlay)
                         {
                             scatter.Prepare(item.pObjPointer + Offset_Mesh, 8);
@@ -952,7 +955,7 @@ namespace DMAHelper
                         }
                         //准备读取Offset_ComponentLocation
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                         
+
                         foreach (var item in listPlay)
                         {
                             scatter.Prepare(item.MeshAddr + Offset_ComponentLocation, 12);
@@ -1012,7 +1015,7 @@ namespace DMAHelper
                         #region 读取AmiMz
                         //准备读取AmiMz
                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                        
+
                         foreach (var item in listPlay)
                         {
                             scatter.Prepare(item.pObjPointer + Offset_AimOffsets, 4);
@@ -1059,7 +1062,7 @@ namespace DMAHelper
 
                             //准备读取ItemGroupPtr
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                             
+
                             foreach (var item in listgoods)
                             {
                                 scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup, 8);
@@ -1072,7 +1075,7 @@ namespace DMAHelper
                             }
                             //准备读取ItemCount 
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                           
+
                             foreach (var item in listgoods)
                             {
                                 if (item.ItemGroupPtr > 0)
@@ -1094,7 +1097,7 @@ namespace DMAHelper
 
                             //准备ItemObject
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                            
+
 
                             foreach (var item in listgoods)
                             {
@@ -1125,7 +1128,7 @@ namespace DMAHelper
                             }
                             //准备UItemAddress 
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                           
+
                             foreach (var item in goods)
                             {
                                 if (item.ItemObject > 0)
@@ -1145,7 +1148,7 @@ namespace DMAHelper
                             }
                             //准备读取UItemIDAddress
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                           
+
                             foreach (var item in goods)
                             {
                                 if (item.UItemAddress > 0)
@@ -1164,7 +1167,7 @@ namespace DMAHelper
                             }
                             //准备读取UItemID
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                          
+
                             foreach (var item in goods)
                             {
                                 if (item.UItemIDAddress > 0)
@@ -1183,7 +1186,7 @@ namespace DMAHelper
                             }
                             //准备读取UItem坐标
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                          
+
                             foreach (var item in goods)
                             {
                                 if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
@@ -1211,7 +1214,7 @@ namespace DMAHelper
                             #region 读取物资名字
                             //准备fNamePtr
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                          
+
                             foreach (var item in goods)
                             {
                                 scatter.Prepare((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8), 8);
@@ -1229,7 +1232,7 @@ namespace DMAHelper
                             goods = goods.Where(x => x.fNamePtr > 0).ToList();
                             //准备fName
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                           
+
                             foreach (var item in goods)
                             {
                                 scatter.Prepare(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8, 8);
@@ -1246,7 +1249,7 @@ namespace DMAHelper
                             }
                             //准备读取物资名字
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                            
+
                             goods = goods.Where(x => x.fName > 0).ToList();
                             foreach (var item in goods)
                             {
@@ -1281,7 +1284,7 @@ namespace DMAHelper
                         {
                             //准备读取载具RootComponent
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                           
+
                             foreach (var item in listtempcar)
                             {
 
@@ -1310,7 +1313,7 @@ namespace DMAHelper
                             }
                             //准备读取坐标
                             scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-                           
+
                             foreach (var item in listCarModel)
                             {
                                 scatter.Prepare(item.RootComponent + Offset_ComponentLocation, 12);
@@ -1385,9 +1388,9 @@ namespace DMAHelper
                     Console.WriteLine("11:" + ex.Message + "\r\n" + ex.StackTrace);
                 }
                 GC.Collect();
-            };
+            }
+            });
 
-            timer.Start();
 
 
         }
