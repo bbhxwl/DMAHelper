@@ -681,10 +681,17 @@ namespace DMAHelper
             Task.Run(() =>
             {
                 VmmScatter scatter = vmm.Scatter_Initialize(pid, Vmm.FLAG_NOCACHE);
+                List<ZhiZhenModel> ListZhiZhenModel = new List<ZhiZhenModel>();
+                List<PlayerModel> ListPlayer = new List<PlayerModel>();
+                List<PubgGood> goods = new List<PubgGood>();
+                List<CarModel> listCarModel = new List<CarModel>();
 
                 while (true)
                 {
-                   
+                    ListZhiZhenModel.Clear();
+                    ListPlayer.Clear();
+                    goods.Clear();
+                    listCarModel.Clear();
                     dt = DateTime.Now;
                     try
                     {
@@ -729,7 +736,11 @@ namespace DMAHelper
                             scatter.Prepare(GameState + Offset_RedZonePosition, 8);
                             scatter.Prepare(GameState + Offset_RedZoneRadius, 4);
                             #region 读取所有类名
-                            List<PlayerModel> ListPlayer = new List<PlayerModel>();
+
+                            if (Actorscount>5000)
+                            {
+                                continue;
+                            }
                             for (int i = 0; i < Actorscount; i++)
                             {
                                 try
@@ -750,7 +761,6 @@ namespace DMAHelper
                             var poisonGasRadius = scatter.ReadFloat(GameState + Offset_PoisonGasWarningRadius);
                             var redPosition = scatter.ReadVector(GameState + Offset_RedZonePosition);
                             var redRadius = scatter.ReadFloat(GameState + Offset_RedZoneRadius);
-                            List<ZhiZhenModel> ListZhiZhenModel = new List<ZhiZhenModel>();
                             for (int i = 0; i < Actorscount; i++)
                             {
                                 ulong pObjPointer = scatter.ReadUInt64(actorBase + (ulong)i * 8);
@@ -1054,7 +1064,6 @@ namespace DMAHelper
                             #endregion
 
                             #region 读取物资
-                            List<PubgGood> goods = new List<PubgGood>();
                             var listgoods = ListZhiZhenModel.Where(item =>
                                     (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
                                 .ToList();
@@ -1103,7 +1112,7 @@ namespace DMAHelper
 
                                 foreach (var item in listgoods)
                                 {
-                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0&&item.ItemCount<5000)
                                     {
                                         for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
                                         {
@@ -1115,7 +1124,7 @@ namespace DMAHelper
                                 scatter.Execute();
                                 foreach (var item in listgoods)
                                 {
-                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0)
+                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0&&item.ItemCount<5000)
                                     {
                                         for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
                                         {
@@ -1281,7 +1290,6 @@ namespace DMAHelper
 
                             }
 
-                            List<CarModel> listCarModel = new List<CarModel>();
                             if (listtempcar != null && listtempcar.Count() > 0)
                             {
                                 //准备读取载具RootComponent
