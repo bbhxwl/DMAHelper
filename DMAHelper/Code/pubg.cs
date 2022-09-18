@@ -80,6 +80,7 @@ namespace DMAHelper
         DecryptData decryptFunc;
         PlayerModel myModel = null;
         public event Action<long> OnExecTime;
+        List<GoodItem> goodItems = new List<GoodItem>();
 
         public pubg()
         {
@@ -608,6 +609,28 @@ namespace DMAHelper
 
                 try
                 {
+                    if (File.Exists("itemfilter.json"))
+                    {
+
+                        string jsonStr = File.ReadAllText("itemfilter.json");
+                        var jo = JsonConvert.DeserializeObject<JObject>(jsonStr);
+                        var v = jo.Properties();
+                        foreach (var item in v)
+                        {
+                            JToken token = item.Value<JToken>();
+                            goodItems.Add(new GoodItem() { className = item.Name, shortName = token["shortName"].Value<string>(), showItem = token["showItem"].Value<bool>(), group = token["group"].Value<int>() });
+                        }
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+
+                }
+                try
+                {
                     vmm = new Vmm("", "-device", "fpga");
                 }
                 catch (Exception e)
@@ -737,7 +760,7 @@ namespace DMAHelper
                             scatter.Prepare(GameState + Offset_RedZoneRadius, 4);
                             #region 读取所有类名
 
-                            if (Actorscount>5000)
+                            if (Actorscount>20000)
                             {
                                 continue;
                             }
@@ -1271,9 +1294,20 @@ namespace DMAHelper
                                 foreach (var item in goods)
                                 {
                                     string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
-                                    item.ClassName = className;
-                                    item.isShow = true;
-                                    item.Name = className;
+                                    var tempM = goodItems.Where(s => s.className == className).FirstOrDefault();
+                                    if (tempM != null)
+                                    {
+                                        item.Name = tempM.shortName;
+                                        item.isShow = tempM.showItem;
+                                        item.ClassName = className;
+                                    }
+                                    else
+                                    {
+                                        item.ClassName = className;
+                                        item.isShow = true;
+                                        item.Name = className;
+                                    }
+                                   
                                 }
                             }
                             #endregion
