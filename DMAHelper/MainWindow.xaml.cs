@@ -188,7 +188,7 @@ namespace DMAHelper
                     });
                 };
                 p.OnPlayerListUpdate += P_OnPlayerListUpdate;
-                if (p.Init(out string msg))
+                if (p.Init(true,out string msg))
                 {
                     mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
                     mqtt.ConnectAsync(op).ContinueWith(rs =>
