@@ -601,7 +601,7 @@ namespace DMAHelper
 
         }
 
-        public bool Init(out string msg)
+        public bool Init(bool isLocal,out string msg)
         {
             try
             {
@@ -629,27 +629,44 @@ namespace DMAHelper
 
 
                 }
-                try
+                if (isLocal)
                 {
-                    vmm = new Vmm("", "-device", "fpga");
-                }
-                catch (Exception e)
-                {
-
-                }
-
-                try
-                {
-                    if (vmm == null)
+                    try
                     {
-                        vmm = new Vmm("", "-device", "fpga", "-memmap", "auto");
+                        vmm = new Vmm("", "-device", "pmem");
+                    }
+                    catch (Exception e)
+                    {
+                        msg = "11:" + e.Message;
+                        return false;
+                         
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        vmm = new Vmm("", "-device", "fpga");
+                    }
+                    catch (Exception e)
+                    {
+
                     }
 
-                }
-                catch (Exception e)
-                {
-                    msg = "1:" + e.Message;
-                    return false;
+                    try
+                    {
+                        if (vmm == null)
+                        {
+                            vmm = new Vmm("", "-device", "fpga", "-memmap", "auto");
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        msg = "1:" + e.Message;
+                        return false;
+
+                    }
 
                 }
 
