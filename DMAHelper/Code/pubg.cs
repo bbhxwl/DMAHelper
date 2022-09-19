@@ -81,7 +81,7 @@ namespace DMAHelper
         PlayerModel myModel = null;
         public event Action<long> OnExecTime;
         List<GoodItem> goodItems = new List<GoodItem>();
-
+        bool isLocal = false;
         public pubg()
         {
             #region 载具列表
@@ -606,7 +606,7 @@ namespace DMAHelper
             try
             {
 
-
+                this.isLocal = isLocal;
                 try
                 {
                     if (File.Exists("itemfilter.json"))
@@ -728,6 +728,10 @@ namespace DMAHelper
 
                 while (true)
                 {
+                    if (isLocal)
+                    {
+                        Thread.Sleep(10);
+                    }
                     ListZhiZhenModel.Clear();
                     ListPlayer.Clear();
                     goods.Clear();
