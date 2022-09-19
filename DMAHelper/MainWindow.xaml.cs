@@ -188,7 +188,16 @@ namespace DMAHelper
                     });
                 };
                 p.OnPlayerListUpdate += P_OnPlayerListUpdate;
-                if (p.Init(true,out string msg))
+                bool islocal = false;
+                if (rbShuang.IsChecked==true)
+                {
+                    islocal = false;
+                }
+                else
+                {
+                    islocal = true;
+                }
+                if (p.Init(islocal, out string msg))
                 {
                     mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
                     mqtt.ConnectAsync(op).ContinueWith(rs =>
