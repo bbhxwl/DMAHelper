@@ -601,11 +601,12 @@ namespace DMAHelper
 
         }
 
-        public bool Init(bool isLocal,out string msg)
+        public bool Init(bool isLocal, out string msg)
         {
+            msg = "";
             try
             {
-
+                
                 this.isLocal = isLocal;
                 try
                 {
@@ -637,9 +638,9 @@ namespace DMAHelper
                     }
                     catch (Exception e)
                     {
-                        msg = "11:" + e.Message;
+                        msg += "11:" + e.Message;
                         return false;
-                         
+
                     }
                 }
                 else
@@ -663,7 +664,7 @@ namespace DMAHelper
                     }
                     catch (Exception e)
                     {
-                        msg = "1:" + e.Message;
+                        msg += "1:" + e.Message;
                         return false;
 
                     }
@@ -707,15 +708,18 @@ namespace DMAHelper
             }
             catch (Exception ex)
             {
-                msg = "2:" + ex.Message;
+                msg += "2:" + ex.Message;
                 return false;
 
             }
-            msg = "未知错误";
+            
+            msg += "未知错误";
             return false;
         }
         Thread t;
         DateTime dt = DateTime.Now;
+        DateTime dtWuZi = DateTime.Now;
+        DateTime dtCar = DateTime.Now;
         public void Start()
         {
             Task.Run(() =>
@@ -734,7 +738,7 @@ namespace DMAHelper
                     }
                     ListZhiZhenModel.Clear();
                     ListPlayer.Clear();
-                    goods.Clear();
+                    
                     listCarModel.Clear();
                     dt = DateTime.Now;
                     try
@@ -781,7 +785,7 @@ namespace DMAHelper
                             scatter.Prepare(GameState + Offset_RedZoneRadius, 4);
                             #region 读取所有类名
 
-                            if (Actorscount>20000)
+                            if (Actorscount > 20000)
                             {
                                 continue;
                             }
@@ -1108,229 +1112,232 @@ namespace DMAHelper
                             #endregion
 
                             #region 读取物资
-                            var listgoods = ListZhiZhenModel.Where(item =>
-                                    (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
-                                .ToList();
-                            if (listgoods != null && listgoods.Count() > 0)
+                            if ((DateTime.Now-dtWuZi).TotalMilliseconds>2000)
                             {
-
-
-                                //准备读取ItemGroupPtr
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-
-                                foreach (var item in listgoods)
+                                dtWuZi = DateTime.Now;
+                                goods.Clear();
+                                var listgoods = ListZhiZhenModel.Where(item =>
+                                   (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
+                               .ToList();
+                                if (listgoods != null && listgoods.Count() > 0)
                                 {
-                                    scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup, 8);
-                                }
-                                //读取ItemGroupPtr
-                                scatter.Execute();
-                                foreach (var item in listgoods)
-                                {
-                                    item.ItemGroupPtr = scatter.ReadUInt64(item.pObjPointer + Offset_DroppedItemGroup);
-                                }
-                                //准备读取ItemCount 
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-
-                                foreach (var item in listgoods)
-                                {
-                                    if (item.ItemGroupPtr > 0)
+                                    //准备读取ItemGroupPtr
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+                                    foreach (var item in listgoods)
                                     {
-                                        scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup + 0x8, 4);
+                                        scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup, 8);
                                     }
-                                }
-                                //读取ItemCount
-                                scatter.Execute();
-
-                                foreach (var item in listgoods)
-                                {
-                                    if (item.ItemGroupPtr > 0)
+                                    //读取ItemGroupPtr
+                                    scatter.Execute();
+                                    foreach (var item in listgoods)
                                     {
-
-                                        item.ItemCount = scatter.ReadInt(item.pObjPointer + Offset_DroppedItemGroup + 0x8);
+                                        item.ItemGroupPtr = scatter.ReadUInt64(item.pObjPointer + Offset_DroppedItemGroup);
                                     }
-                                }
+                                    //准备读取ItemCount 
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                //准备ItemObject
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
-
-
-                                foreach (var item in listgoods)
-                                {
-                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0&&item.ItemCount<5000)
+                                    foreach (var item in listgoods)
                                     {
-                                        for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                        if (item.ItemGroupPtr > 0)
                                         {
-                                            scatter.Prepare(item.ItemGroupPtr + (ulong)(itemIndex * 0x10), 8);
+                                            scatter.Prepare(item.pObjPointer + Offset_DroppedItemGroup + 0x8, 4);
                                         }
                                     }
-                                }
-                                //读取ItemObject
-                                scatter.Execute();
-                                foreach (var item in listgoods)
-                                {
-                                    if (item.ItemGroupPtr > 0 && item.ItemCount > 0&&item.ItemCount<5000)
+                                    //读取ItemCount
+                                    scatter.Execute();
+
+                                    foreach (var item in listgoods)
                                     {
-                                        for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                        if (item.ItemGroupPtr > 0)
                                         {
-                                            ulong ItemObject = scatter.ReadUInt64(item.ItemGroupPtr + (ulong)(itemIndex * 0x10));
-                                            goods.Add(new PubgGood()
+
+                                            item.ItemCount = scatter.ReadInt(item.pObjPointer + Offset_DroppedItemGroup + 0x8);
+                                        }
+                                    }
+
+                                    //准备ItemObject
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+
+
+                                    foreach (var item in listgoods)
+                                    {
+                                        if (item.ItemGroupPtr > 0 && item.ItemCount > 0 && item.ItemCount < 5000)
+                                        {
+                                            for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
                                             {
-                                                ItemObject = ItemObject
-                                            });
-
+                                                scatter.Prepare(item.ItemGroupPtr + (ulong)(itemIndex * 0x10), 8);
+                                            }
                                         }
                                     }
-                                }
-                                //准备UItemAddress 
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+                                    //读取ItemObject
+                                    scatter.Execute();
+                                    foreach (var item in listgoods)
+                                    {
+                                        if (item.ItemGroupPtr > 0 && item.ItemCount > 0 && item.ItemCount < 5000)
+                                        {
+                                            for (int itemIndex = 0; itemIndex < item.ItemCount; itemIndex++)
+                                            {
+                                                ulong ItemObject = scatter.ReadUInt64(item.ItemGroupPtr + (ulong)(itemIndex * 0x10));
+                                                goods.Add(new PubgGood()
+                                                {
+                                                    ItemObject = ItemObject
+                                                });
 
-                                foreach (var item in goods)
-                                {
-                                    if (item.ItemObject > 0)
-                                    {
-                                        scatter.Prepare(item.ItemObject + Offset_DroppedItemGroup_UItem, 8);
+                                            }
+                                        }
                                     }
-                                }
+                                    //准备UItemAddress 
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                //读取UItemAddress
-                                scatter.Execute();
-                                foreach (var item in goods)
-                                {
-                                    if (item.ItemObject > 0)
+                                    foreach (var item in goods)
                                     {
-                                        item.UItemAddress = scatter.ReadUInt64(item.ItemObject + Offset_DroppedItemGroup_UItem);
+                                        if (item.ItemObject > 0)
+                                        {
+                                            scatter.Prepare(item.ItemObject + Offset_DroppedItemGroup_UItem, 8);
+                                        }
                                     }
-                                }
-                                //准备读取UItemIDAddress
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                foreach (var item in goods)
-                                {
-                                    if (item.UItemAddress > 0)
+                                    //读取UItemAddress
+                                    scatter.Execute();
+                                    foreach (var item in goods)
                                     {
-                                        scatter.Prepare(item.UItemAddress + Offset_ItemInformationComponent, 8);
+                                        if (item.ItemObject > 0)
+                                        {
+                                            item.UItemAddress = scatter.ReadUInt64(item.ItemObject + Offset_DroppedItemGroup_UItem);
+                                        }
                                     }
-                                }
-                                //读取UItemIDAddress
-                                scatter.Execute();
-                                foreach (var item in goods)
-                                {
-                                    if (item.UItemAddress > 0)
-                                    {
-                                        item.UItemIDAddress = scatter.ReadUInt64(item.UItemAddress + Offset_ItemInformationComponent);
-                                    }
-                                }
-                                //准备读取UItemID
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+                                    //准备读取UItemIDAddress
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                foreach (var item in goods)
-                                {
-                                    if (item.UItemIDAddress > 0)
+                                    foreach (var item in goods)
                                     {
-                                        scatter.Prepare(item.UItemIDAddress + Offset_ItemID, 4);
+                                        if (item.UItemAddress > 0)
+                                        {
+                                            scatter.Prepare(item.UItemAddress + Offset_ItemInformationComponent, 8);
+                                        }
                                     }
-                                }
-                                //读取UItemID
-                                scatter.Execute();
-                                foreach (var item in goods)
-                                {
-                                    if (item.UItemIDAddress > 0)
+                                    //读取UItemIDAddress
+                                    scatter.Execute();
+                                    foreach (var item in goods)
                                     {
-                                        item.UItemID = scatter.ReadUInt(item.UItemIDAddress + Offset_ItemID);
+                                        if (item.UItemAddress > 0)
+                                        {
+                                            item.UItemIDAddress = scatter.ReadUInt64(item.UItemAddress + Offset_ItemInformationComponent);
+                                        }
                                     }
-                                }
-                                //准备读取UItem坐标
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+                                    //准备读取UItemID
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                foreach (var item in goods)
-                                {
-                                    if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                    foreach (var item in goods)
                                     {
-                                        scatter.Prepare(item.ItemObject + Offset_ComponentLocation, 12);
+                                        if (item.UItemIDAddress > 0)
+                                        {
+                                            scatter.Prepare(item.UItemIDAddress + Offset_ItemID, 4);
+                                        }
                                     }
-                                }
-                                //读取UItem坐标
-                                scatter.Prepare(world + Offset_WorldLocation, 4);
-                                scatter.Prepare(world + Offset_WorldLocation + 0x04, 4);
-                                scatter.Execute();
-                                float ww = scatter.ReadInt(world + Offset_WorldLocation);
-                                float hh = scatter.ReadInt(world + Offset_WorldLocation + 0x4);
-                                foreach (var item in goods)
-                                {
-                                    if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                    //读取UItemID
+                                    scatter.Execute();
+                                    foreach (var item in goods)
                                     {
-                                        var zuobiao = scatter.Read(item.ItemObject + Offset_ComponentLocation, 12);
-                                        Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao, 0), BitConverter.ToSingle(zuobiao, 4), BitConverter.ToSingle(zuobiao, 8));
-                                        var tempv3 = new Vector3D(ww, hh, 0) + v3d;
-                                        item.x = (int)tempv3.X;
-                                        item.y = (int)tempv3.Y;
+                                        if (item.UItemIDAddress > 0)
+                                        {
+                                            item.UItemID = scatter.ReadUInt(item.UItemIDAddress + Offset_ItemID);
+                                        }
                                     }
-                                }
-                                #region 读取物资名字
-                                //准备fNamePtr
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+                                    //准备读取UItem坐标
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                foreach (var item in goods)
-                                {
-                                    scatter.Prepare((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8), 8);
-                                }
-                                isExec = scatter.Execute();
-                                //读取fNamePtr 
-                                foreach (var item in goods)
-                                {
-                                    ulong fNamePtr = scatter.ReadUInt64((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8));
-                                    if (fNamePtr > 0)
+                                    foreach (var item in goods)
                                     {
-                                        item.fNamePtr = fNamePtr;
+                                        if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                        {
+                                            scatter.Prepare(item.ItemObject + Offset_ComponentLocation, 12);
+                                        }
                                     }
-                                }
-                                goods = goods.Where(x => x.fNamePtr > 0).ToList();
-                                //准备fName
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+                                    //读取UItem坐标
+                                    scatter.Prepare(world + Offset_WorldLocation, 4);
+                                    scatter.Prepare(world + Offset_WorldLocation + 0x04, 4);
+                                    scatter.Execute();
+                                    float ww = scatter.ReadInt(world + Offset_WorldLocation);
+                                    float hh = scatter.ReadInt(world + Offset_WorldLocation + 0x4);
+                                    foreach (var item in goods)
+                                    {
+                                        if (item.UItemID > 0 && item.UItemID < 0xfff0ff)
+                                        {
+                                            var zuobiao = scatter.Read(item.ItemObject + Offset_ComponentLocation, 12);
+                                            Vector3D v3d = new Vector3D(BitConverter.ToSingle(zuobiao, 0), BitConverter.ToSingle(zuobiao, 4), BitConverter.ToSingle(zuobiao, 8));
+                                            var tempv3 = new Vector3D(ww, hh, 0) + v3d;
+                                            item.x = (int)tempv3.X;
+                                            item.y = (int)tempv3.Y;
+                                        }
+                                    }
+                                    #region 读取物资名字
+                                    //准备fNamePtr
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                foreach (var item in goods)
-                                {
-                                    scatter.Prepare(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8, 8);
-                                }
-                                isExec = scatter.Execute();
-                                //读取fName，
-                                foreach (var item in goods)
-                                {
-                                    ulong fName = scatter.ReadUInt64(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8);
-                                    if (fName > 0)
+                                    foreach (var item in goods)
                                     {
-                                        item.fName = fName;
+                                        scatter.Prepare((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8), 8);
                                     }
-                                }
-                                //准备读取物资名字
-                                scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+                                    isExec = scatter.Execute();
+                                    //读取fNamePtr 
+                                    foreach (var item in goods)
+                                    {
+                                        ulong fNamePtr = scatter.ReadUInt64((GNamesAddress + (ulong)(item.UItemID / Offset_ChunkSize) * 0x8));
+                                        if (fNamePtr > 0)
+                                        {
+                                            item.fNamePtr = fNamePtr;
+                                        }
+                                    }
+                                    goods = goods.Where(x => x.fNamePtr > 0).ToList();
+                                    //准备fName
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
-                                goods = goods.Where(x => x.fName > 0).ToList();
-                                foreach (var item in goods)
-                                {
-                                    scatter.Prepare(item.fName + 0x10, 64);
-                                }
-                                scatter.Execute();
-                                //读取物资名字
-                                foreach (var item in goods)
-                                {
-                                    string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
-                                    var tempM = goodItems.Where(s => s.className == className).FirstOrDefault();
-                                    if (tempM != null)
+                                    foreach (var item in goods)
                                     {
-                                        item.Name = tempM.shortName;
-                                        item.isShow = tempM.showItem;
-                                        item.ClassName = className;
+                                        scatter.Prepare(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8, 8);
                                     }
-                                    else
+                                    isExec = scatter.Execute();
+                                    //读取fName，
+                                    foreach (var item in goods)
                                     {
-                                        item.ClassName = className;
-                                        item.isShow = true;
-                                        item.Name = className;
+                                        ulong fName = scatter.ReadUInt64(item.fNamePtr + (ulong)(item.UItemID % Offset_ChunkSize) * 0x8);
+                                        if (fName > 0)
+                                        {
+                                            item.fName = fName;
+                                        }
                                     }
-                                   
+                                    //准备读取物资名字
+                                    scatter.Clear(pid, Vmm.FLAG_NOCACHE);
+
+                                    goods = goods.Where(x => x.fName > 0).ToList();
+                                    foreach (var item in goods)
+                                    {
+                                        scatter.Prepare(item.fName + 0x10, 64);
+                                    }
+                                    scatter.Execute();
+                                    //读取物资名字
+                                    foreach (var item in goods)
+                                    {
+                                        string className = scatter.ReadStringASCII(item.fName + 0x10, 64);
+                                        var tempM = goodItems.Where(s => s.className == className).FirstOrDefault();
+                                        if (tempM != null)
+                                        {
+                                            item.Name = tempM.shortName;
+                                            item.isShow = tempM.showItem;
+                                            item.ClassName = className;
+                                        }
+                                        else
+                                        {
+                                            item.ClassName = className;
+                                            item.isShow = true;
+                                            item.Name = className;
+                                        }
+
+                                    }
                                 }
                             }
+                           
                             #endregion
 
                             #endregion
@@ -1429,7 +1436,6 @@ namespace DMAHelper
                             {
                                 model.MyName = tempMyModel.Name;
                             }
-
                             model.MyName = MyName;
                             if (ListPlayer.Count == 0)
                             {
