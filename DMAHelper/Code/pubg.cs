@@ -1112,10 +1112,12 @@ namespace DMAHelper
                             #endregion
 
                             #region 读取物资
+                            goods.Clear();
+
                             if ((DateTime.Now-dtWuZi).TotalMilliseconds>2000)
                             {
                                 dtWuZi = DateTime.Now;
-                                goods.Clear();
+                                
                                 var listgoods = ListZhiZhenModel.Where(item =>
                                    (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
                                .ToList();
@@ -1337,7 +1339,7 @@ namespace DMAHelper
                                     }
                                 }
                             }
-                           
+                          
                             #endregion
 
                             #endregion
