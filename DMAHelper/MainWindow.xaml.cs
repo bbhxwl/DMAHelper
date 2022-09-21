@@ -250,5 +250,13 @@ namespace DMAHelper
               });
 
         }
+
+        private void cbWuZi_Checked(object sender, RoutedEventArgs e)
+        {
+            if (p!=null)
+            {
+                p.isKaiWuZi = cbWuZi.IsChecked==true?true:false;
+            }
+        }
     }
 }

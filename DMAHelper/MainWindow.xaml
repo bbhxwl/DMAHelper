@@ -11,6 +11,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
@@ -25,8 +26,13 @@
             <RadioButton  x:Name="rbShuang"  Content="双机" VerticalAlignment="Center" IsChecked="True"  ></RadioButton>
             <RadioButton   Content="单机" VerticalAlignment="Center" ></RadioButton>
         </StackPanel>
-        
-        <Button x:Name="btnOk" Grid.ColumnSpan="2" Click="Button_Click" Grid.Row="2" Grid.Column="0" >确认</Button>
-        <TextBox Grid.Column="3" x:Name="txtLog" Grid.RowSpan="3" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" ></TextBox>
+        <Label Grid.Row="2"  Grid.Column="0" VerticalAlignment="Center">物资:</Label>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.Column="1">
+            
+             <CheckBox  x:Name="cbWuZi"  Content="开启物资" VerticalAlignment="Center" Checked="cbWuZi_Checked" ></CheckBox>
+        </StackPanel>
+        <Button x:Name="btnOk" Grid.ColumnSpan="2" Click="Button_Click" Grid.Row="3" Grid.Column="0" >确认</Button>
+        <TextBox Grid.Column="3" x:Name="txtLog" Grid.RowSpan="4" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" ></TextBox>
     </Grid>
 </Window>
