@@ -619,7 +619,7 @@ namespace DMAHelper
                         var v = jo.Properties();
                         foreach (var item in v)
                         {
-                            JToken token = item.Value<JToken>();
+                            JToken token = item.Root[item.Name];
                             goodItems.Add(new GoodItem() { className = item.Name, shortName = token["shortName"].Value<string>(), showItem = token["showItem"].Value<bool>(), group = token["group"].Value<int>() });
                         }
 
@@ -1115,12 +1115,10 @@ namespace DMAHelper
                             #region 读取物资
                             if (isKaiWuZi==true)
                             {
-                                goods.Clear();
-
                                 if ((DateTime.Now - dtWuZi).TotalMilliseconds > 2000)
                                 {
+                                    goods.Clear();
                                     dtWuZi = DateTime.Now;
-
                                     var listgoods = ListZhiZhenModel.Where(item =>
                                        (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
                                    .ToList();
@@ -1276,7 +1274,7 @@ namespace DMAHelper
                                                 item.y = (int)tempv3.Y;
                                             }
                                         }
-                                        #region 读取物资名字
+                                        
                                         //准备fNamePtr
                                         scatter.Clear(pid, Vmm.FLAG_NOCACHE);
 
@@ -1332,23 +1330,18 @@ namespace DMAHelper
                                                 item.isShow = tempM.showItem;
                                                 item.ClassName = className;
                                             }
-                                            else
-                                            {
-                                                item.ClassName = className;
-                                                item.isShow = true;
-                                                item.Name = className;
-                                            }
+                                            //else
+                                            //{
+                                            //    item.ClassName = className;
+                                            //    item.isShow = true;
+                                            //    item.Name = className;
+                                            //}
 
                                         }
                                     }
                                 }
-
                             }
-
                             #endregion
-
-                            #endregion
-                            Console.WriteLine("zaiju");
                             #region 读取载具
 
                             var listtempcar = ListZhiZhenModel.Where(item =>
@@ -1415,7 +1408,7 @@ namespace DMAHelper
 
 
                             #endregion
-
+                           
                             var tempMyModel = ListPlayer.Where(s => s.Name == MyName).FirstOrDefault();
 
                             if (tempMyModel != null)
@@ -1430,8 +1423,6 @@ namespace DMAHelper
                                     }
                                 }
                             }
-
-
                             model.Cars = listCarModel;
                             model.Player = ListPlayer;
                             model.MyTeam = ListPlayer.Where(s => s.IsMyTeam == true).ToList();
