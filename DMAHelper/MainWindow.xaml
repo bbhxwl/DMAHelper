@@ -30,7 +30,7 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.Column="1">
             
-             <CheckBox  x:Name="cbWuZi"  Content="开启物资" VerticalAlignment="Center" Checked="cbWuZi_Checked" ></CheckBox>
+             <CheckBox  x:Name="cbWuZi"  Content="开启物资" VerticalAlignment="Center" Checked="cbWuZi_Checked" Click="cbWuZi_Click" ></CheckBox>
         </StackPanel>
         <Button x:Name="btnOk" Grid.ColumnSpan="2" Click="Button_Click" Grid.Row="3" Grid.Column="0" >确认</Button>
         <TextBox Grid.Column="3" x:Name="txtLog" Grid.RowSpan="4" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" ></TextBox>

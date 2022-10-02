@@ -1113,11 +1113,11 @@ namespace DMAHelper
                             #endregion
 
                             #region 读取物资
+                            goods.Clear();
                             if (isKaiWuZi==true)
                             {
-                                if ((DateTime.Now - dtWuZi).TotalMilliseconds > 2000)
-                                {
-                                    goods.Clear();
+                                
+                                   
                                     dtWuZi = DateTime.Now;
                                     var listgoods = ListZhiZhenModel.Where(item =>
                                        (!string.IsNullOrEmpty(item.className) && item.className == "DroppedItemGroup"))
@@ -1329,7 +1329,7 @@ namespace DMAHelper
                                                 item.Name = tempM.shortName;
                                                 item.isShow = tempM.showItem;
                                                 item.ClassName = className;
-                                            }
+                                                item.group = tempM.group;                                            }
                                             //else
                                             //{
                                             //    item.ClassName = className;
@@ -1339,7 +1339,7 @@ namespace DMAHelper
 
                                         }
                                     }
-                                }
+                                 
                             }
                             #endregion
                             #region 读取载具
