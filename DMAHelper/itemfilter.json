@@ -67,7 +67,7 @@
   "Item_Armor_C_01_Lv3_C": {
     "shortName": "甲",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Armor_D_01_Lv2_C": {
     "shortName": "二甲",
@@ -81,7 +81,7 @@
   },
   "Item_Attach_Weapon_Lower_AngledForeGrip_C": {
     "shortName": "三",
-    "showItem": true,
+    "showItem": false,
     "group": 0
   },
   "Item_Attach_Weapon_Lower_Foregrip_C": {
@@ -182,7 +182,7 @@
   "Item_Attach_Weapon_Muzzle_Compensator_Large_C": {
     "shortName": "补",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Attach_Weapon_Muzzle_Compensator_Medium_C": {
     "shortName": "Compensator (Handgun, SMG)",
@@ -192,7 +192,7 @@
   "Item_Attach_Weapon_Muzzle_Compensator_SniperRifle_C": {
     "shortName": "狙补",
     "showItem": true,
-    "group": 2
+    "group": 0
   },
   "Item_Attach_Weapon_Muzzle_Duckbill_C": {
     "shortName": "Duckbill",
@@ -217,7 +217,7 @@
   "Item_Attach_Weapon_Muzzle_Suppressor_Large_C": {
     "shortName": "消",
     "showItem": true,
-    "group": 2
+    "group": 0
   },
   "Item_Attach_Weapon_Muzzle_Suppressor_Medium_C": {
     "shortName": "焰",
@@ -251,12 +251,12 @@
   },
   "Item_Attach_Weapon_Stock_SniperRifle_BulletLoops_C": {
     "shortName": "袋",
-    "showItem": true,
+    "showItem": false,
     "group": 2
   },
   "Item_Attach_Weapon_Stock_SniperRifle_CheekPad_C": {
     "shortName": "腮",
-    "showItem": true,
+    "showItem": false,
     "group": 2
   },
   "Item_Attach_Weapon_Stock_UZI_C": {
@@ -266,12 +266,12 @@
   },
   "Item_Attach_Weapon_Upper_ACOG_01_C": {
     "shortName": "4X",
-    "showItem": true,
+    "showItem": false,
     "group": 0
   },
   "Item_Attach_Weapon_Upper_Aimpoint_C": {
     "shortName": "2X",
-    "showItem": true,
+    "showItem": false,
     "group": 0
   },
   "Item_Attach_Weapon_Upper_CQBSS_C": {
@@ -281,23 +281,23 @@
   },
   "Item_Attach_Weapon_Upper_DotSight_01_C": {
     "shortName": "红",
-    "showItem": true,
-    "group": 3
+    "showItem": false,
+    "group": 0
   },
   "Item_Attach_Weapon_Upper_Holosight_C": {
     "shortName": "息",
-    "showItem": true,
-    "group": 3
+    "showItem": false,
+    "group": 0
   },
   "Item_Attach_Weapon_Upper_PM2_01_C": {
     "shortName": "15X",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Attach_Weapon_Upper_Scope3x_C": {
     "shortName": "3X",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Attach_Weapon_Upper_Scope6x_C": {
     "shortName": "6666666666",
@@ -322,7 +322,7 @@
   "Item_Back_BlueBlocker": {
     "shortName": "毒包",
     "showItem": true,
-    "group": 2
+    "group": 0
   },
   "Item_Back_C_01_Lv3_C": {
     "shortName": "包包包包包包包",
@@ -372,51 +372,51 @@
   "Item_BulletproofShield_C": {
     "shortName": "盾牌",
     "showItem": true,
-    "group": 2
+    "group": 0
   },
   "Item_Chimera_Key_C": {
     "shortName": "==钥匙===",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_EmergencyPickup_C": {
     "shortName": "紧急呼救器",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Ghillie_01_C": {
     "shortName": "吉",
     "showItem": true,
-    "group": 3
+    "group": false
   },
   "Item_Ghillie_02_C": {
     "shortName": "吉",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Ghillie_03_C": {
     "shortName": "吉",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Ghillie_04_C": {
     "shortName": "吉",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Ghillie_05_C": {
     "shortName": "吉",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Ghillie_06_C": {
     "shortName": "吉",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Ghillie_07_C": {
     "shortName": "吉",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Head_E_01_Lv1_C": {
@@ -431,12 +431,12 @@
   },
   "Item_Head_F_01_Lv2_C": {
     "shortName": "头",
-    "showItem": true,
+    "showItem": false,
     "group": 0
   },
   "Item_Head_F_02_Lv2_C": {
     "shortName": "头",
-    "showItem": true,
+    "showItem": false,
     "group": 0
   },
   "Item_Head_G_01_Lv3_C": {
@@ -467,7 +467,7 @@
   "Item_JerryCan_C": {
     "shortName": "油",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Mountainbike_C": {
     "shortName": "自行车",
@@ -502,22 +502,22 @@
   "Item_Weapon_ACE32_C": {
     "shortName": "ACE",
     "showItem": true,
-    "group": 2
+    "group": 1
   },
   "Item_Weapon_AK47_C": {
     "shortName": "AKM",
     "showItem": true,
-    "group": 2
+    "group": 1
   },
   "Item_Weapon_AUG_C": {
     "shortName": "AUG",
     "showItem": true,
-    "group": 3
+    "group": 1
   },
   "Item_Weapon_AWM_C": {
     "shortName": "AWM",
     "showItem": true,
-    "group": 3
+    "group": 1
   },
   "Item_Weapon_Apple_C": {
     "shortName": "Apple",
@@ -526,12 +526,12 @@
   },
   "Item_Weapon_Berreta686_C": {
     "shortName": "S686",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_BerylM762_C": {
     "shortName": "M7",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_BizonPP19_C": {
@@ -541,18 +541,18 @@
   },
   "Item_Weapon_BlueChipDetector_C": {
     "shortName": "探测器",
-    "showItem": true,
+    "showItem": false,
     "group": 2
   },
   "Item_Weapon_BluezoneGrenade_C": {
     "shortName": "篮",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Weapon_C4_C": {
     "shortName": "C4",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Weapon_Cowbar_C": {
     "shortName": "Crowbar",
@@ -561,22 +561,22 @@
   },
   "Item_Weapon_Crossbow_C": {
     "shortName": "弩",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_DP12_C": {
     "shortName": "DBS",
-    "showItem": true,
+    "showItem": false,
     "group": 1
   },
   "Item_Weapon_DP28_C": {
     "shortName": "DP28",
-    "showItem": true,
+    "showItem": false,
     "group": 1
   },
   "Item_Weapon_DecoyGrenade_C": {
     "shortName": "饵",
-    "showItem": true,
+    "showItem": false,
     "group": 1
   },
   "Item_Weapon_DesertEagle_C": {
@@ -602,11 +602,11 @@
   "Item_Weapon_FlareGun_C": {
     "shortName": "==空投===",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Weapon_FlashBang_C": {
     "shortName": "闪",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_G18_C": {
@@ -616,23 +616,23 @@
   },
   "Item_Weapon_G36C_C": {
     "shortName": "G36",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_Grenade_C": {
     "shortName": "雷",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_Grenade_Warmode_C": {
     "shortName": "雷",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_Groza_C": {
     "shortName": "Groza",
     "showItem": true,
-    "group": 3
+    "group": 1
   },
   "Item_Weapon_HK416_C": {
     "shortName": "M4",
@@ -651,12 +651,12 @@
   },
   "Item_Weapon_L6_C": {
     "shortName": "Lynx",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_M16A4_C": {
     "shortName": "M16",
-    "showItem": true,
+    "showItem": false,
     "group": 0
   },
   "Item_Weapon_M1911_C": {
@@ -672,7 +672,7 @@
   "Item_Weapon_M24_C": {
     "shortName": "M24",
     "showItem": true,
-    "group": 2
+    "group": 1
   },
   "Item_Weapon_M79_C": {
     "shortName": "M79",
@@ -696,7 +696,7 @@
   },
   "Item_Weapon_MP9_C": {
     "shortName": "MP9",
-    "showItem": true,
+    "showItem": false,
     "group": 2
   },
   "Item_Weapon_Machete_C": {
@@ -706,7 +706,7 @@
   },
   "Item_Weapon_Mads_QBU88_C": {
     "shortName": "QBU",
-    "showItem": true,
+    "showItem": false,
     "group": 2
   },
   "Item_Weapon_Mini14_C": {
@@ -727,16 +727,16 @@
   "Item_Weapon_Mk47Mutant_C": {
     "shortName": "Mk47",
     "showItem": true,
-    "group": 0
+    "group": 1
   },
   "Item_Weapon_Molotov_C": {
     "shortName": "燃",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_Mortar_C": {
     "shortName": "炮",
-    "showItem": true,
+    "showItem": false,
     "group": 1
   },
   "Item_Weapon_Mosin_C": {
@@ -751,17 +751,17 @@
   },
   "Item_Weapon_OriginS12_C": {
     "shortName": "O12",
-    "showItem": true,
+    "showItem": false,
     "group": 2
   },
   "Item_Weapon_P90_C": {
     "shortName": "P90",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_Pan_C": {
     "shortName": "锅",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_PanzerFaust100M_C": {
@@ -772,7 +772,7 @@
   "Item_Weapon_QBU88_C": {
     "shortName": "QBU",
     "showItem": true,
-    "group": 3
+    "group": 1
   },
   "Item_Weapon_QBZ95_C": {
     "shortName": "QBZ",
@@ -817,7 +817,7 @@
   "Item_Weapon_SmokeBomb_C": {
     "shortName": "烟",
     "showItem": true,
-    "group": 2
+    "group": 0
   },
   "Item_Weapon_Snowball_C": {
     "shortName": "Snowball",
@@ -836,13 +836,13 @@
   },
   "Item_Weapon_StickyGrenade_C": {
     "shortName": "黏",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_TacPack_C": {
     "shortName": "战术背包",
     "showItem": true,
-    "group": 3
+    "group": 0
   },
   "Item_Weapon_Thompson_C": {
     "shortName": "Tommy Gun",
@@ -876,18 +876,18 @@
   },
   "Item_Weapon_Win1894_C": {
     "shortName": "W94",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_Winchester_C": {
     "shortName": "S1897",
-    "showItem": true,
+    "showItem": false,
     "group": 3
   },
   "Item_Weapon_vz61Skorpion_C": {
     "shortName": "蝎",
     "showItem": true,
-    "group": 2
+    "group": 0
   },
   "SP6_EventItem_DVD_01_C": {
     "shortName": "Event Item",

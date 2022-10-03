@@ -671,9 +671,12 @@ namespace DMAHelper
                     }
 
                 }
-
-
-                // GetMemMap();
+                if (vmm == null)
+                {
+                    msg ="vmm初始化失败";
+                    return false;
+                }
+                    // GetMemMap();
                 vmm.PidGetFromName("tslgame.exe", out uint pid);
                 this.pid = pid;
                 moduleBase = vmm.ProcessGetModuleBase(pid, "TslGame.exe");
