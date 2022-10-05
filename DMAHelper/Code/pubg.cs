@@ -29,65 +29,49 @@ namespace DMAHelper
         #region 偏移
         ulong moduleBase;
         ulong GNamesAddress;
-        ulong Offset_AcknowledgedPawn = 0x0480;
+        ulong Offset_AcknowledgedPawn = 0x0478;
         ulong Offset_GWorld = 0x08D3B500;
-        ulong Offset_XenuineDecrypt = 0x07117328;
-        //不确定
-        ulong Offset_FNameEntry = 0x8F105A0;
-        //不确定
+        ulong Offset_XenuineDecrypt = 0x07117628;
+        ulong Offset_FNameEntry = 0x08F105A0;
         int Offset_ChunkSize = 0x41B8;
         ulong Offset_ObjID = 0x24;
         public static uint Offset_XorKey1 = 0x65D2A73B;
         public static long Offset_XorKey2 = 0xE9C2FC83;
-        //没更新
-        public static int Offset_RorValue = 0x03;
+        public static int Offset_RorValue = 0x02;
         public static bool Offset_IsingRor = true;
-        //有可能是F90，41B8
-        ulong Offset_CharacterName = 0xF90;
+        ulong Offset_CharacterName = 0x0F90;
         ulong Offset_CurrentLevel = 0x08E8;
-        ulong Offset_Actors = 0x190;
+        ulong Offset_Actors = 0x0110;
         ulong Offset_ItemPackage = 0x0560;
-        //没更新
-        ulong Offset_AimOffsets = 0x15C0;
-        //没更新
+        ulong Offset_AimOffsets = 0x1670;
         ulong Offset_ItemInformationComponent = 0x00B0;
         ulong Offset_ItemID = 0x248;
         ulong Offset_DroppedItem = 0x420;
         ulong Offset_DroppedItemGroup = 0x40;
         ulong Offset_DroppedItemGroup_UItem = 0x748;
         ulong Offset_SpectatedCount = 0x0F0C;
-        //没更新
-        ulong Offset_LerpSafetyZoneRadius = 0x04D8;
-        //没更新
-        ulong Offset_LerpSafetyZonePosition = 0x0778;
-        //没更新
-        ulong Offset_PoisonGasWarningPosition = 0x04BC;
-        //没更新
-        ulong Offset_PoisonGasWarningRadius = 0x04AC;
-        //没更新
-        ulong Offset_BlackZonePosition = 0x0AF0;
-        //没更新
-        ulong Offset_BlackZoneRadius = 0x0AFC;
-        //没更新
-        ulong Offset_RedZonePosition = 0x0710;
-        //没更新
-        ulong Offset_RedZoneRadius = 0x04D4;
+        ulong Offset_LerpSafetyZoneRadius = 0x0480;
+        ulong Offset_LerpSafetyZonePosition = 0x06F4;
+        ulong Offset_PoisonGasWarningPosition = 0x0518;
+        ulong Offset_PoisonGasWarningRadius = 0x0754;
+        ulong Offset_BlackZonePosition = 0x0AD0;
+        ulong Offset_BlackZoneRadius = 0x0ADC;
+        ulong Offset_RedZonePosition = 0x0524;
+        ulong Offset_RedZoneRadius = 0x054C;
         ulong Offset_GameState = 0x420;
-        //没更新
-        ulong Offset_WorldLocation = 0x08C4;
+        ulong Offset_WorldLocation = 0x09D0;
         ulong Offset_Mesh = 0x4B0;
         ulong Offset_Health = 0x1AE0;
         ulong Offset_GroggyHealth = 0x10D0;
         ulong Offset_PlayerState = 0x420;
         ulong Offset_LastTeamNum = 0x1AA0;
         ulong Offset_PlayerController = 0x0038;
-        //没更新
-        ulong Offset_LocalPlayersPTR = 0x08ECA770;
+        ulong Offset_LocalPlayersPTR = 0x08E73770;
         ulong Offset_PlayerCameraManager = 0x498;
         ulong Offset_CameraLocation = 0x1018;
         ulong Offset_PlayerStatistics = 0x4B8;
         
-        ulong Offset_RootComponent = 0x3A0;
+        ulong Offset_RootComponent = 0x03A0;
         //有的叫position
         ulong Offset_ComponentLocation = 0x2A0;
         #endregion
