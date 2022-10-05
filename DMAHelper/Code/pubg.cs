@@ -30,49 +30,66 @@ namespace DMAHelper
         ulong moduleBase;
         ulong GNamesAddress;
         ulong Offset_AcknowledgedPawn = 0x0480;
-        ulong Offset_GWorld = 0x08D92500;
-        ulong Offset_XenuineDecrypt = 0x07168728;
-        ulong Offset_FNameEntry = 0x08F675A0;
-        int Offset_ChunkSize = 0x4040;
-        ulong Offset_ObjID = 0x000C;
-        public static uint Offset_XorKey1 = 0xD6657937;
-        public static long Offset_XorKey2 = 0x52AF7AF6;
+        ulong Offset_GWorld = 0x08D3B500;
+        ulong Offset_XenuineDecrypt = 0x07117328;
+        //不确定
+        ulong Offset_FNameEntry = 0x8F105A0;
+        //不确定
+        int Offset_ChunkSize = 0x41B8;
+        ulong Offset_ObjID = 0x24;
+        public static uint Offset_XorKey1 = 0x65D2A73B;
+        public static long Offset_XorKey2 = 0xE9C2FC83;
+        //没更新
         public static int Offset_RorValue = 0x03;
-        public static bool Offset_IsingRor = false;
-        ulong Offset_CharacterName = 0x1388;
-
-        ulong Offset_CurrentLevel = 0x03D0;
-        ulong Offset_Actors = 0x00C0;
-        ulong Offset_ItemPackage = 0x0568;
+        public static bool Offset_IsingRor = true;
+        //有可能是F90，41B8
+        ulong Offset_CharacterName = 0xF90;
+        ulong Offset_CurrentLevel = 0x08E8;
+        ulong Offset_Actors = 0x190;
+        ulong Offset_ItemPackage = 0x0560;
+        //没更新
         ulong Offset_AimOffsets = 0x15C0;
+        //没更新
         ulong Offset_ItemInformationComponent = 0x00B0;
-        ulong Offset_ItemID = 0x0248;
-        ulong Offset_DroppedItem = 0x0428;
-        ulong Offset_DroppedItemGroup = 0x0048;
-        ulong Offset_DroppedItemGroup_UItem = 0x0738;
-        ulong Offset_SpectatedCount = 0x1314;
+        ulong Offset_ItemID = 0x248;
+        ulong Offset_DroppedItem = 0x420;
+        ulong Offset_DroppedItemGroup = 0x40;
+        ulong Offset_DroppedItemGroup_UItem = 0x748;
+        ulong Offset_SpectatedCount = 0x0F0C;
+        //没更新
         ulong Offset_LerpSafetyZoneRadius = 0x04D8;
+        //没更新
         ulong Offset_LerpSafetyZonePosition = 0x0778;
+        //没更新
         ulong Offset_PoisonGasWarningPosition = 0x04BC;
+        //没更新
         ulong Offset_PoisonGasWarningRadius = 0x04AC;
+        //没更新
         ulong Offset_BlackZonePosition = 0x0AF0;
+        //没更新
         ulong Offset_BlackZoneRadius = 0x0AFC;
+        //没更新
         ulong Offset_RedZonePosition = 0x0710;
+        //没更新
         ulong Offset_RedZoneRadius = 0x04D4;
-        ulong Offset_GameState = 0x0360;
+        ulong Offset_GameState = 0x420;
+        //没更新
         ulong Offset_WorldLocation = 0x08C4;
-        ulong Offset_Mesh = 0x04C0;
-        ulong Offset_Health = 0x1958;
-        ulong Offset_GroggyHealth = 0x1BA4;
-        ulong Offset_PlayerState = 0x0430;
-        ulong Offset_LastTeamNum = 0x2228;
+        ulong Offset_Mesh = 0x4B0;
+        ulong Offset_Health = 0x1AE0;
+        ulong Offset_GroggyHealth = 0x10D0;
+        ulong Offset_PlayerState = 0x420;
+        ulong Offset_LastTeamNum = 0x1AA0;
         ulong Offset_PlayerController = 0x0038;
+        //没更新
         ulong Offset_LocalPlayersPTR = 0x08ECA770;
-        ulong Offset_PlayerCameraManager = 0x04A0;
-        ulong Offset_CameraLocation = 0x1CBC;
-        ulong Offset_PlayerStatistics = 0x0A2C;
-        ulong Offset_RootComponent = 0x01C8;
-        ulong Offset_ComponentLocation = 0x02B0;
+        ulong Offset_PlayerCameraManager = 0x498;
+        ulong Offset_CameraLocation = 0x1018;
+        ulong Offset_PlayerStatistics = 0x4B8;
+        
+        ulong Offset_RootComponent = 0x3A0;
+        //有的叫position
+        ulong Offset_ComponentLocation = 0x2A0;
         #endregion
 
         private List<CarModel> listCar = new List<CarModel>();
