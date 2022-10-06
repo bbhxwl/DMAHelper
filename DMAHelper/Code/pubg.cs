@@ -610,9 +610,9 @@ namespace DMAHelper
                 catch (Exception)
                 {
 
-                   
+
                 }
-             
+
             }
         }
         ulong ZhuanHuan(JToken tk)
@@ -756,9 +756,37 @@ namespace DMAHelper
                     return false;
                 }
                 // GetMemMap();
-                vmm.PidGetFromName("tslgame.exe", out uint pid);
-                this.pid = pid;
+                var plist = vmm.PidList();
+                foreach (var item in plist)
+                {
+                    string strKernel32KernelPath = vmm.ProcessGetInformationString(item, Vmm.VMMDLL_PROCESS_INFORMATION_OPT_STRING_PATH_KERNEL);
+                    if (strKernel32KernelPath.ToLower().Contains("tslgame.exe"))
+                    {
+                        moduleBase = vmm.ProcessGetModuleBase(item, "TslGame.exe");
+                        if (moduleBase>0)
+                        {
+                            var d = vmm.MemReadInt64(item, moduleBase + off.Offset_XenuineDecrypt);
+                            if (d>0)
+                            {
+                                this.pid = item;
+                                break;
+                            }
+                        }
+                    }
+                }
+                
+                if (pid <= 0)
+                {
+                    msg = "找不到游戏进程";
+                    return false;
+                }
+  
                 moduleBase = vmm.ProcessGetModuleBase(pid, "TslGame.exe");
+                if (moduleBase <= 0)
+                {
+                    msg = "模块获取失败";
+                    return false;
+                }
                 var DecryptThis = vmm.MemReadInt64(pid, moduleBase + off.Offset_XenuineDecrypt);
                 if (DecryptThis > 0)
                 {
@@ -787,6 +815,11 @@ namespace DMAHelper
                     #endregion 
                     msg = "";
                     return true;
+                }
+                else
+                {
+                    msg = "DecryptThis小于0";
+                    return false;
                 }
             }
             catch (Exception ex)
