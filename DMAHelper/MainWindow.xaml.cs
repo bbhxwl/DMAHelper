@@ -21,6 +21,10 @@ using System.Diagnostics;
 using System.Net.Configuration;
 using System.Windows.Media.Media3D;
 using System.Security.Cryptography;
+using System.Globalization;
+using DMAHelper.Code;
+using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace DMAHelper
 {
@@ -35,16 +39,13 @@ namespace DMAHelper
         public MainWindow()
         {
             InitializeComponent();
-
-
+           
+            
         }
         private void P_OnPlayerListUpdate(PubgModel obj)
         {
             if (mqtt.IsConnected)
             {
-
-
-
                 PubgMqttModel model = new PubgMqttModel();
                 model.Map = obj.MapName;
                 model.MyTeam = obj.MyTeam;
@@ -166,17 +167,25 @@ namespace DMAHelper
             zhuti = txtuid.Text;
 
             MqttClientOptions op = null;
-            if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
+            if (File.Exists("mqtt.txt"))
             {
-                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
-
+                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer(File.ReadAllText("mqtt.txt")).Build();
             }
             else
             {
-                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
+                if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
+                {
+                    op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+
+                }
+                else
+                {
+                    op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
+
+                }
 
             }
-           
+
             try
             {
                 p = new pubg();

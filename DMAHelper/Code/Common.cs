@@ -16,22 +16,7 @@ namespace DMAHelper
        public delegate ulong decryptData(ulong c);
  
         
-        
-        public static  uint dec_objid(int value)
-        {
-            uint v18 = _ROR4_oL_((uint)(value ^ pubg.Offset_XorKey1), pubg.Offset_RorValue, pubg.Offset_IsingRor);
-            return v18 ^ (v18 << 16) ^ (uint)pubg.Offset_XorKey2;
-        }
-
-        static uint _ROR4_oL_(uint x, int count, bool IsRor)
-        {
-            count %= 32;
-            if (IsRor)
-                return (x << (32 - count)) | (x >> count);
-            else
-                return (x << count) | (x >> (32 - count));
-        }
-
+      
         [DllImport("kernel32.dll", SetLastError = true)]
       public   static extern IntPtr VirtualAlloc(IntPtr lpAddress,int dwSize, AllocationType lAllocationType, MemoryProtection flProtect);
 
