@@ -167,7 +167,12 @@ namespace DMAHelper
             zhuti = txtuid.Text;
 
             MqttClientOptions op = null;
-            if (File.Exists("mqtt.txt"))
+            if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
+            {
+                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+
+            }
+           else if (File.Exists("mqtt.txt"))
             {
                 op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer(File.ReadAllText("mqtt.txt")).Build();
             }
