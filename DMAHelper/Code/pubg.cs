@@ -850,7 +850,7 @@ namespace DMAHelper
                 {
                     if (isLocal)
                     {
-                        Thread.Sleep(10);
+                        Thread.Sleep(30);
                     }
                     ListZhiZhenModel.Clear();
                     ListPlayer.Clear();
