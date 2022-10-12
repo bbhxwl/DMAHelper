@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DMAHelper"
         mc:Ignorable="d"
-        Title="斌斌 0.0.1版本" Height="150" Width="280" WindowStartupLocation="CenterScreen">
+        Title="斌斌 0.0.1版本" Height="150" Width="400" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0"  Grid.Column="0">账号:</Label>

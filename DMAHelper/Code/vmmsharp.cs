@@ -575,6 +575,10 @@ namespace vmmsharp
 
         public unsafe byte[] MemRead(uint pid, ulong qwA, uint cb, uint flags = 0x0001)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[cb];
             fixed (byte* pb = data)
@@ -589,35 +593,56 @@ namespace vmmsharp
                 Array.Resize<byte>(ref data, (int)cbRead);
             }
             return data;
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return new byte[0];
         }
         public unsafe Vector3D MemReadVector(uint pid, ulong qwA,  uint flags = 0x0001)
         {
-            uint cbRead;
-            byte[] data = new byte[12];
-            fixed (byte* pb = data)
+            try
             {
-                if (!vmmi.VMMDLL_MemReadEx(hVMM, pid, qwA, pb, 12, out cbRead, flags))
+                uint cbRead;
+                byte[] data = new byte[12];
+                fixed (byte* pb = data)
                 {
-                    return new Vector3D(0,0,0);
+                    if (!vmmi.VMMDLL_MemReadEx(hVMM, pid, qwA, pb, 12, out cbRead, flags))
+                    {
+                        return new Vector3D(0, 0, 0);
+                    }
                 }
-            }
-            if (cbRead != 12)
-            {
-                Array.Resize<byte>(ref data, (int)cbRead);
-            }
-            if (data.Length!=12)
-            {
-                return new Vector3D(0, 0, 0);
-            }
-            float x = BitConverter.ToSingle(data, 0);
-            float y = BitConverter.ToSingle(data, 4);
-            float z = BitConverter.ToSingle(data, 8);
+                if (cbRead != 12)
+                {
+                    Array.Resize<byte>(ref data, (int)cbRead);
+                }
+                if (data.Length != 12)
+                {
+                    return new Vector3D(0, 0, 0);
+                }
+                float x = BitConverter.ToSingle(data, 0);
+                float y = BitConverter.ToSingle(data, 4);
+                float z = BitConverter.ToSingle(data, 8);
 
-            return new Vector3D(x,y,z);
+                return new Vector3D(x, y, z);
+            }
+            catch (Exception)
+            {
+
+               
+            }
+            return new Vector3D();
+          
         }
 
         public unsafe uint MemReadInt32(uint pid, ulong qwA, uint flags = 0x0001)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[4];
             fixed (byte* pb = data)
@@ -636,10 +661,21 @@ namespace vmmsharp
                 return 0;
             }
             return (uint)BitConverter.ToInt32(data, 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return 0;
         }
 
         public unsafe int MemReadInt(uint pid, ulong qwA, uint flags = 0x0001)
         {
+            try
+            {
+
+         
             uint cbRead;
             byte[] data = new byte[4];
             fixed (byte* pb = data)
@@ -658,10 +694,21 @@ namespace vmmsharp
                 return 0;
             }
             return BitConverter.ToInt32(data, 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return 0;
         }
 
         public unsafe float MemReadFloat(uint pid, ulong qwA, uint flags = 0x0001)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[4];
             fixed (byte* pb = data)
@@ -680,10 +727,20 @@ namespace vmmsharp
                 return 0;
             }
             return BitConverter.ToSingle(data, 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return 0;
         }
         public unsafe ulong MemReadInt64(uint pid, ulong qwA, uint flags = 0x0001)
         {
-            
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[8];
             fixed (byte* pb = data)
@@ -702,9 +759,19 @@ namespace vmmsharp
                 return 0;
             }
             return (ulong)BitConverter.ToInt64(data, 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return 0;
         }
         public unsafe string MemReadString(uint pid, ulong qwA, uint cb)
         {
+            try
+            {
+
             uint flags = 0x0001;
             uint cbRead;
             byte[] data = new byte[cb];
@@ -727,10 +794,22 @@ namespace vmmsharp
             string str = Encoding.Unicode.GetString(data).Trim();
 
             return str.Substring(0, str.IndexOf('\0') > 0 ? str.IndexOf('\0') : str.Length);
+
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return "";
         }
 
         public unsafe string MemReadStringASCII(uint pid, ulong qwA, uint cb)
         {
+            try
+            {
+
+           
             uint flags = 0x0001;
             uint cbRead;
             byte[] data = new byte[cb];
@@ -753,6 +832,13 @@ namespace vmmsharp
             string str = Encoding.ASCII.GetString(data).Trim();
 
             return str.Substring(0, str.IndexOf('\0') > 0 ? str.IndexOf('\0') : str.Length);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return "";
         }
 
         public unsafe bool MemPrefetchPages(uint pid, ulong[] qwA)
@@ -2183,6 +2269,10 @@ namespace vmmsharp
 
         public unsafe byte[] Read(ulong qwA, uint cb)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[cb];
             fixed (byte* pb = data)
@@ -2197,9 +2287,20 @@ namespace vmmsharp
                 Array.Resize<byte>(ref data, (int)cbRead);
             }
             return data;
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return new byte[0];
         }
         public unsafe string ReadStringUnicode(ulong qwA, uint cb)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[cb];
             fixed (byte* pb = data)
@@ -2215,10 +2316,21 @@ namespace vmmsharp
             }
             string name = Encoding.Unicode.GetString(data);
             return name.Substring(0, name.IndexOf('\0') >= 0 ? name.IndexOf('\0') : name.Length);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return "";
         }
 
         public unsafe string ReadStringASCII(ulong qwA, uint cb)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[cb];
             fixed (byte* pb = data)
@@ -2234,10 +2346,21 @@ namespace vmmsharp
             }
             string name = Encoding.ASCII.GetString(data);
             return name.Substring(0, name.IndexOf('\0') >= 0 ? name.IndexOf('\0') : name.Length);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return "";
         }
 
         public unsafe int ReadInt(ulong qwA)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[4];
             fixed (byte* pb = data)
@@ -2253,9 +2376,20 @@ namespace vmmsharp
                 return 0;
             }
             return BitConverter.ToInt32(data, 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return 0;
         }
         public unsafe uint ReadUInt(ulong qwA)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[4];
             fixed (byte* pb = data)
@@ -2271,10 +2405,21 @@ namespace vmmsharp
                 return 0;
             }
             return BitConverter.ToUInt32(data, 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return 0;
         }
 
         public unsafe float ReadFloat(ulong qwA)
         {
+            try
+            {
+
+            
             uint cbRead;
             byte[] data = new byte[4];
             fixed (byte* pb = data)
@@ -2290,10 +2435,21 @@ namespace vmmsharp
                 return 0;
             }
             return BitConverter.ToSingle(data, 0);
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return 0;
         }
 
         public unsafe ulong ReadUInt64(ulong qwA)
         {
+            try
+            {
+
+           
             uint cbRead;
             byte[] data = new byte[8];
             fixed (byte* pb = data)
@@ -2309,10 +2465,20 @@ namespace vmmsharp
                 return 0;
             }
             return  BitConverter.ToUInt64(data, 0);
+            }
+            catch (Exception)
+            {
+
+            }
+            return 0;
+           
         }
 
         public unsafe Vector ReadVector(ulong qwA)
         {
+            try
+            {
+
             uint cbRead;
             byte[] data = new byte[8];
             fixed (byte* pb = data)
@@ -2329,6 +2495,13 @@ namespace vmmsharp
             }
             return new Vector(BitConverter.ToSingle(data, 0), BitConverter.ToSingle(data, 4));
 
+            }
+            catch (Exception)
+            {
+
+
+            }
+            return new Vector();
         }
 
         public bool Prepare(ulong qwA, uint cb)

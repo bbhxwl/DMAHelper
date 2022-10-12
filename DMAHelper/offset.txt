@@ -33,7 +33,7 @@
     "Offset_PlayerState": "0400",
     "Offset_LastTeamNum": "1958",
     "Offset_PlayerController": "30",
-    "Offset_LocalPlayersPTR": "0058",
+    "Offset_LocalPlayersPTR": "58",
     "Offset_PlayerCameraManager": "490",
     "Offset_CameraLocation": "161C",
     "Offset_PlayerStatistics": "894",

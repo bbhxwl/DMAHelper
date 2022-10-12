@@ -33,13 +33,13 @@ namespace DMAHelper
     /// </summary>
     public partial class MainWindow : Window
     {
-
+       
         pubg p = null;
         IMqttClient mqtt = new MqttFactory().CreateMqttClient();
         public MainWindow()
         {
             InitializeComponent();
-           
+            
             
         }
         private void P_OnPlayerListUpdate(PubgModel obj)
@@ -166,40 +166,26 @@ namespace DMAHelper
             }
             zhuti = txtuid.Text;
 
-            MqttClientOptions op = null;
-            if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
-            {
-                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
-
-            }
-           else if (File.Exists("mqtt.txt"))
-            {
-                op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer(File.ReadAllText("mqtt.txt")).Build();
-            }
-            else
-            {
-                if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
-                {
-                    op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
-
-                }
-                else
-                {
-                    op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
-
-                }
-
-            }
+           
 
             try
             {
                 p = new pubg();
-                p.OnExecTime += (s) =>
+                p.OnExecTime += (s,m) =>
                 {
                     this.Dispatcher.Invoke(() =>
                     {
                         this.Title = s.ToString();
                     });
+                    if (!string.IsNullOrEmpty(m))
+                    {
+                        this.Dispatcher.Invoke(() =>
+                        {
+                            txtLog.AppendText(m+"\r\n");
+                        });
+                        
+                    }
+                   
                 };
                 p.OnPlayerListUpdate += P_OnPlayerListUpdate;
                 bool islocal = false;
@@ -213,6 +199,30 @@ namespace DMAHelper
                 }
                 if (p.Init(islocal, out string msg))
                 {
+                    MqttClientOptions op = null;
+                    if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
+                    {
+                        op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+
+                    }
+                    else if (File.Exists("mqtt.txt"))
+                    {
+                        op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer(File.ReadAllText("mqtt.txt")).Build();
+                    }
+                    else
+                    {
+                        if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
+                        {
+                            op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+
+                        }
+                        else
+                        {
+                            op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("219.129.239.39").Build();
+
+                        }
+
+                    }
                     mqtt.DisconnectedAsync += Mqtt_DisconnectedAsync;
                     mqtt.ConnectAsync(op).ContinueWith(rs =>
                     {
