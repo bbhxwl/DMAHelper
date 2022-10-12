@@ -892,10 +892,10 @@ namespace DMAHelper
                                 if (diyici)
                                 {
                                     diyici = false;
-                                    if (OnExecTime != null)
-                                    {
-                                        OnExecTime(0, $"world={world},ULocalPlayer={ULocalPlayer},PlayerController={PlayerController},CameraManager={CameraManager},PersistentLevel={PersistentLevel},ActorsArray={ActorsArray},Actorscount={Actorscount},actorBase={actorBase},GNames={GNames},MapId={MapId},LocalPlayerPawn={LocalPlayerPawn},CharacterId={CharacterId},MyName={MyName},mapName={mapName},GameState={GameState}");
-                                    }
+                                    //if (OnExecTime != null)
+                                    //{
+                                    //    OnExecTime(0, $"world={world},ULocalPlayer={ULocalPlayer},PlayerController={PlayerController},CameraManager={CameraManager},PersistentLevel={PersistentLevel},ActorsArray={ActorsArray},Actorscount={Actorscount},actorBase={actorBase},GNames={GNames},MapId={MapId},LocalPlayerPawn={LocalPlayerPawn},CharacterId={CharacterId},MyName={MyName},mapName={mapName},GameState={GameState}");
+                                    //}
                                 }
                                 if (mapName == "TslLobby_Persistent_Main")
                                 {
