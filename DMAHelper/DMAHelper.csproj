@@ -143,9 +143,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <None Include="winpmem_x64.sys">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="winpmem_x64.sys" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

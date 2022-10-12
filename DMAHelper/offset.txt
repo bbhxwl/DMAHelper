@@ -26,7 +26,7 @@
     "Offset_RedZonePosition": "0524",
     "Offset_RedZoneRadius": "054C",
     "Offset_GameState": "218",
-    "Offset_WorldLocation": "5ac",
+    "Offset_WorldLocation": "7F4",
     "Offset_Mesh": "540",
     "Offset_Health": "860",
     "Offset_GroggyHealth": "2818",
