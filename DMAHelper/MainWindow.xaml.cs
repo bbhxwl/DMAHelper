@@ -202,7 +202,7 @@ namespace DMAHelper
                     MqttClientOptions op = null;
                     if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
                     {
-                        op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+                        op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("121.10.141.68").Build();
 
                     }
                     else if (File.Exists("mqtt.txt"))
@@ -213,7 +213,7 @@ namespace DMAHelper
                     {
                         if (txtuid.Text.IndexOf("470138890") != -1 || txtuid.Text.IndexOf("binbin") != -1)
                         {
-                            op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+                            op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("121.10.141.68").Build();
 
                         }
                         else
@@ -260,7 +260,7 @@ namespace DMAHelper
 
         private Task Mqtt_DisconnectedAsync(MqttClientDisconnectedEventArgs arg)
         {
-            var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("113.107.160.90").Build();
+            var op = new MqttClientOptionsBuilder().WithWillQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.AtLeastOnce).WithTcpServer("121.10.141.68").Build();
             return mqtt.ConnectAsync(op).ContinueWith(rs =>
               {
                   if (rs.Result.ResultCode == MqttClientConnectResultCode.Success)
