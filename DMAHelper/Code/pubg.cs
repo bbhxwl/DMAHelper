@@ -565,6 +565,7 @@ namespace DMAHelper
                     var jo = JsonConvert.DeserializeObject<JObject>(File.ReadAllText("offset.txt"));
                     off = new Offset()
                     {
+                        Offset_LocalPlayers=ZhuanHuan(jo["Offset_LocalPlayers"]),
                         Offset_AcknowledgedPawn = ZhuanHuan(jo["Offset_AcknowledgedPawn"]),
                         Offset_GWorld = ZhuanHuan(jo["Offset_GWorld"]),
                         Offset_XenuineDecrypt = ZhuanHuan(jo["Offset_XenuineDecrypt"]),
@@ -872,7 +873,9 @@ namespace DMAHelper
 
                                 PubgModel model = new PubgModel();
                                 ulong world = decryptFunc(vmm.MemReadInt64(pid, moduleBase + off.Offset_GWorld));
-                                ulong ULocalPlayer = vmm.MemReadInt64(pid, moduleBase + off.Offset_LocalPlayersPTR);
+                                ulong GameState = decryptFunc(vmm.MemReadInt64(pid, world + off.Offset_GameState));
+                                ulong tempuULocalPlayer  = vmm.MemReadInt64(pid, GameState + off.Offset_LocalPlayers);
+                                ulong ULocalPlayer = decryptFunc(vmm.MemReadInt64(pid, tempuULocalPlayer));
                                 ulong PlayerController = decryptFunc(vmm.MemReadInt64(pid, ULocalPlayer + off.Offset_PlayerController));
                                 ulong CameraManager = vmm.MemReadInt64(pid, PlayerController + off.Offset_PlayerCameraManager);
                                 Vector3D cameraLocation = vmm.MemReadVector(pid, CameraManager + off.Offset_CameraLocation);
@@ -888,7 +891,7 @@ namespace DMAHelper
                                 ulong CharacterId = vmm.MemReadInt64(pid, LocalPlayerPawn + off.Offset_CharacterName);
                                 var MyName = vmm.MemReadString(pid, CharacterId, 64);
                                 string mapName = GetObjName(MapId);
-                                ulong GameState = decryptFunc(vmm.MemReadInt64(pid, world + off.Offset_GameState));
+                                
                                 if (diyici)
                                 {
                                     diyici = false;

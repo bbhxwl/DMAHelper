@@ -8,7 +8,7 @@ namespace DMAHelper.Code
 {
     public  class Offset
     {
-         
+        public ulong Offset_LocalPlayers  { get; set; }=0x00C0;
         public ulong Offset_AcknowledgedPawn { get; set; } = 0x0478;
         public ulong Offset_GWorld { get; set; } = 0x08D3B500;
         public ulong Offset_XenuineDecrypt { get; set; } = 0x07117628;

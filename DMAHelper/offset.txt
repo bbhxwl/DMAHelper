@@ -38,5 +38,6 @@
     "Offset_CameraLocation": "09F8",
     "Offset_PlayerStatistics": "05F8",
     "Offset_RootComponent": "01D0",
-    "Offset_ComponentLocation": "0240"
+    "Offset_ComponentLocation": "0240",
+    "Offset_LocalPlayers ":"00C0"
 }
